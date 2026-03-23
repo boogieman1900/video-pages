@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A Message For You</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { background: #000; min-height: 100vh; display: flex; align-items: center; justify-content: center; }
+    wistia-player { width: 100%; max-width: 420px; display: block; margin: 0 auto; }
+  </style>
+  <script src="https://fast.wistia.com/player.js" async></script>
+  <script src="https://fast.wistia.com/embed/0xrba89wr8.js" async type="module"></script>
+  <style>
+    wistia-player[media-id='0xrba89wr8']:not(:defined) {
+      background: center / contain no-repeat url('https://fast.wistia.com/embed/medias/0xrba89wr8/swatch');
+      display: block; filter: blur(5px); padding-top: 177.78%;
+    }
+  </style>
+</head>
+<body>
+  <wistia-player media-id="0xrba89wr8" aspect="0.5625"></wistia-player>
+</body>
+</html>
