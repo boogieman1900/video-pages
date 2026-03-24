@@ -421,6 +421,16 @@ main{flex:1;overflow:auto;padding:24px;}
     </div>
   </div>
 
+  <!-- Slide-out drawer -->
+  <div id="proj-drawer" style="display:none;position:fixed;top:0;right:0;width:480px;height:100vh;background:var(--surface);border-left:1px solid var(--border);z-index:1000;overflow-y:auto;padding:24px;box-shadow:-4px 0 24px rgba(0,0,0,0.5);">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+      <div id="drawer-title" style="font-size:16px;font-weight:600;color:var(--gold);"></div>
+      <button onclick="closeDrawer()" style="background:none;border:none;color:var(--muted);font-size:20px;cursor:pointer;">✕</button>
+    </div>
+    <div id="drawer-content" style="font-size:13px;line-height:1.8;color:var(--text);"></div>
+  </div>
+  <div id="drawer-overlay" onclick="closeDrawer()" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.4);z-index:999;"></div>
+
   <!-- Project rows -->
   <div class="card" style="padding:0;overflow:hidden;">
     <table class="kpi-table" style="width:100%;">
@@ -432,90 +442,80 @@ main{flex:1;overflow:auto;padding:24px;}
           <th>Status</th>
           <th>Blocked by</th>
           <th>Next Action</th>
-          <th>Docs</th>
         </tr>
       </thead>
       <tbody id="proj-rows">
-        <tr onclick="window.open('https://github.com/boogieman1900/video-pages/tree/main/projects/001-mission-control','_blank')" style="cursor:pointer;">
+        <tr onclick="openProject('001')" style="cursor:pointer;" onmouseover="this.style.background='rgba(245,200,66,0.04)'" onmouseout="this.style.background=''">
           <td style="text-align:center;font-size:16px;">🟢</td>
           <td><strong>001</strong> Mission Control Dashboard</td>
           <td><span style="color:var(--red);font-size:11px;font-weight:600;">P1</span></td>
           <td><span style="color:var(--green);font-size:12px;">Active</span></td>
           <td style="color:var(--muted);font-size:12px;">—</td>
           <td style="font-size:12px;">Add quality score + capacity widgets</td>
-          <td style="font-size:12px;"><a href="https://github.com/boogieman1900/video-pages/tree/main/projects/001-mission-control" target="_blank" style="color:var(--blue);">📄</a></td>
         </tr>
-        <tr onclick="window.open('https://github.com/boogieman1900/video-pages/tree/main/projects/002-video-army','_blank')" style="cursor:pointer;">
+        <tr onclick="openProject('002')" style="cursor:pointer;" onmouseover="this.style.background='rgba(245,200,66,0.04)'" onmouseout="this.style.background=''">
           <td style="text-align:center;font-size:16px;">⏸️</td>
           <td><strong>002</strong> Video Army — Outreach Videos</td>
           <td><span style="color:var(--red);font-size:11px;font-weight:600;">P1</span></td>
           <td><span style="color:var(--yellow);font-size:12px;">Paused</span></td>
           <td style="color:var(--muted);font-size:12px;">Steve approval</td>
           <td style="font-size:12px;">Steve approves contact list → re-enable</td>
-          <td style="font-size:12px;"><a href="https://github.com/boogieman1900/video-pages/tree/main/projects/002-video-army" target="_blank" style="color:var(--blue);">📄</a></td>
         </tr>
-        <tr onclick="window.open('https://github.com/boogieman1900/video-pages/tree/main/projects/003-daily-vlog','_blank')" style="cursor:pointer;">
+        <tr onclick="openProject('003')" style="cursor:pointer;" onmouseover="this.style.background='rgba(245,200,66,0.04)'" onmouseout="this.style.background=''">
           <td style="text-align:center;font-size:16px;">🟢</td>
           <td><strong>003</strong> Daily Vlog — Building in Public</td>
           <td><span style="color:var(--yellow);font-size:11px;font-weight:600;">P2</span></td>
           <td><span style="color:var(--green);font-size:12px;">Active</span></td>
           <td style="color:var(--muted);font-size:12px;">—</td>
           <td style="font-size:12px;">Wire up 8AM cron + test run</td>
-          <td style="font-size:12px;"><a href="https://github.com/boogieman1900/video-pages/tree/main/projects/003-daily-vlog" target="_blank" style="color:var(--blue);">📄</a></td>
         </tr>
-        <tr onclick="window.open('https://github.com/boogieman1900/video-pages/tree/main/projects/004-reenable-crons','_blank')" style="cursor:pointer;">
+        <tr onclick="openProject('004')" style="cursor:pointer;" onmouseover="this.style.background='rgba(245,200,66,0.04)'" onmouseout="this.style.background=''">
           <td style="text-align:center;font-size:16px;">🔴</td>
           <td><strong>004</strong> Re-enable Outreach Crons</td>
           <td><span style="color:var(--red);font-size:11px;font-weight:600;">P1</span></td>
           <td><span style="color:var(--red);font-size:12px;">Blocked</span></td>
           <td style="color:var(--muted);font-size:12px;">Steve approval</td>
           <td style="font-size:12px;">Steve confirms contact list</td>
-          <td style="font-size:12px;"><a href="https://github.com/boogieman1900/video-pages/tree/main/projects/004-reenable-crons" target="_blank" style="color:var(--blue);">📄</a></td>
         </tr>
-        <tr onclick="window.open('https://github.com/boogieman1900/video-pages/tree/main/projects/005-ghl-cassy-bridge','_blank')" style="cursor:pointer;">
+        <tr onclick="openProject('005')" style="cursor:pointer;" onmouseover="this.style.background='rgba(245,200,66,0.04)'" onmouseout="this.style.background=''">
           <td style="text-align:center;font-size:16px;">🔴</td>
           <td><strong>005</strong> GHL ↔ Cassy Bridge</td>
           <td><span style="color:var(--yellow);font-size:11px;font-weight:600;">P2</span></td>
           <td><span style="color:var(--red);font-size:12px;">Blocked</span></td>
           <td style="color:var(--muted);font-size:12px;">006 PII Scrub first</td>
           <td style="font-size:12px;">Complete 006 → design webhook</td>
-          <td style="font-size:12px;"><a href="https://github.com/boogieman1900/video-pages/tree/main/projects/005-ghl-cassy-bridge" target="_blank" style="color:var(--blue);">📄</a></td>
         </tr>
-        <tr onclick="window.open('https://github.com/boogieman1900/video-pages/tree/main/projects/006-pii-scrub','_blank')" style="cursor:pointer;">
+        <tr onclick="openProject('006')" style="cursor:pointer;" onmouseover="this.style.background='rgba(245,200,66,0.04)'" onmouseout="this.style.background=''">
           <td style="text-align:center;font-size:16px;">⬜</td>
           <td><strong>006</strong> PII Scrub — Memory Files</td>
           <td><span style="color:var(--red);font-size:11px;font-weight:600;">P1</span></td>
           <td><span style="color:var(--muted);font-size:12px;">Draft</span></td>
           <td style="color:var(--muted);font-size:12px;">—</td>
           <td style="font-size:12px;">Steve approves → Cassy runs scrub</td>
-          <td style="font-size:12px;"><a href="https://github.com/boogieman1900/video-pages/tree/main/projects/006-pii-scrub" target="_blank" style="color:var(--blue);">📄</a></td>
         </tr>
-        <tr onclick="window.open('https://github.com/boogieman1900/video-pages/tree/main/projects/007-background-task-queue','_blank')" style="cursor:pointer;">
+        <tr onclick="openProject('007')" style="cursor:pointer;" onmouseover="this.style.background='rgba(245,200,66,0.04)'" onmouseout="this.style.background=''">
           <td style="text-align:center;font-size:16px;">⬜</td>
           <td><strong>007</strong> Background Task Queue</td>
           <td><span style="color:var(--muted);font-size:11px;font-weight:600;">P3</span></td>
           <td><span style="color:var(--muted);font-size:12px;">Draft</span></td>
           <td style="color:var(--muted);font-size:12px;">009 Phase 1 first</td>
           <td style="font-size:12px;">Approve 009 → then build queue</td>
-          <td style="font-size:12px;"><a href="https://github.com/boogieman1900/video-pages/tree/main/projects/007-background-task-queue" target="_blank" style="color:var(--blue);">📄</a></td>
         </tr>
-        <tr onclick="window.open('https://github.com/boogieman1900/video-pages/tree/main/projects/008-token-radar','_blank')" style="cursor:pointer;">
+        <tr onclick="openProject('008')" style="cursor:pointer;" onmouseover="this.style.background='rgba(245,200,66,0.04)'" onmouseout="this.style.background=''">
           <td style="text-align:center;font-size:16px;">⬜</td>
           <td><strong>008</strong> Token Radar / Spider Graph</td>
           <td><span style="color:var(--yellow);font-size:11px;font-weight:600;">P2</span></td>
           <td><span style="color:var(--muted);font-size:12px;">Draft</span></td>
           <td style="color:var(--muted);font-size:12px;">009 Phase 2 data</td>
           <td style="font-size:12px;">Approve 009 → Phase 2 → build radar</td>
-          <td style="font-size:12px;"><a href="https://github.com/boogieman1900/video-pages/tree/main/projects/008-token-radar" target="_blank" style="color:var(--blue);">📄</a></td>
         </tr>
-        <tr onclick="window.open('https://github.com/boogieman1900/video-pages/tree/main/projects/009-model-routing','_blank')" style="cursor:pointer;">
+        <tr onclick="openProject('009')" style="cursor:pointer;" onmouseover="this.style.background='rgba(245,200,66,0.04)'" onmouseout="this.style.background=''">
           <td style="text-align:center;font-size:16px;">⬜</td>
           <td><strong>009</strong> Intelligent Model Routing</td>
           <td><span style="color:var(--yellow);font-size:11px;font-weight:600;">P2</span></td>
           <td><span style="color:var(--muted);font-size:12px;">Draft</span></td>
           <td style="color:var(--muted);font-size:12px;">Steve approval</td>
           <td style="font-size:12px;">Approve in #approve-or-kill → Phase 1</td>
-          <td style="font-size:12px;"><a href="https://github.com/boogieman1900/video-pages/tree/main/projects/009-model-routing" target="_blank" style="color:var(--blue);">📄</a></td>
         </tr>
       </tbody>
     </table>
@@ -611,6 +611,148 @@ function show(id, el) {
   for (var j = 0; j < navs.length; j++) navs[j].classList.remove('active');
   if (el) el.classList.add('active');
 }
+var PROJECTS = {
+  '001': {
+    title: '001 — Mission Control Dashboard',
+    status: '🟢 Active', priority: 'P1', owner: 'Both',
+    problem: 'No unified view of what Cassy is doing, what\'s pending, and what it\'s costing.',
+    goal: 'Single HTML dashboard showing: active tasks, pipeline, KPIs, approvals, corrections, cost, and project health — all at a glance.',
+    outOfScope: ['Not client-facing', 'Not a CRM replacement', 'Not real-time streaming (polling is fine)'],
+    criteria: ['KPI widgets update from kpi-state.json', 'Approvals queue shows pending items', 'Quality score widget live', 'Token radar live', 'Project health board live'],
+    dependencies: ['Needs: Project 008 for radar widget', 'Needs: Project 009 Phase 2 for cost data'],
+    nextAction: 'Add quality score + capacity widgets',
+    rollback: 'git revert HEAD && git push'
+  },
+  '002': {
+    title: '002 — Video Army: Outreach Videos',
+    status: '⏸️ Paused', priority: 'P1', owner: 'Both',
+    problem: 'Steve wants personalized daily AI videos to 11+ contacts. Manual production too slow.',
+    goal: 'Automated daily HeyGen videos → Wistia hosted → GitHub Pages landing page → email to each contact.',
+    outOfScope: ['No videos sent without Steve\'s explicit contact list approval', 'No client PII in scripts', 'No re-enabling without sign-off'],
+    criteria: ['All scripts use correct Wistia auth ✅ fixed', 'Scripts abort on upload failure (no broken links)', 'BCC steve@stevehamoen.com on every outreach email', 'Landing pages verified live before send', 'Steve approves re-enable'],
+    dependencies: ['Blocked by: Steve approval to re-enable'],
+    nextAction: 'Steve confirms which contacts should continue → test each → re-enable one at a time',
+    incident: '⚠️ 2026-03-24: Broken Wistia links sent to 9 contacts. Fix emails sent without approval. Both violations documented.',
+    rollback: 'openclaw cron disable <id> for each video cron'
+  },
+  '003': {
+    title: '003 — Daily Vlog: Building in Public',
+    status: '🟢 Active', priority: 'P2', owner: 'Both',
+    problem: 'Steve wants to document the AI build journey daily. Manual recording isn\'t sustainable.',
+    goal: 'Auto-generated daily HeyGen vlog at 8AM. Pulls from previous day\'s journal. Steve as speaker. Sent to steve@stevehamoen.com only.',
+    outOfScope: ['Never sent directly to contacts without Steve sharing manually', 'No client names in scripts', 'Not a polished marketing video — raw and real'],
+    criteria: ['Cron fires at 8AM daily', 'Pulls from memory/journal-YYYY-MM-DD.md', 'Dark wood panel avatar', 'Wistia hosted + GitHub Pages landing page', 'Landing page verified live before email'],
+    dependencies: ['Uses: Project 002 Wistia upload pattern'],
+    nextAction: 'Wire up 8AM cron → test run → Steve confirms quality',
+    rollback: 'openclaw cron disable <vlog-cron-id>'
+  },
+  '004': {
+    title: '004 — Re-enable Outreach Crons',
+    status: '🔴 Blocked', priority: 'P1', owner: 'Steve (decision) / Cassy (execution)',
+    problem: 'All 11 outreach video crons disabled after 2026-03-24 broken link incident. Scripts fixed but crons remain off.',
+    goal: 'Re-enable the right crons for the right contacts with Steve\'s explicit sign-off.',
+    outOfScope: ['No cron re-enabled without Steve naming each contact', 'No new contacts added without approval'],
+    criteria: ['Steve provides approved contact list', 'Each script tested to steve@stevehamoen.com first', 'Steve confirms test video plays', 'Crons re-enabled one at a time'],
+    dependencies: ['Blocked by: Steve approval', 'Requires: Project 002 fixes confirmed'],
+    nextAction: 'Steve confirms which contacts to resume → test → re-enable',
+    rollback: 'openclaw cron disable <id> — immediate'
+  },
+  '005': {
+    title: '005 — GHL ↔ Cassy Bridge',
+    status: '🔴 Blocked', priority: 'P2', owner: 'Both',
+    problem: 'Upcoming GHL agent and Cassy will operate in silos without a connection layer.',
+    goal: 'Cassy receives anonymized signals from GHL (no PII). Mission Control shows unified view of both agents.',
+    outOfScope: ['Client PII never passes to Cassy (PIPEDA)', 'GHL Agent never overrides Cassy', 'Not building the GHL agent itself'],
+    criteria: ['GHL fires webhook to Cassy on key events', 'Cassy receives anonymized signals only', 'Shared Google Sheet as state layer', 'Mission Control shows GHL activity', 'Handoff protocol documented'],
+    dependencies: ['Blocked by: Project 006 (PII scrub must be done first)'],
+    nextAction: 'Complete 006 → design webhook spec → build bridge',
+    rollback: 'Disable GHL webhook → independent operation resumes'
+  },
+  '006': {
+    title: '006 — PII Scrub: Memory Files',
+    status: '⬜ Draft', priority: 'P1', owner: 'Cassy',
+    problem: 'MEMORY.md and journal files contain real client names/emails. PIPEDA exposure if workspace ever hits cloud.',
+    goal: 'Remove all external client PII from Cassy\'s memory. Replace with role codes. GHL holds the lookup table.',
+    outOfScope: ['Steve\'s own contact info stays', 'Not deleting journal files — just scrubbing names'],
+    criteria: ['MEMORY.md has zero external client names/emails', 'Journal files use codes not real names', 'Lookup table created', 'Future journals follow same convention'],
+    dependencies: ['Blocks: Project 005 — must be done first'],
+    nextAction: 'Steve approves → Cassy runs scrub → grep verify → done',
+    rollback: 'git revert if scrub goes wrong — all original data in git history'
+  },
+  '007': {
+    title: '007 — Background Task Queue',
+    status: '⬜ Draft', priority: 'P3', owner: 'Cassy',
+    problem: 'Cassy sits idle between heartbeats. Cheap models could run useful background work during this time.',
+    goal: 'Structured queue of background tasks on Groq/Llama. All output to #pending-sends or #needs-review. Nothing auto-sends.',
+    outOfScope: ['No autonomous sending from background tasks ever', 'No PII in background task inputs'],
+    criteria: ['BACKGROUND_QUEUE.md exists with task definitions', 'Tasks run on Groq/Llama', 'All output lands in #pending-sends or #needs-review', 'Zero auto-sends'],
+    dependencies: ['Needs: Project 009 Phase 1 (cheap model routing first)'],
+    nextAction: 'Approve 009 → Phase 1 live → build queue structure',
+    rollback: 'Delete BACKGROUND_QUEUE.md entries or disable crons'
+  },
+  '008': {
+    title: '008 — Token Radar / Spider Graph',
+    status: '⬜ Draft', priority: 'P2', owner: 'Cassy',
+    problem: 'No visual of where AI thinking is being spent. Can\'t tell revenue work from overhead at a glance.',
+    goal: '6-axis radar chart on Mission Control: Outreach / Monitoring / Research / Content / Operations / Memory. Color-coded by model.',
+    outOfScope: ['Not real-time (30min refresh is fine)', 'Not per-message granularity'],
+    criteria: ['Radar chart rendering in Mission Control', '6 axes color-coded by model', 'Daily report footer shows model summary', '[Model Name] prefix on every Cassy reply ✅ started'],
+    dependencies: ['Needs: Project 009 Phase 2 (routing log) for data', 'Needs: Project 001 base dashboard'],
+    nextAction: 'Approve 009 → Phase 2 data flows → build radar with real data',
+    rollback: 'Remove radar widget div — no functional impact'
+  },
+  '009': {
+    title: '009 — Intelligent Model Routing',
+    status: '⬜ Draft', priority: 'P2', owner: 'Cassy',
+    problem: 'Everything defaults to Claude Sonnet (~$0.02/turn). Video scripts, heartbeats, monitoring — all on the most expensive model.',
+    goal: 'Route each task to the right model tier. Cut daily AI cost from ~$1.50-2.00 to ~$0.30-0.50 with no quality loss.',
+    outOfScope: ['Steve ↔ Cassy conversations always stay on Sonnet', 'Phase 3 not started until Phase 2 data exists'],
+    criteria: ['Phase 1: All crons specify model explicitly', 'Video scripts → Groq', 'Email monitor → GPT-4o-mini', 'Heartbeats → Groq', 'Phase 2: Each task logs {type, model, tokens, cost}', 'Phase 3: Dynamic routing (future)'],
+    dependencies: ['Blocks: Project 007 (needs cheap routing)', 'Blocks: Project 008 (needs Phase 2 logging)'],
+    nextAction: 'React ✅ in #approve-or-kill → Cassy updates all cron model specs',
+    rollback: 'Revert cron model field to anthropic/claude-sonnet-4-6'
+  }
+};
+
+function openProject(id) {
+  var p = PROJECTS[id];
+  if (!p) return;
+  document.getElementById('drawer-title').innerHTML = p.title;
+  var html = '';
+  html += '<div style="margin-bottom:16px;display:flex;gap:12px;flex-wrap:wrap;">';
+  html += '<span style="background:var(--surface2);padding:3px 10px;border-radius:20px;font-size:11px;">' + p.status + '</span>';
+  html += '<span style="background:var(--surface2);padding:3px 10px;border-radius:20px;font-size:11px;color:var(--gold);">Priority: ' + p.priority + '</span>';
+  html += '<span style="background:var(--surface2);padding:3px 10px;border-radius:20px;font-size:11px;color:var(--muted);">Owner: ' + p.owner + '</span>';
+  html += '</div>';
+  html += '<div style="color:var(--muted);font-size:10px;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;">Problem</div>';
+  html += '<div style="margin-bottom:14px;">' + p.problem + '</div>';
+  html += '<div style="color:var(--muted);font-size:10px;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;">Goal</div>';
+  html += '<div style="margin-bottom:14px;">' + p.goal + '</div>';
+  if (p.outOfScope && p.outOfScope.length) {
+    html += '<div style="color:var(--muted);font-size:10px;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;">Out of Scope</div>';
+    html += '<ul style="margin-bottom:14px;padding-left:18px;">' + p.outOfScope.map(function(i){return '<li style="color:var(--muted);font-size:12px;">'+i+'</li>';}).join('') + '</ul>';
+  }
+  html += '<div style="color:var(--muted);font-size:10px;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;">Success Criteria</div>';
+  html += '<ul style="margin-bottom:14px;padding-left:18px;">' + p.criteria.map(function(i){return '<li style="font-size:12px;">'+i+'</li>';}).join('') + '</ul>';
+  html += '<div style="color:var(--muted);font-size:10px;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;">Dependencies</div>';
+  html += '<ul style="margin-bottom:14px;padding-left:18px;">' + p.dependencies.map(function(i){return '<li style="font-size:12px;color:var(--muted);">'+i+'</li>';}).join('') + '</ul>';
+  html += '<div style="color:var(--muted);font-size:10px;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;">Next Action</div>';
+  html += '<div style="margin-bottom:14px;color:var(--gold);">' + p.nextAction + '</div>';
+  if (p.incident) {
+    html += '<div style="background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);border-radius:8px;padding:10px;margin-bottom:14px;font-size:12px;color:#fca5a5;">' + p.incident + '</div>';
+  }
+  html += '<div style="color:var(--muted);font-size:10px;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;">Rollback</div>';
+  html += '<div style="font-family:monospace;font-size:11px;background:var(--surface2);padding:8px;border-radius:6px;color:var(--muted);">' + p.rollback + '</div>';
+  document.getElementById('drawer-content').innerHTML = html;
+  document.getElementById('proj-drawer').style.display = 'block';
+  document.getElementById('drawer-overlay').style.display = 'block';
+}
+
+function closeDrawer() {
+  document.getElementById('proj-drawer').style.display = 'none';
+  document.getElementById('drawer-overlay').style.display = 'none';
+}
+
 function clock() {
   var el = document.getElementById('clock');
   if (el) el.textContent = new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',second:'2-digit',timeZone:'America/Toronto'})+' EDT';
