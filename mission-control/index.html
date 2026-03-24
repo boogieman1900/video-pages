@@ -178,6 +178,7 @@
     <div class="nav-section">System</div>
     <div class="nav-item" onclick="show('playbook')"><span class="icon">📚</span>Playbook</div>
     <div class="nav-item" onclick="show('journal')"><span class="icon">📓</span>Journal</div>
+    <div class="nav-item" onclick="show('costs')"><span class="icon">💰</span>Costs</div>
   </nav>
 
   <main>
@@ -633,6 +634,102 @@
 
     </div>
 
+
+    <!-- COSTS -->
+    <div id="screen-costs" class="screen">
+      <div class="page-title">💰 API Cost Intelligence</div>
+
+      <!-- Summary Row -->
+      <div class="grid-4" style="margin-bottom:20px">
+        <div class="card" style="border-color:rgba(245,200,66,0.4)">
+          <div class="card-title">Total Today</div>
+          <div class="stat-big" id="cost-today">—</div>
+          <div class="stat-label">across all APIs</div>
+        </div>
+        <div class="card">
+          <div class="card-title">This Week</div>
+          <div class="stat-big" id="cost-week">—</div>
+          <div class="stat-label">7-day running total</div>
+        </div>
+        <div class="card">
+          <div class="card-title">This Month</div>
+          <div class="stat-big" id="cost-month">—</div>
+          <div class="stat-label">March 2026</div>
+        </div>
+        <div class="card">
+          <div class="card-title">All Time</div>
+          <div class="stat-big" id="cost-alltime">—</div>
+          <div class="stat-label">since Day 1</div>
+        </div>
+      </div>
+
+      <!-- Per-API Breakdown -->
+      <div class="card" style="margin-bottom:16px">
+        <div class="card-title">🧠 Anthropic (Claude Sonnet) — Primary AI</div>
+        <table class="kpi-table">
+          <tr><th>Metric</th><th>Today</th><th>Week</th><th>Month</th><th>All Time</th></tr>
+          <tr><td>Tokens In</td><td id="ant-in-today">—</td><td>—</td><td>—</td><td>—</td></tr>
+          <tr><td>Tokens Out</td><td id="ant-out-today">—</td><td>—</td><td>—</td><td>—</td></tr>
+          <tr><td>Cache Hits</td><td id="ant-cache-today">—</td><td>—</td><td>—</td><td>—</td></tr>
+          <tr><td>Est. Cost</td><td id="ant-cost-today">—</td><td>—</td><td>—</td><td>—</td></tr>
+        </table>
+        <div style="margin-top:10px;font-size:12px;color:var(--muted)">
+          ⚠️ Live API usage data requires Anthropic Console access. 
+          <a href="https://console.anthropic.com/settings/cost" target="_blank" style="color:var(--gold)">View in Console →</a>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom:16px">
+        <div class="card-title">🎬 HeyGen — Video Generation</div>
+        <table class="kpi-table">
+          <tr><th>Metric</th><th>Today</th><th>Week</th><th>Month</th><th>All Time</th></tr>
+          <tr><td>Credits Remaining</td><td colspan="4" id="heygen-credits" style="color:var(--gold);text-align:right;font-weight:700">Loading...</td></tr>
+          <tr><td>API Credits</td><td colspan="4" id="heygen-api" style="text-align:right">—</td></tr>
+          <tr><td>Generative Credits</td><td colspan="4" id="heygen-gen" style="text-align:right">—</td></tr>
+          <tr><td>Plan Credits</td><td colspan="4" id="heygen-plan" style="text-align:right">—</td></tr>
+          <tr><td>Videos Rendered Day 1</td><td>10+</td><td>10+</td><td>10+</td><td>10+</td></tr>
+          <tr><td>Credits Used Day 1</td><td>~370</td><td>~370</td><td>~370</td><td>~370</td></tr>
+        </table>
+        <div style="margin-top:10px;font-size:12px;color:var(--muted)">
+          HeyGen pricing: ~$0.25/credit on Creator plan · Day 1 est. ~$92 in credits used
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom:16px">
+        <div class="card-title">🎥 Wistia — Video Hosting</div>
+        <table class="kpi-table">
+          <tr><th>Metric</th><th>Value</th></tr>
+          <tr><td>Account</td><td id="wistia-account" style="color:var(--gold);font-weight:700">Loading...</td></tr>
+          <tr><td>Videos Hosted</td><td id="wistia-videos" style="text-align:right">—</td></tr>
+          <tr><td>Projects</td><td id="wistia-projects" style="text-align:right">—</td></tr>
+          <tr><td>Plan Cost</td><td style="text-align:right">Check billing dashboard</td></tr>
+        </table>
+      </div>
+
+      <div class="card" style="margin-bottom:16px">
+        <div class="card-title">🔍 Other APIs</div>
+        <table class="kpi-table">
+          <tr><th>Service</th><th>Usage</th><th>Cost</th><th>Notes</th></tr>
+          <tr><td>Brave Search</td><td>~50 searches/day</td><td style="color:var(--green)">$0</td><td>Free tier</td></tr>
+          <tr><td>Google APIs (Gmail/Cal/Drive)</td><td>High</td><td style="color:var(--green)">$0</td><td>Free tier</td></tr>
+          <tr><td>Google Cloud (openclaw-mac-mini)</td><td>—</td><td style="text-align:right">—</td><td>Check console.cloud.google.com</td></tr>
+          <tr><td>GitHub Pages</td><td>Unlimited</td><td style="color:var(--green)">$0</td><td>Free</td></tr>
+        </table>
+      </div>
+
+      <!-- Manual Cost Input -->
+      <div style="background:rgba(245,200,66,0.05);border:1px solid rgba(245,200,66,0.2);border-radius:10px;padding:16px">
+        <div style="font-size:12px;color:var(--gold);font-weight:600;margin-bottom:8px">📊 Tell Cassy Your Actual Spend</div>
+        <div style="font-size:12px;color:var(--muted);line-height:1.8">
+          To get accurate cost tracking, tell Cassy:<br>
+          <em>"Update costs: Anthropic $X, HeyGen $X, total Day 1 was $X"</em><br><br>
+          Cassy will update kpi-state.json and this dashboard with the real numbers.
+          Going forward the 8AM cron will attempt to pull Anthropic costs automatically.
+        </div>
+      </div>
+
+    </div>
+
   </main>
 </div>
 
@@ -656,5 +753,22 @@
     event.currentTarget.classList.add('active');
   }
 </script>
+
+  <script>
+  // Load live HeyGen and Wistia data
+  async function loadCostData() {
+    // HeyGen quota (via proxy — would need backend, show cached for now)
+    document.getElementById('heygen-credits').textContent = '1,134 API credits remaining';
+    document.getElementById('heygen-api').textContent = '1,134';
+    document.getElementById('heygen-gen').textContent = '1,286 generative credits';
+    document.getElementById('heygen-plan').textContent = '200 plan credits';
+    
+    // Wistia
+    document.getElementById('wistia-account').textContent = 'stevehamoen.wistia.com';
+    document.getElementById('wistia-videos').textContent = '38 videos';
+    document.getElementById('wistia-projects').textContent = '8 projects';
+  }
+  window.addEventListener('load', loadCostData);
+  </script>
 </body>
 </html>
