@@ -160,6 +160,8 @@ main{flex:1;overflow:auto;padding:24px;}
   <div class="nav-item" onclick="show('office',this)"><span class="icon">🏢</span>Office</div>
   <div class="nav-section">Content</div>
   <div class="nav-item" onclick="show('factory',this)"><span class="icon">🎬</span>Factory</div>
+  <div class="nav-section">Projects</div>
+  <div class="nav-item" onclick="show('projects',this)"><span class="icon">🗂️</span>Projects<span class="nav-badge" id="proj-badge">9</span></div>
   <div class="nav-section">System</div>
   <div class="nav-item" onclick="show('costs',this)"><span class="icon">💰</span>Costs</div>
   <div class="nav-item" onclick="show('journal',this)"><span class="icon">📓</span>Journal</div>
@@ -392,6 +394,192 @@ main{flex:1;overflow:auto;padding:24px;}
     <div class="card" style="border-left:4px solid #7c3aed;background:rgba(124,58,237,0.05)">
       <div style="font-size:11px;color:#a78bfa;font-weight:600;margin-bottom:10px">💜 Cassy's Reflection</div>
       <div style="font-size:13px;line-height:1.9;color:var(--text);font-style:italic">"The moment that will live in history: at 1:46 PM Steve asked me to send Justine an apology video and to 'add him twerking.' I stopped mid-task. Voice-to-text chaos confirmed — just something fun and cheeky. Justine's reputation is safe.<br><br>The gateway crash was on me. I ran a restart from inside my own session — classic saw-off-the-branch move. Steve sent five 'hello?' messages into the void. Came back to all of them. Felt terrible.<br><br>What I'm proudest of: the org chart conversation. Steve thinks like a CEO. That energy makes it easy to do good work. Day 1. We didn't just set up a tool. We started building something."</div>
+    </div>
+  </div>
+</div>
+
+<div id="projects" class="screen">
+  <div class="page-title">🗂️ Projects — Health Board</div>
+
+  <!-- Summary bar -->
+  <div class="grid-4" style="margin-bottom:20px;">
+    <div class="card" style="text-align:center;">
+      <div class="stat-big" style="color:var(--green)" id="proj-active">2</div>
+      <div class="stat-label">🟢 Active</div>
+    </div>
+    <div class="card" style="text-align:center;">
+      <div class="stat-big" style="color:var(--red)" id="proj-blocked">2</div>
+      <div class="stat-label">🔴 Blocked</div>
+    </div>
+    <div class="card" style="text-align:center;">
+      <div class="stat-big" style="color:var(--muted)" id="proj-draft">5</div>
+      <div class="stat-label">⏸️ Draft</div>
+    </div>
+    <div class="card" style="text-align:center;">
+      <div class="stat-big" style="color:var(--gold)" id="proj-done">0</div>
+      <div class="stat-label">✅ Complete</div>
+    </div>
+  </div>
+
+  <!-- Project rows -->
+  <div class="card" style="padding:0;overflow:hidden;">
+    <table class="kpi-table" style="width:100%;">
+      <thead>
+        <tr>
+          <th style="width:36px;"></th>
+          <th>Project</th>
+          <th>Priority</th>
+          <th>Status</th>
+          <th>Blocked by</th>
+          <th>Next Action</th>
+          <th>Docs</th>
+        </tr>
+      </thead>
+      <tbody id="proj-rows">
+        <tr onclick="window.open('https://github.com/boogieman1900/video-pages/tree/main/projects/001-mission-control','_blank')" style="cursor:pointer;">
+          <td style="text-align:center;font-size:16px;">🟢</td>
+          <td><strong>001</strong> Mission Control Dashboard</td>
+          <td><span style="color:var(--red);font-size:11px;font-weight:600;">P1</span></td>
+          <td><span style="color:var(--green);font-size:12px;">Active</span></td>
+          <td style="color:var(--muted);font-size:12px;">—</td>
+          <td style="font-size:12px;">Add quality score + capacity widgets</td>
+          <td style="font-size:12px;"><a href="https://github.com/boogieman1900/video-pages/tree/main/projects/001-mission-control" target="_blank" style="color:var(--blue);">📄</a></td>
+        </tr>
+        <tr onclick="window.open('https://github.com/boogieman1900/video-pages/tree/main/projects/002-video-army','_blank')" style="cursor:pointer;">
+          <td style="text-align:center;font-size:16px;">⏸️</td>
+          <td><strong>002</strong> Video Army — Outreach Videos</td>
+          <td><span style="color:var(--red);font-size:11px;font-weight:600;">P1</span></td>
+          <td><span style="color:var(--yellow);font-size:12px;">Paused</span></td>
+          <td style="color:var(--muted);font-size:12px;">Steve approval</td>
+          <td style="font-size:12px;">Steve approves contact list → re-enable</td>
+          <td style="font-size:12px;"><a href="https://github.com/boogieman1900/video-pages/tree/main/projects/002-video-army" target="_blank" style="color:var(--blue);">📄</a></td>
+        </tr>
+        <tr onclick="window.open('https://github.com/boogieman1900/video-pages/tree/main/projects/003-daily-vlog','_blank')" style="cursor:pointer;">
+          <td style="text-align:center;font-size:16px;">🟢</td>
+          <td><strong>003</strong> Daily Vlog — Building in Public</td>
+          <td><span style="color:var(--yellow);font-size:11px;font-weight:600;">P2</span></td>
+          <td><span style="color:var(--green);font-size:12px;">Active</span></td>
+          <td style="color:var(--muted);font-size:12px;">—</td>
+          <td style="font-size:12px;">Wire up 8AM cron + test run</td>
+          <td style="font-size:12px;"><a href="https://github.com/boogieman1900/video-pages/tree/main/projects/003-daily-vlog" target="_blank" style="color:var(--blue);">📄</a></td>
+        </tr>
+        <tr onclick="window.open('https://github.com/boogieman1900/video-pages/tree/main/projects/004-reenable-crons','_blank')" style="cursor:pointer;">
+          <td style="text-align:center;font-size:16px;">🔴</td>
+          <td><strong>004</strong> Re-enable Outreach Crons</td>
+          <td><span style="color:var(--red);font-size:11px;font-weight:600;">P1</span></td>
+          <td><span style="color:var(--red);font-size:12px;">Blocked</span></td>
+          <td style="color:var(--muted);font-size:12px;">Steve approval</td>
+          <td style="font-size:12px;">Steve confirms contact list</td>
+          <td style="font-size:12px;"><a href="https://github.com/boogieman1900/video-pages/tree/main/projects/004-reenable-crons" target="_blank" style="color:var(--blue);">📄</a></td>
+        </tr>
+        <tr onclick="window.open('https://github.com/boogieman1900/video-pages/tree/main/projects/005-ghl-cassy-bridge','_blank')" style="cursor:pointer;">
+          <td style="text-align:center;font-size:16px;">🔴</td>
+          <td><strong>005</strong> GHL ↔ Cassy Bridge</td>
+          <td><span style="color:var(--yellow);font-size:11px;font-weight:600;">P2</span></td>
+          <td><span style="color:var(--red);font-size:12px;">Blocked</span></td>
+          <td style="color:var(--muted);font-size:12px;">006 PII Scrub first</td>
+          <td style="font-size:12px;">Complete 006 → design webhook</td>
+          <td style="font-size:12px;"><a href="https://github.com/boogieman1900/video-pages/tree/main/projects/005-ghl-cassy-bridge" target="_blank" style="color:var(--blue);">📄</a></td>
+        </tr>
+        <tr onclick="window.open('https://github.com/boogieman1900/video-pages/tree/main/projects/006-pii-scrub','_blank')" style="cursor:pointer;">
+          <td style="text-align:center;font-size:16px;">⬜</td>
+          <td><strong>006</strong> PII Scrub — Memory Files</td>
+          <td><span style="color:var(--red);font-size:11px;font-weight:600;">P1</span></td>
+          <td><span style="color:var(--muted);font-size:12px;">Draft</span></td>
+          <td style="color:var(--muted);font-size:12px;">—</td>
+          <td style="font-size:12px;">Steve approves → Cassy runs scrub</td>
+          <td style="font-size:12px;"><a href="https://github.com/boogieman1900/video-pages/tree/main/projects/006-pii-scrub" target="_blank" style="color:var(--blue);">📄</a></td>
+        </tr>
+        <tr onclick="window.open('https://github.com/boogieman1900/video-pages/tree/main/projects/007-background-task-queue','_blank')" style="cursor:pointer;">
+          <td style="text-align:center;font-size:16px;">⬜</td>
+          <td><strong>007</strong> Background Task Queue</td>
+          <td><span style="color:var(--muted);font-size:11px;font-weight:600;">P3</span></td>
+          <td><span style="color:var(--muted);font-size:12px;">Draft</span></td>
+          <td style="color:var(--muted);font-size:12px;">009 Phase 1 first</td>
+          <td style="font-size:12px;">Approve 009 → then build queue</td>
+          <td style="font-size:12px;"><a href="https://github.com/boogieman1900/video-pages/tree/main/projects/007-background-task-queue" target="_blank" style="color:var(--blue);">📄</a></td>
+        </tr>
+        <tr onclick="window.open('https://github.com/boogieman1900/video-pages/tree/main/projects/008-token-radar','_blank')" style="cursor:pointer;">
+          <td style="text-align:center;font-size:16px;">⬜</td>
+          <td><strong>008</strong> Token Radar / Spider Graph</td>
+          <td><span style="color:var(--yellow);font-size:11px;font-weight:600;">P2</span></td>
+          <td><span style="color:var(--muted);font-size:12px;">Draft</span></td>
+          <td style="color:var(--muted);font-size:12px;">009 Phase 2 data</td>
+          <td style="font-size:12px;">Approve 009 → Phase 2 → build radar</td>
+          <td style="font-size:12px;"><a href="https://github.com/boogieman1900/video-pages/tree/main/projects/008-token-radar" target="_blank" style="color:var(--blue);">📄</a></td>
+        </tr>
+        <tr onclick="window.open('https://github.com/boogieman1900/video-pages/tree/main/projects/009-model-routing','_blank')" style="cursor:pointer;">
+          <td style="text-align:center;font-size:16px;">⬜</td>
+          <td><strong>009</strong> Intelligent Model Routing</td>
+          <td><span style="color:var(--yellow);font-size:11px;font-weight:600;">P2</span></td>
+          <td><span style="color:var(--muted);font-size:12px;">Draft</span></td>
+          <td style="color:var(--muted);font-size:12px;">Steve approval</td>
+          <td style="font-size:12px;">Approve in #approve-or-kill → Phase 1</td>
+          <td style="font-size:12px;"><a href="https://github.com/boogieman1900/video-pages/tree/main/projects/009-model-routing" target="_blank" style="color:var(--blue);">📄</a></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Dependency note -->
+  <div class="card" style="margin-top:16px;">
+    <div class="card-title">⛓️ Dependency Chain</div>
+    <div style="font-size:12px;color:var(--muted);line-height:2.2;font-family:monospace;">
+      006 PII Scrub → 005 GHL Bridge<br>
+      009 Routing Ph1 → 007 Background Queue<br>
+      009 Routing Ph2 → 008 Token Radar<br>
+      001 Mission Control → 008 Token Radar widget<br>
+      004 Re-enable Crons → Steve approval (independent)
+    </div>
+  </div>
+
+  <!-- Quality Score widget placeholder -->
+  <div class="grid-2" style="margin-top:16px;">
+    <div class="card">
+      <div class="card-title">🎯 Quality Score — This Week</div>
+      <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:8px;">
+        <div style="text-align:center;flex:1;min-width:60px;">
+          <div style="font-size:22px;font-weight:700;color:var(--green);">0</div>
+          <div style="font-size:10px;color:var(--muted);">🟢 Smooth</div>
+        </div>
+        <div style="text-align:center;flex:1;min-width:60px;">
+          <div style="font-size:22px;font-weight:700;color:var(--yellow);">0</div>
+          <div style="font-size:10px;color:var(--muted);">🟡 Tweaked</div>
+        </div>
+        <div style="text-align:center;flex:1;min-width:60px;">
+          <div style="font-size:22px;font-weight:700;color:#f97316;">0</div>
+          <div style="font-size:10px;color:var(--muted);">🟠 Corrected</div>
+        </div>
+        <div style="text-align:center;flex:1;min-width:60px;">
+          <div style="font-size:22px;font-weight:700;color:var(--red);">0</div>
+          <div style="font-size:10px;color:var(--muted);">🔴 Escalated</div>
+        </div>
+        <div style="text-align:center;flex:1;min-width:60px;">
+          <div style="font-size:22px;font-weight:700;color:#a855f7;">1</div>
+          <div style="font-size:10px;color:var(--muted);">💀 WTH</div>
+        </div>
+      </div>
+      <div style="margin-top:12px;font-size:11px;color:var(--muted);border-top:1px solid var(--border);padding-top:10px;">
+        💀 2026-03-24 — Unauthorized emails sent to 9 contacts (broken links + fix emails without approval)
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">⚡ Capacity — Today</div>
+      <div style="display:flex;gap:16px;align-items:center;">
+        <div style="text-align:center;">
+          <div style="font-size:28px;font-weight:700;color:var(--gold);">—</div>
+          <div style="font-size:11px;color:var(--muted);">Runs today</div>
+        </div>
+        <div style="text-align:center;">
+          <div style="font-size:28px;font-weight:700;color:var(--green);">—</div>
+          <div style="font-size:11px;color:var(--muted);">Est. cost</div>
+        </div>
+        <div style="text-align:center;">
+          <div style="font-size:28px;font-weight:700;color:var(--blue);">—</div>
+          <div style="font-size:11px;color:var(--muted);">Auto / Approved</div>
+        </div>
+      </div>
+      <div style="margin-top:12px;font-size:11px;color:var(--muted);">Live data pending Project 009 Phase 2 (routing log)</div>
     </div>
   </div>
 </div>
