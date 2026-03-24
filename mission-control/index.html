@@ -331,11 +331,13 @@ main{flex:1;overflow:auto;padding:24px;}
     .office-room { position:relative; width:100%; height:420px; background:#0a1628; border:1px solid var(--border); border-radius:12px; overflow:hidden; }
     /* Zone backgrounds */
     .zone { position:absolute; border-radius:8px; }
-    .zone-desk    { left:20px;  top:20px;  width:260px; height:175px; background:rgba(59,130,246,0.06); border:1px solid rgba(59,130,246,0.15); }
-    .zone-library { right:20px; top:20px;  width:195px; height:175px; background:rgba(168,85,247,0.06); border:1px solid rgba(168,85,247,0.15); }
-    .zone-comms   { left:20px;  top:215px; width:195px; height:155px; background:rgba(34,197,94,0.05);  border:1px solid rgba(34,197,94,0.15); }
-    .zone-break   { left:230px; top:215px; width:155px; height:155px; background:rgba(245,200,66,0.05); border:1px solid rgba(245,200,66,0.12); }
-    .zone-lounge  { right:20px; top:215px; width:170px; height:155px; background:rgba(100,116,139,0.05); border:1px solid rgba(100,116,139,0.12); }
+    /* 5-zone layout: top row 3 | bottom row 2 */
+    .zone-build   { left:20px;   top:20px;    width:210px; height:175px; background:rgba(59,130,246,0.07);  border:1px solid rgba(59,130,246,0.2); }
+    .zone-studio  { left:245px;  top:20px;    width:210px; height:175px; background:rgba(239,68,68,0.06);   border:1px solid rgba(239,68,68,0.2); }
+    .zone-library { right:20px;  top:20px;    width:165px; height:175px; background:rgba(168,85,247,0.06);  border:1px solid rgba(168,85,247,0.2); }
+    .zone-ops     { left:20px;   top:215px;   width:250px; height:155px; background:rgba(34,197,94,0.05);   border:1px solid rgba(34,197,94,0.15); }
+    .zone-break   { left:285px;  top:215px;   width:130px; height:155px; background:rgba(245,200,66,0.05);  border:1px solid rgba(245,200,66,0.12); }
+    .zone-lounge  { right:20px;  top:215px;   width:175px; height:155px; background:rgba(100,116,139,0.05); border:1px solid rgba(100,116,139,0.12); }
     .zone-label   { position:absolute; top:8px; left:10px; font-size:9px; letter-spacing:1.5px; text-transform:uppercase; opacity:0.5; }
 
     /* Desks */
@@ -374,39 +376,53 @@ main{flex:1;overflow:auto;padding:24px;}
 
   <!-- The room -->
   <div class="office-room" id="office-room">
-    <!-- Zone: Workstations — actively building/executing -->
-    <div class="zone zone-desk">
-      <div class="zone-label" style="color:rgba(59,130,246,0.8);">💻 Workstation — Active Build</div>
-      <div class="desk-obj" style="left:18px;top:45px;"></div>
-      <div class="desk-obj" style="left:80px;top:45px;"></div>
-      <div class="desk-obj" style="left:142px;top:45px;"></div>
-      <div class="desk-obj" style="left:204px;top:45px;"></div>
+    <!-- 🔨 Build Station — Cassy building/coding a project feature -->
+    <div class="zone zone-build">
+      <div class="zone-label" style="color:rgba(59,130,246,0.85);">🔨 Build Station</div>
+      <div class="desk-obj" style="left:18px;top:48px;"></div>
+      <div class="desk-obj" style="left:80px;top:48px;"></div>
+      <div class="desk-obj" style="left:142px;top:48px;"></div>
       <div class="desk-obj" style="left:18px;top:120px;"></div>
       <div class="desk-obj" style="left:80px;top:120px;"></div>
     </div>
-    <!-- Zone: Research — actively reading/analyzing -->
+    <!-- 🎙️ Studio — content creation: vlog, video, briefings, social -->
+    <div class="zone zone-studio">
+      <div class="zone-label" style="color:rgba(239,68,68,0.85);">🎙️ Studio</div>
+      <!-- mic stand -->
+      <div style="position:absolute;left:90px;top:40px;width:6px;height:50px;background:rgba(239,68,68,0.3);border-radius:3px;"></div>
+      <div style="position:absolute;left:76px;top:36px;width:34px;height:20px;border:2px solid rgba(239,68,68,0.4);border-radius:50%;"></div>
+      <!-- camera -->
+      <div style="position:absolute;left:140px;top:50px;width:30px;height:22px;background:rgba(239,68,68,0.15);border:1px solid rgba(239,68,68,0.3);border-radius:4px;"></div>
+      <div style="position:absolute;left:170px;top:55px;width:12px;height:12px;border-radius:50%;background:rgba(239,68,68,0.2);border:1px solid rgba(239,68,68,0.4);"></div>
+      <!-- on-air light -->
+      <div id="studio-light" style="position:absolute;right:12px;top:12px;width:10px;height:10px;border-radius:50%;background:rgba(239,68,68,0.2);"></div>
+    </div>
+    <!-- 📚 Research — Scout scanning ClawHub + sessions -->
     <div class="zone zone-library">
-      <div class="zone-label" style="color:rgba(168,85,247,0.8);">📚 Research — Active</div>
+      <div class="zone-label" style="color:rgba(168,85,247,0.85);">📚 Research</div>
       <div class="bookshelf" style="right:10px;top:28px;"></div>
       <div class="bookshelf" style="right:36px;top:28px;"></div>
       <div class="bookshelf" style="right:62px;top:28px;"></div>
     </div>
-    <!-- Zone: Comms — actively messaging/emailing/calling -->
-    <div class="zone zone-comms">
-      <div class="zone-label" style="color:rgba(34,197,94,0.8);">📱 Comms — Active</div>
-      <div class="desk-obj" style="left:18px;top:45px;"></div>
-      <div class="desk-obj" style="left:80px;top:45px;"></div>
-      <div class="desk-obj" style="left:142px;top:45px;"></div>
+    <!-- ⚙️ Ops Desk — monitoring, KPI, approval sync running -->
+    <div class="zone zone-ops">
+      <div class="zone-label" style="color:rgba(34,197,94,0.85);">⚙️ Ops</div>
+      <div class="desk-obj" style="left:18px;top:48px;"></div>
+      <div class="desk-obj" style="left:80px;top:48px;"></div>
+      <div class="desk-obj" style="left:142px;top:48px;"></div>
+      <div class="desk-obj" style="left:204px;top:48px;"></div>
+      <div class="desk-obj" style="left:18px;top:110px;"></div>
+      <div class="desk-obj" style="left:80px;top:110px;"></div>
     </div>
-    <!-- Zone: Break Room — next run ≤30 min, warming up -->
+    <!-- ☕ Break Room — next run ≤30 min -->
     <div class="zone zone-break">
-      <div class="zone-label" style="color:rgba(245,200,66,0.7);">☕ Break — Soon</div>
-      <div class="table-obj" style="left:40px;bottom:20px;"></div>
+      <div class="zone-label" style="color:rgba(245,200,66,0.7);">☕ Soon</div>
+      <div class="table-obj" style="left:32px;bottom:22px;"></div>
     </div>
-    <!-- Zone: Lounge — idle, hours away -->
+    <!-- 🛋️ Lounge — idle, off-hours -->
     <div class="zone zone-lounge">
-      <div class="zone-label" style="color:rgba(100,116,139,0.6);">🛋️ Lounge — Idle</div>
-      <div class="couch-obj" style="bottom:20px;left:20px;"></div>
+      <div class="zone-label" style="color:rgba(100,116,139,0.6);">🛋️ Idle</div>
+      <div class="couch-obj" style="bottom:22px;left:22px;"></div>
     </div>
     <!-- Agents injected by JS -->
   </div>
@@ -1319,25 +1335,32 @@ function closeDrawer() {
 // break   = next run ≤30 min (warming up, coffee in hand)
 // lounge  = idle — hours away, sleeping
 
+// Zone meanings:
+// build   = Cassy actively building a project feature / writing code / creating docs
+// studio  = any agent generating content (video, vlog, briefing, social)
+// library = Scout actively scanning/researching
+// ops     = monitoring, KPI, approval sync running NOW
+// break   = next run ≤30 min, warming up
+// lounge  = idle / off-hours / sleeping
+
 var AGENTS = [
   { id:'cassy', name:'Cassy', emoji:'💼', role:'Main Agent · Sonnet', color:'#f5c842',
     getStatus: function() {
-      // Cassy is at her desk when this page is being viewed — she's working
-      return { zone:'desk', anim:'typing', task:'Active · responding to Steve in #orders' };
+      return { zone:'build', anim:'typing', task:'Building · responding to Steve in #orders' };
     }
   },
   { id:'email', name:'Email Mon.', emoji:'📧', role:'Every 5m · GPT-mini', color:'#3b82f6',
     getStatus: function() {
       var m = new Date().getMinutes() % 5;
-      if (m < 2) return { zone:'comms',  anim:'typing',   task:'Reading + replying to inbox NOW' };
-      if (m >= 4) return { zone:'break', anim:'waiting',  task:'Next check in <1 min' };
-      return               { zone:'lounge', anim:'sleeping', task:'Next check in ' + (5-m) + ' min' };
+      if (m < 2)  return { zone:'ops',    anim:'typing',   task:'Reading + replying to inbox NOW' };
+      if (m >= 4) return { zone:'break',  anim:'waiting',  task:'Next check in <1 min' };
+      return              { zone:'lounge', anim:'sleeping', task:'Next check in ' + (5-m) + ' min' };
     }
   },
   { id:'kpi', name:'KPI Reporter', emoji:'📊', role:'8AM daily · GPT-mini', color:'#22c55e',
     getStatus: function() {
       var h = new Date().getHours(), m = new Date().getMinutes();
-      if (h===8 && m<20)  return { zone:'desk',   anim:'typing',   task:'Posting daily KPI scorecard NOW' };
+      if (h===8 && m<20)  return { zone:'ops',    anim:'typing',   task:'Posting daily KPI scorecard NOW' };
       if (h===7 && m>=45) return { zone:'break',  anim:'waiting',  task:'Starting in <15 min' };
       return                      { zone:'lounge', anim:'sleeping', task:'Off-hours · next run 8:00 AM' };
     }
@@ -1345,8 +1368,8 @@ var AGENTS = [
   { id:'vlog', name:'Daily Vlog', emoji:'🎬', role:'8AM daily · Groq', color:'#f97316',
     getStatus: function() {
       var h = new Date().getHours(), m = new Date().getMinutes();
-      if (h===8 && m<35)  return { zone:'desk',   anim:'typing',   task:'Generating Steve\'s vlog video NOW' };
-      if (h===7 && m>=50) return { zone:'break',  anim:'waiting',  task:'Starting soon' };
+      if (h===8 && m<35)  return { zone:'studio', anim:'typing',   task:'Generating Steve\'s vlog video NOW' };
+      if (h===7 && m>=50) return { zone:'break',  anim:'waiting',  task:'Warming up · starting soon' };
       return                      { zone:'lounge', anim:'sleeping', task:'Off-hours · next run 8:00 AM' };
     }
   },
@@ -1354,18 +1377,16 @@ var AGENTS = [
     getStatus: function() {
       var h = new Date().getHours(), m = new Date().getMinutes(), d = new Date().getDay();
       var isWeekday = d>=1&&d<=5;
-      var activeHour = h===9||h===12||h===15;
-      var warmHour = (h===8&&m>=45)||(h===11&&m>=45)||(h===14&&m>=45);
-      if (activeHour && m<20 && isWeekday) return { zone:'desk',  anim:'typing',  task:'Running background task queue NOW' };
-      if (warmHour && isWeekday)           return { zone:'break', anim:'waiting', task:'Queued · starting soon' };
-      return                                       { zone:'lounge', anim:'sleeping', task:'Off-hours · Mon-Fri 9/12/15h' };
+      if ((h===9||h===12||h===15) && m<20 && isWeekday)
+        return { zone:'studio', anim:'typing',   task:'Creating background content NOW' };
+      if (((h===8&&m>=45)||(h===11&&m>=45)||(h===14&&m>=45)) && isWeekday)
+        return { zone:'break',  anim:'waiting',  task:'Queued · starting soon' };
+      return   { zone:'lounge', anim:'sleeping', task:'Off-hours · Mon-Fri 9/12/15h' };
     }
   },
   { id:'scout', name:'Scout', emoji:'🔭', role:'Every 6h · Groq', color:'#a855f7',
     getStatus: function() {
-      // Scout fires at anchor + 6h intervals. Approximated by hour % 6.
-      var h = new Date().getHours(), m = new Date().getMinutes();
-      var slotH = h % 6;
+      var h = new Date().getHours(), m = new Date().getMinutes(), slotH = h % 6;
       if (slotH===0 && m<25)  return { zone:'library', anim:'researching', task:'Scanning ClawHub + sessions NOW' };
       if (slotH===5 && m>=45) return { zone:'break',   anim:'waiting',     task:'Starting in <15 min' };
       return                          { zone:'lounge',  anim:'sleeping',    task:'Next scan in ~' + (6-slotH) + 'h' };
@@ -1374,20 +1395,21 @@ var AGENTS = [
   { id:'approval', name:'Approval Sync', emoji:'✅', role:'Every 1h · Groq', color:'#10b981',
     getStatus: function() {
       var m = new Date().getMinutes();
-      if (m < 8)  return { zone:'desk',  anim:'typing',  task:'Checking #approve-or-kill reactions NOW' };
-      if (m >= 55) return { zone:'break', anim:'waiting', task:'Starting in <5 min' };
+      if (m < 8)   return { zone:'ops',    anim:'typing',   task:'Checking #approve-or-kill reactions NOW' };
+      if (m >= 55) return { zone:'break',  anim:'waiting',  task:'Starting in <5 min' };
       return               { zone:'lounge', anim:'sleeping', task:'Next sync in ~' + (60-m) + ' min' };
     }
   }
 ];
 
-// Zone spawn coordinates [x%, y%] slots within each zone element
+// Zone spawn coordinates [x%, y%] within each zone element
 var ZONE_SLOTS = {
-  desk:     [[12,55],[35,55],[58,55],[80,55],[12,88],[35,88]],
-  library:  [[15,45],[40,45],[65,45],[15,80],[40,80]],
-  comms:    [[12,55],[35,55],[60,55],[80,55]],
-  break:    [[20,55],[50,55],[20,85],[50,85]],
-  lounge:   [[15,55],[38,55],[62,55],[85,55],[15,85],[38,85]]
+  build:   [[12,52],[35,52],[58,52],[80,52],[12,85],[35,85]],
+  studio:  [[15,52],[38,52],[62,52],[85,52],[15,85],[38,85]],
+  library: [[12,48],[38,48],[65,48],[12,80],[38,80]],
+  ops:     [[10,52],[28,52],[46,52],[64,52],[10,85],[28,85]],
+  break:   [[20,52],[55,52],[20,85],[55,85]],
+  lounge:  [[12,52],[35,52],[58,52],[82,52],[12,85],[35,85]]
 };
 var _slotIdx = {};
 
@@ -1434,8 +1456,15 @@ function placeAgents() {
     room.appendChild(sprite);
 
     // Mini card
-    var statusColors = { desk:'var(--blue)', library:'#a855f7', comms:'var(--green)', break:'var(--yellow)', lounge:'var(--muted)' };
-    var statusLabels = { desk:'🔨 Building', library:'📚 Researching', comms:'📱 Comms', break:'☕ Up Soon', lounge:'💤 Idle' };
+    var statusColors = { build:'var(--blue)', studio:'var(--red)', library:'#a855f7', ops:'var(--green)', break:'var(--yellow)', lounge:'var(--muted)' };
+    var statusLabels = { build:'🔨 Building', studio:'🎙️ On Air', library:'📚 Researching', ops:'⚙️ Ops Running', break:'☕ Up Soon', lounge:'💤 Idle' };
+    // Studio ON AIR light
+    var studioOccupied = AGENTS.some(function(a){ return a.getStatus().zone==='studio'; });
+    var studioLight = document.getElementById('studio-light');
+    if (studioLight) {
+      studioLight.style.background = studioOccupied ? '#ef4444' : 'rgba(239,68,68,0.15)';
+      studioLight.style.boxShadow  = studioOccupied ? '0 0 8px #ef4444' : 'none';
+    }
     var mini = document.createElement('div');
     mini.className = 'agent-mini';
     mini.innerHTML =
@@ -1453,7 +1482,7 @@ function officeTime() {
   if (el) {
     var now = new Date();
     var h = now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',timeZone:'America/Toronto'});
-    var active = AGENTS.filter(function(a){ var z=a.getStatus().zone; return z==='desk'||z==='library'||z==='comms'; }).length;
+    var active = AGENTS.filter(function(a){ var z=a.getStatus().zone; return z==='build'||z==='studio'||z==='library'||z==='ops'; }).length;
     var idle   = AGENTS.filter(function(a){ return a.getStatus().zone==='lounge'; }).length;
     var soon   = AGENTS.filter(function(a){ return a.getStatus().zone==='break'; }).length;
     el.textContent = h + ' EDT  ·  🔨 ' + active + ' active  ·  ☕ ' + soon + ' up soon  ·  💤 ' + idle + ' idle';
