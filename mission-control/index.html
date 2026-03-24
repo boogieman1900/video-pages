@@ -702,8 +702,50 @@
       </div>
 
       <!-- Full API Inventory -->
-      <div class="card" style="margin-bottom:16px">
-        <div class="card-title">🗂️ Full API Inventory</div>
+      <!-- Decision AI -->
+      <div class="card" style="margin-bottom:16px;border-left:4px solid #7c3aed">
+        <div style="font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:#a78bfa;margin-bottom:14px">🧠 DECISION AI — Models That Think</div>
+        <table class="kpi-table">
+          <tr><th>Provider</th><th>Model</th><th>Status</th><th>Cost / 1M tokens</th><th>Best For</th></tr>
+          <tr><td>Anthropic</td><td>Claude Sonnet 4.6</td><td><span class="pill pill-green">✅ Active</span></td><td>$3 in · $15 out</td><td>Reasoning, code, complex tasks</td></tr>
+          <tr><td>Anthropic</td><td>Claude Haiku</td><td><span class="pill pill-green">✅ Available</span></td><td>$0.25 in · $1.25 out</td><td>Simple tasks, crons</td></tr>
+          <tr><td>OpenAI</td><td>GPT-5.4-mini</td><td><span class="pill pill-green">✅ Active (crons)</span></td><td>$0.15 in · $0.60 out</td><td>Email, structured writing</td></tr>
+          <tr><td>OpenAI</td><td>GPT-5.4</td><td><span class="pill pill-green">✅ Available</span></td><td>$2.50 in · $10 out</td><td>Quality writing, GPT-4 class</td></tr>
+          <tr><td>Groq</td><td>Llama 3.3 70B</td><td><span class="pill pill-green">✅ Active (crons)</span></td><td>~$0.06 in/out</td><td>Sports/news briefings, fast crons</td></tr>
+          <tr><td>Google (via OR)</td><td>Gemini 2.5 Flash</td><td><span class="pill pill-green">✅ Active</span></td><td>$0.10 in · $0.40 out</td><td>Vision, multimodal, structured</td></tr>
+          <tr><td>OpenRouter</td><td>27 free models</td><td><span class="pill pill-green">✅ Failover</span></td><td>$0 (free tier)</td><td>Backup if Anthropic/OpenAI down</td></tr>
+        </table>
+      </div>
+
+      <!-- Processing APIs -->
+      <div class="card" style="margin-bottom:16px;border-left:4px solid #3b82f6">
+        <div style="font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:#60a5fa;margin-bottom:14px">⚙️ PROCESSING APIS — Tools That Do Specific Jobs</div>
+        <table class="kpi-table">
+          <tr><th>Service</th><th>What It Does</th><th>Status</th><th>Cost</th><th>Free Tier</th></tr>
+          <tr><td>🎬 HeyGen</td><td>AI avatar video generation</td><td><span class="pill pill-green">✅ Active</span></td><td>~1 credit/sec video</td><td>1,134 credits remaining</td></tr>
+          <tr><td>🎥 Wistia</td><td>Video hosting + analytics</td><td><span class="pill pill-green">✅ Active</span></td><td>Monthly subscription</td><td>Up to 20 videos free</td></tr>
+          <tr><td>🔍 Brave Search</td><td>Web search</td><td><span class="pill pill-green">✅ Active</span></td><td>$3/1k queries (Pro)</td><td>2k/month free</td></tr>
+          <tr><td>📧 Gmail (gog)</td><td>Email send/receive/label</td><td><span class="pill pill-green">✅ Active</span></td><td>$0</td><td>Unlimited</td></tr>
+          <tr><td>📅 Google Calendar</td><td>Meeting booking, invites</td><td><span class="pill pill-green">✅ Active</span></td><td>$0</td><td>Unlimited</td></tr>
+          <tr><td>📁 Google Drive</td><td>File hosting + sharing</td><td><span class="pill pill-green">✅ Active</span></td><td>$0</td><td>15GB free</td></tr>
+          <tr><td>💬 Discord Bot</td><td>Cassy HQ command centre</td><td><span class="pill pill-green">✅ Active</span></td><td>$0</td><td>Unlimited</td></tr>
+          <tr><td>📱 Telegram Bot</td><td>Primary chat interface</td><td><span class="pill pill-green">✅ Active</span></td><td>$0</td><td>Unlimited</td></tr>
+          <tr><td>🌐 GitHub Pages</td><td>Video landing pages</td><td><span class="pill pill-green">✅ Active</span></td><td>$0</td><td>Unlimited</td></tr>
+          <tr><td>🔧 Google Chat</td><td>Workspace messaging</td><td><span class="pill pill-yellow">⚠️ Partial</span></td><td>$0</td><td>Webhook configured</td></tr>
+        </table>
+      </div>
+
+      <div class="card" style="margin-bottom:16px;border-left:4px solid var(--yellow)">
+        <div style="font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--yellow);margin-bottom:14px">🔮 COMING SOON — Processing APIs to Add</div>
+        <table class="kpi-table">
+          <tr><th>Service</th><th>What It Does</th><th>Cost</th><th>Priority</th></tr>
+          <tr><td>🎬 Kling AI</td><td>Cinematic video generation — B-roll, product shots</td><td>~$1/10s video</td><td><span class="pill pill-yellow">Medium</span></td></tr>
+          <tr><td>💃 Seedance (fal.ai)</td><td>Audio+video joint generation — TikTok/social</td><td>Pay per use</td><td><span class="pill pill-yellow">Medium</span></td></tr>
+          <tr><td>🎵 Suno (via PiAPI)</td><td>AI music generation — podcast intros, video BGM</td><td>Points based</td><td><span class="pill pill-yellow">Medium</span></td></tr>
+          <tr><td>🎨 Imagen 4 (Google)</td><td>AI image generation — graphics, thumbnails</td><td>~$0.04/image</td><td><span class="pill pill-green">Low (enable billing)</span></td></tr>
+          <tr><td>🎥 Veo 3 (Google)</td><td>Google's video gen — waitlist</td><td>TBD</td><td><span class="pill pill-green">Later</span></td></tr>
+        </table>
+      </div>
         <table class="kpi-table">
           <tr><th>Service</th><th>Key Location</th><th>Plan/Tier</th><th>Cost Model</th><th>Day 1 Est.</th></tr>
           <tr><td>🧠 Anthropic (Claude)</td><td>auth-profiles.json</td><td>API pay-per-use</td><td>$3/M input · $15/M output</td><td style="color:var(--yellow)">~$50</td></tr>
