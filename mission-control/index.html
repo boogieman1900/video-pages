@@ -867,3 +867,67 @@
     </div>
 
   </main>
+</div>
+
+</body>
+<script>
+  // Clock
+  function updateClock() {
+    var el = document.getElementById('clock');
+    if (el) {
+      var now = new Date();
+      el.textContent = now.toLocaleTimeString('en-US', {
+        hour: '2-digit', minute: '2-digit', second: '2-digit',
+        timeZone: 'America/Toronto'
+      }) + ' EDT';
+    }
+  }
+  updateClock();
+  setInterval(updateClock, 1000);
+
+  // Navigation
+  function show(screenName, clickedEl) {
+    var screens = document.querySelectorAll('.screen');
+    for (var i = 0; i < screens.length; i++) {
+      screens[i].style.display = 'none';
+      screens[i].classList.remove('active');
+    }
+    var target = document.getElementById('screen-' + screenName);
+    if (target) {
+      target.style.display = 'block';
+      target.classList.add('active');
+    }
+    var navItems = document.querySelectorAll('.nav-item');
+    for (var j = 0; j < navItems.length; j++) {
+      navItems[j].classList.remove('active');
+    }
+    if (clickedEl) {
+      clickedEl.classList.add('active');
+    }
+  }
+
+  // Init
+  document.addEventListener('DOMContentLoaded', function() {
+    var screens = document.querySelectorAll('.screen');
+    for (var i = 0; i < screens.length; i++) {
+      screens[i].style.display = 'none';
+    }
+    var radar = document.getElementById('screen-radar');
+    if (radar) { radar.style.display = 'block'; radar.classList.add('active'); }
+    var firstNav = document.querySelector('.nav-item');
+    if (firstNav) firstNav.classList.add('active');
+  });
+
+  // HeyGen + Wistia live data
+  window.addEventListener('load', function() {
+    var hc = document.getElementById('heygen-credits');
+    if (hc) hc.textContent = '1,134 API credits remaining';
+    var wa = document.getElementById('wistia-account');
+    if (wa) wa.textContent = 'stevehamoen.wistia.com';
+    var wv = document.getElementById('wistia-videos');
+    if (wv) wv.textContent = '38 videos';
+    var wp = document.getElementById('wistia-projects');
+    if (wp) wp.textContent = '8 projects';
+  });
+</script>
+</html>
