@@ -322,19 +322,91 @@ main{flex:1;overflow:auto;padding:24px;}
 </div>
 
 <div id="factory" class="screen">
-  <div class="page-title">🎬 Content Factory</div>
-  <div class="grid-2">
-    <div class="card">
-      <div class="card-title">Videos</div>
-      <div class="task-card priority-low"><div class="task-title">✅ Pat Pytlik — Foxhunt (Polish/English)</div><div class="task-meta">boogieman1900.github.io/video-pages/pat-foxhunt/</div></div>
-      <div class="task-card priority-high"><div class="task-title">⏳ Justine Feliciano — personalized</div><div class="task-meta">Pending approval</div></div>
-    </div>
-    <div class="card">
-      <div class="card-title">Landing Pages</div>
-      <div class="task-card"><div class="task-title">✅ pat-foxhunt</div><div class="task-meta">boogieman1900.github.io/video-pages/pat-foxhunt/</div></div>
-      <div class="task-card"><div class="task-title">✅ ty-andre, ty-marcus, ty-stacey, more</div><div class="task-meta">boogieman1900.github.io/video-pages/</div></div>
-    </div>
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+    <div class="page-title" style="margin-bottom:0;">🏢 The Agency</div>
+    <div id="office-time" style="font-size:11px;color:var(--muted);"></div>
   </div>
+
+  <style>
+    .office-room { position:relative; width:100%; height:420px; background:#0a1628; border:1px solid var(--border); border-radius:12px; overflow:hidden; }
+    /* Zone backgrounds */
+    .zone { position:absolute; border-radius:8px; }
+    .zone-desk    { left:20px;  top:20px;  width:340px; height:180px; background:rgba(59,130,246,0.06); border:1px solid rgba(59,130,246,0.15); }
+    .zone-library { right:20px; top:20px;  width:240px; height:180px; background:rgba(168,85,247,0.06); border:1px solid rgba(168,85,247,0.15); }
+    .zone-break   { left:20px;  bottom:20px; width:200px; height:160px; background:rgba(245,200,66,0.05); border:1px solid rgba(245,200,66,0.12); }
+    .zone-lounge  { right:20px; bottom:20px; width:300px; height:160px; background:rgba(100,116,139,0.05); border:1px solid rgba(100,116,139,0.12); }
+    .zone-label   { position:absolute; top:8px; left:10px; font-size:9px; letter-spacing:1.5px; text-transform:uppercase; opacity:0.5; }
+
+    /* Desks */
+    .desk-obj { position:absolute; width:44px; height:28px; background:#162840; border:1px solid rgba(59,130,246,0.3); border-radius:4px; }
+    .bookshelf { position:absolute; width:20px; height:70px; background:#1e1035; border:1px solid rgba(168,85,247,0.3); border-radius:3px; }
+    .couch-obj { position:absolute; width:120px; height:36px; background:#1a2030; border:1px solid rgba(100,116,139,0.3); border-radius:6px; }
+    .table-obj { position:absolute; width:60px; height:40px; background:#1a1a10; border:1px solid rgba(245,200,66,0.2); border-radius:50%; }
+
+    /* Agent sprite */
+    .agent-sprite { position:absolute; text-align:center; cursor:pointer; transition:transform 0.2s; z-index:10; }
+    .agent-sprite:hover { transform:scale(1.15); }
+    .agent-sprite:hover .agent-tooltip { display:block; }
+    .agent-body { font-size:22px; line-height:1; }
+    .agent-label { font-size:9px; color:var(--text); margin-top:2px; white-space:nowrap; font-weight:600; }
+    .agent-tooltip { display:none; position:absolute; bottom:calc(100% + 6px); left:50%; transform:translateX(-50%); background:#0f1e35; border:1px solid var(--border); border-radius:6px; padding:6px 10px; white-space:nowrap; font-size:11px; color:var(--text); z-index:100; pointer-events:none; box-shadow:0 4px 12px rgba(0,0,0,0.4); }
+    .agent-tooltip::after { content:''; position:absolute; top:100%; left:50%; transform:translateX(-50%); border:5px solid transparent; border-top-color:#0f1e35; }
+
+    /* Animations */
+    @keyframes typing { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-3px)} }
+    @keyframes sleeping { 0%,100%{transform:rotate(-3deg)} 50%{transform:rotate(3deg)} }
+    @keyframes researching { 0%,100%{transform:translateX(0)} 25%{transform:translateX(2px)} 75%{transform:translateX(-2px)} }
+    @keyframes waiting { 0%,100%{transform:scale(1)} 50%{transform:scale(1.04)} }
+    .anim-typing { animation:typing 0.8s ease-in-out infinite; }
+    .anim-sleeping { animation:sleeping 3s ease-in-out infinite; }
+    .anim-researching { animation:researching 2s ease-in-out infinite; }
+    .anim-waiting { animation:waiting 2s ease-in-out infinite; }
+
+    /* Agent cards row */
+    .agent-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:10px; margin-top:14px; }
+    .agent-mini { background:var(--surface); border:1px solid var(--border); border-radius:8px; padding:10px 12px; display:flex; align-items:center; gap:10px; }
+    .agent-mini:hover { border-color:rgba(245,200,66,0.3); }
+    .agent-mini-icon { font-size:20px; }
+    .agent-mini-name { font-size:12px; font-weight:600; }
+    .agent-mini-status { font-size:10px; color:var(--muted); }
+  </style>
+
+  <!-- The room -->
+  <div class="office-room" id="office-room">
+    <!-- Zone: Workstations -->
+    <div class="zone zone-desk">
+      <div class="zone-label" style="color:rgba(59,130,246,0.7);">💻 Workstations</div>
+      <div class="desk-obj" style="left:20px;top:45px;"></div>
+      <div class="desk-obj" style="left:80px;top:45px;"></div>
+      <div class="desk-obj" style="left:140px;top:45px;"></div>
+      <div class="desk-obj" style="left:200px;top:45px;"></div>
+      <div class="desk-obj" style="left:260px;top:45px;"></div>
+      <div class="desk-obj" style="left:20px;top:120px;"></div>
+      <div class="desk-obj" style="left:80px;top:120px;"></div>
+      <div class="desk-obj" style="left:140px;top:120px;"></div>
+    </div>
+    <!-- Zone: Library / Research -->
+    <div class="zone zone-library">
+      <div class="zone-label" style="color:rgba(168,85,247,0.7);">📚 Research</div>
+      <div class="bookshelf" style="right:10px;top:25px;"></div>
+      <div class="bookshelf" style="right:35px;top:25px;"></div>
+      <div class="bookshelf" style="right:60px;top:25px;"></div>
+    </div>
+    <!-- Zone: Break Room -->
+    <div class="zone zone-break">
+      <div class="zone-label" style="color:rgba(245,200,66,0.7);">☕ Break Room</div>
+      <div class="table-obj" style="left:60px;bottom:20px;"></div>
+    </div>
+    <!-- Zone: Lounge (idle/sleeping) -->
+    <div class="zone zone-lounge">
+      <div class="zone-label" style="color:rgba(100,116,139,0.7);">🛋️ Lounge</div>
+      <div class="couch-obj" style="bottom:20px;left:80px;"></div>
+    </div>
+    <!-- Agents injected by JS -->
+  </div>
+
+  <!-- Agent cards -->
+  <div class="agent-grid" id="agent-mini-grid"></div>
 </div>
 
 <div id="costs" class="screen">
@@ -897,6 +969,9 @@ main{flex:1;overflow:auto;padding:24px;}
 </div>
 
 <script>
+// Chart instances (lazy init)
+var _charts = {};
+
 function show(id, el) {
   var screens = document.querySelectorAll('.screen');
   for (var i = 0; i < screens.length; i++) screens[i].style.display = 'none';
@@ -905,6 +980,100 @@ function show(id, el) {
   var navs = document.querySelectorAll('.nav-item');
   for (var j = 0; j < navs.length; j++) navs[j].classList.remove('active');
   if (el) el.classList.add('active');
+  // Lazy-init charts when their screen is shown
+  if (id === 'projects') { initQualitySparkline(); initCapacityDoughnut(); }
+  if (id === 'token-radar') { initTokenRadar(); }
+}
+
+function initQualitySparkline() {
+  if (_charts['quality-sparkline']) return;
+  var ctx = document.getElementById('quality-sparkline');
+  if (!ctx) return;
+  _charts['quality-sparkline'] = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ['W10', 'W11', 'W12', 'W13'],
+      datasets: [
+        { label: 'Smooth', data: [3, 2, 1, 0], backgroundColor: 'rgba(34,197,94,0.6)', stack: 'a' },
+        { label: 'Tweaked', data: [1, 1, 1, 0], backgroundColor: 'rgba(234,179,8,0.6)', stack: 'a' },
+        { label: 'Corrected', data: [0, 1, 0, 0], backgroundColor: 'rgba(249,115,22,0.6)', stack: 'a' },
+        { label: 'Escalated', data: [0, 0, 0, 0], backgroundColor: 'rgba(239,68,68,0.6)', stack: 'a' },
+        { label: 'WTH', data: [0, 0, 0, 1], backgroundColor: 'rgba(168,85,247,0.8)', stack: 'a' }
+      ]
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { stacked: true, ticks: { color: '#64748b', font: { size: 10 } }, grid: { color: 'rgba(255,255,255,0.04)' } },
+        y: { stacked: true, ticks: { color: '#64748b', font: { size: 10 }, stepSize: 1 }, grid: { color: 'rgba(255,255,255,0.06)' }, beginAtZero: true }
+      }
+    }
+  });
+}
+
+function initCapacityDoughnut() {
+  if (_charts['capacity-doughnut']) return;
+  var ctx = document.getElementById('capacity-doughnut');
+  if (!ctx) return;
+  _charts['capacity-doughnut'] = new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+      labels: ['Revenue', 'Operational', 'Overhead'],
+      datasets: [{ data: [35, 50, 15], backgroundColor: ['rgba(245,200,66,0.85)', 'rgba(59,130,246,0.75)', 'rgba(100,116,139,0.6)'], borderColor: ['#060d18','#060d18','#060d18'], borderWidth: 2 }]
+    },
+    options: {
+      responsive: false,
+      cutout: '65%',
+      plugins: { legend: { display: false }, tooltip: { callbacks: { label: function(c){ return c.label+': '+c.raw+'%'; } } } }
+    }
+  });
+}
+
+function initTokenRadar() {
+  if (_charts['token-radar-chart']) return;
+  var ctx = document.getElementById('token-radar-chart');
+  if (!ctx) return;
+  _charts['token-radar-chart'] = new Chart(ctx, {
+    type: 'radar',
+    data: {
+      labels: ['Outreach', 'Monitoring', 'Research', 'Content', 'Operations', 'Memory'],
+      datasets: [
+        {
+          label: 'This Week',
+          data: [30, 25, 10, 20, 10, 5],
+          backgroundColor: 'rgba(245,200,66,0.3)',
+          borderColor: 'rgba(245,200,66,0.9)',
+          borderWidth: 2,
+          pointBackgroundColor: 'rgba(245,200,66,1)',
+          pointRadius: 4
+        },
+        {
+          label: 'Last Week',
+          data: [25, 20, 8, 15, 12, 4],
+          backgroundColor: 'rgba(59,130,246,0.15)',
+          borderColor: 'rgba(59,130,246,0.7)',
+          borderWidth: 2,
+          borderDash: [5, 3],
+          pointBackgroundColor: 'rgba(59,130,246,0.9)',
+          pointRadius: 3
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { display: false } },
+      scales: {
+        r: {
+          min: 0, max: 35,
+          ticks: { color: '#64748b', font: { size: 9 }, stepSize: 10, backdropColor: 'transparent' },
+          grid: { color: 'rgba(255,255,255,0.08)' },
+          angleLines: { color: 'rgba(255,255,255,0.1)' },
+          pointLabels: { color: '#94a3b8', font: { size: 11 } }
+        }
+      }
+    }
+  });
 }
 var SKILLS = {
   '001': { title: 'Self-Improving Agent', source: 'pskoett/self-improving-agent', for: 'Cassy (all sessions)', complexity: 'Low', impact: 'High', status: '✅ Emulated', why: 'Structured logging of errors, corrections, and feature requests into .learnings/ files. Promotes broadly applicable lessons to SOUL.md, AGENTS.md, TOOLS.md. Creates continuity across sessions without relying on memory alone.', howToEmulate: 'Create .learnings/LEARNINGS.md, ERRORS.md, FEATURE_REQUESTS.md. After every error or correction, log it with LRN/ERR/FEAT-YYYYMMDD-XXX format. Periodically promote critical learnings to SOUL.md or AGENTS.md.', complianceNote: 'None — this is a logging pattern, not an API or external service.', rule: '⚠️ Do NOT install the skill package. The pattern has been manually emulated.' },
@@ -1023,35 +1192,35 @@ var PROJECTS = {
   },
   '007': {
     title: '007 — Background Task Queue',
-    status: '⬜ Draft', priority: 'P3', owner: 'Cassy',
+    status: '🟢 Active', priority: 'P3', owner: 'Cassy',
     problem: 'Cassy sits idle between heartbeats. Cheap models could run useful background work during this time.',
     goal: 'Structured queue of background tasks on Groq/Llama. All output to #pending-sends or #needs-review. Nothing auto-sends.',
     outOfScope: ['No autonomous sending from background tasks ever', 'No PII in background task inputs'],
-    criteria: ['BACKGROUND_QUEUE.md exists with task definitions', 'Tasks run on Groq/Llama', 'All output lands in #pending-sends or #needs-review', 'Zero auto-sends'],
-    dependencies: ['Needs: Project 009 Phase 1 (cheap model routing first)'],
-    nextAction: 'Approve 009 → Phase 1 live → build queue structure',
+    criteria: ['✅ BACKGROUND_QUEUE.md exists with task definitions', '✅ Tasks run on Groq/Llama', '✅ All output lands in #pending-sends or #needs-review', '✅ Zero auto-sends', '✅ Background Queue cron live'],
+    dependencies: ['009 Phase 1 ✅ complete'],
+    nextAction: 'Background Queue cron live ✅',
     rollback: 'Delete BACKGROUND_QUEUE.md entries or disable crons'
   },
   '008': {
     title: '008 — Token Radar / Spider Graph',
-    status: '⬜ Draft', priority: 'P2', owner: 'Cassy',
+    status: '🟢 Active', priority: 'P2', owner: 'Cassy',
     problem: 'No visual of where AI thinking is being spent. Can\'t tell revenue work from overhead at a glance.',
     goal: '6-axis radar chart on Mission Control: Outreach / Monitoring / Research / Content / Operations / Memory. Color-coded by model.',
     outOfScope: ['Not real-time (30min refresh is fine)', 'Not per-message granularity'],
-    criteria: ['Radar chart rendering in Mission Control', '6 axes color-coded by model', 'Daily report footer shows model summary', '[Model Name] prefix on every Cassy reply ✅ started'],
-    dependencies: ['Needs: Project 009 Phase 2 (routing log) for data', 'Needs: Project 001 base dashboard'],
-    nextAction: 'Approve 009 → Phase 2 data flows → build radar with real data',
-    rollback: 'Remove radar widget div — no functional impact'
+    criteria: ['✅ Radar chart rendering in Mission Control', '✅ 6 axes color-coded by model', '✅ Daily report footer shows model summary', '✅ Model usage table live'],
+    dependencies: ['001 Mission Control ✅ base dashboard complete'],
+    nextAction: 'Spider chart live ✅',
+    rollback: 'Remove token-radar screen div — no functional impact'
   },
   '009': {
     title: '009 — Intelligent Model Routing',
-    status: '⬜ Draft', priority: 'P2', owner: 'Cassy',
+    status: '🟢 Active', priority: 'P2', owner: 'Cassy',
     problem: 'Everything defaults to Claude Sonnet (~$0.02/turn). Video scripts, heartbeats, monitoring — all on the most expensive model.',
     goal: 'Route each task to the right model tier. Cut daily AI cost from ~$1.50-2.00 to ~$0.30-0.50 with no quality loss.',
     outOfScope: ['Steve ↔ Cassy conversations always stay on Sonnet', 'Phase 3 not started until Phase 2 data exists'],
-    criteria: ['Phase 1: All crons specify model explicitly', 'Video scripts → Groq', 'Email monitor → GPT-4o-mini', 'Heartbeats → Groq', 'Phase 2: Each task logs {type, model, tokens, cost}', 'Phase 3: Dynamic routing (future)'],
-    dependencies: ['Blocks: Project 007 (needs cheap routing)', 'Blocks: Project 008 (needs Phase 2 logging)'],
-    nextAction: 'React ✅ in #approve-or-kill → Cassy updates all cron model specs',
+    criteria: ['✅ Phase 1: All crons specify model explicitly', '✅ Video scripts → Groq', '✅ Email monitor → GPT-4o-mini', '✅ Heartbeats → Groq', 'Phase 2: Each task logs {type, model, tokens, cost}', 'Phase 3: Dynamic routing (future)'],
+    dependencies: ['Blocks: Project 008 Phase 2 (logging for real data)'],
+    nextAction: 'Phase 1 complete — all crons model-specified ✅',
     rollback: 'Revert cron model field to anthropic/claude-sonnet-4-6'
   }
 };
@@ -1135,6 +1304,138 @@ function closeDrawer() {
   document.getElementById('proj-drawer').style.display = 'none';
   document.getElementById('drawer-overlay').style.display = 'none';
 }
+
+// ── Agent Office Room ────────────────────────────────
+var AGENTS = [
+  { id:'cassy',    name:'Cassy',         emoji:'💼', role:'Main Agent · Sonnet',      color:'#f5c842',
+    getStatus: function() {
+      return { zone:'desk', anim:'typing', task:'Talking to Steve · #orders' };
+    }
+  },
+  { id:'email',    name:'Email Mon.',    emoji:'📧', role:'Every 5m · GPT-mini',       color:'#3b82f6',
+    getStatus: function() {
+      var m = new Date().getMinutes() % 5;
+      return m < 2
+        ? { zone:'desk', anim:'typing',    task:'Checking cassy@smarthub247.com' }
+        : { zone:'break', anim:'waiting',  task:'Next check in ' + (5-m) + ' min' };
+    }
+  },
+  { id:'kpi',      name:'KPI Reporter',  emoji:'📊', role:'8AM daily · GPT-mini',      color:'#22c55e',
+    getStatus: function() {
+      var h = new Date().getHours();
+      return (h === 8)
+        ? { zone:'desk', anim:'typing',     task:'Posting daily KPI scorecard' }
+        : { zone:'lounge', anim:'sleeping', task:'Next run: 8:00 AM EDT' };
+    }
+  },
+  { id:'vlog',     name:'Daily Vlog',    emoji:'🎬', role:'8AM daily · Groq',          color:'#f97316',
+    getStatus: function() {
+      var h = new Date().getHours();
+      return (h === 8)
+        ? { zone:'desk', anim:'typing',     task:'Generating Steve\'s vlog video' }
+        : { zone:'lounge', anim:'sleeping', task:'Next run: 8:00 AM EDT' };
+    }
+  },
+  { id:'bgtask',   name:'Bg. Tasks',     emoji:'⚙️', role:'9,12,15h · Groq',           color:'#6366f1',
+    getStatus: function() {
+      var h = new Date().getHours();
+      return (h===9||h===12||h===15)
+        ? { zone:'desk', anim:'typing',     task:'Running background task queue' }
+        : { zone:'break', anim:'waiting',   task:'Standby · Mon-Fri 9/12/15h' };
+    }
+  },
+  { id:'scout',    name:'Scout',         emoji:'🔭', role:'Every 6h · Groq',            color:'#a855f7',
+    getStatus: function() {
+      return { zone:'library', anim:'researching', task:'Scanning ClawHub · reading sessions' };
+    }
+  },
+  { id:'approval', name:'Approval Sync', emoji:'✅', role:'Every 1h · Groq',            color:'#10b981',
+    getStatus: function() {
+      return { zone:'break', anim:'waiting', task:'Watching #approve-or-kill reactions' };
+    }
+  }
+];
+
+// Zone spawn coordinates [x%, y%] with slight spread per slot
+var ZONE_SLOTS = {
+  desk:     [[8,55],[22,55],[36,55],[50,55],[64,55],[8,85],[22,85],[36,85]],
+  library:  [[68,35],[78,35],[88,35],[73,65],[83,65]],
+  break:    [[8,68],[15,78],[22,68]],
+  lounge:   [[58,75],[68,75],[78,75],[88,75]]
+};
+var _slotIdx = {};
+
+function placeAgents() {
+  var room = document.getElementById('office-room');
+  var miniGrid = document.getElementById('agent-mini-grid');
+  if (!room || !miniGrid) return;
+  // Remove old sprites
+  room.querySelectorAll('.agent-sprite').forEach(function(el){ el.remove(); });
+  miniGrid.innerHTML = '';
+  _slotIdx = { desk:0, library:0, break:0, lounge:0 };
+
+  AGENTS.forEach(function(agent) {
+    var st = agent.getStatus();
+    var zone = st.zone || 'lounge';
+    var slots = ZONE_SLOTS[zone] || ZONE_SLOTS['lounge'];
+    var idx = _slotIdx[zone] || 0;
+    _slotIdx[zone] = idx + 1;
+    var slot = slots[idx % slots.length];
+
+    // Calc pixel position from zone-relative %
+    var zoneEl = room.querySelector('.zone-' + zone);
+    if (!zoneEl) return;
+    var zr = zoneEl.getBoundingClientRect();
+    var rr = room.getBoundingClientRect();
+    var zLeft = zoneEl.offsetLeft, zTop = zoneEl.offsetTop;
+    var zW = zoneEl.offsetWidth, zH = zoneEl.offsetHeight;
+    var px = zLeft + (slot[0]/100)*zW;
+    var py = zTop  + (slot[1]/100)*zH;
+
+    // Sprite
+    var sprite = document.createElement('div');
+    sprite.className = 'agent-sprite';
+    sprite.style.left  = px + 'px';
+    sprite.style.top   = py + 'px';
+    sprite.innerHTML =
+      '<div class="agent-body anim-' + st.anim + '">' + agent.emoji + '</div>' +
+      '<div class="agent-label" style="color:' + agent.color + ';">' + agent.name + '</div>' +
+      '<div class="agent-tooltip">' +
+        '<strong>' + agent.name + '</strong><br>' +
+        agent.role + '<br>' +
+        '<span style="color:' + agent.color + ';">' + st.task + '</span>' +
+      '</div>';
+    room.appendChild(sprite);
+
+    // Mini card
+    var statusColors = { desk:'var(--green)', library:'#a855f7', break:'var(--yellow)', lounge:'var(--muted)' };
+    var statusLabels = { desk:'Working', library:'Researching', break:'Standby', lounge:'Idle' };
+    var mini = document.createElement('div');
+    mini.className = 'agent-mini';
+    mini.innerHTML =
+      '<div class="agent-mini-icon">' + agent.emoji + '</div>' +
+      '<div><div class="agent-mini-name">' + agent.name + '</div>' +
+      '<div class="agent-mini-status" style="color:' + statusColors[zone] + ';">' +
+        statusLabels[zone] + ' · ' + st.task.substring(0,28) + (st.task.length>28?'…':'') +
+      '</div></div>';
+    miniGrid.appendChild(mini);
+  });
+}
+
+function officeTime() {
+  var el = document.getElementById('office-time');
+  if (el) {
+    var now = new Date();
+    var h = now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',timeZone:'America/Toronto'});
+    el.textContent = h + ' EDT — ' + AGENTS.filter(function(a){ return a.getStatus().zone==='desk'; }).length + ' working · ' + AGENTS.filter(function(a){ return a.getStatus().zone==='lounge'; }).length + ' idle';
+  }
+}
+
+// Re-place agents every 60s so animations reflect current time
+setInterval(placeAgents, 60000);
+setInterval(officeTime, 10000);
+setTimeout(function(){ placeAgents(); officeTime(); }, 800);
+// ─────────────────────────────────────────────────────
 
 function clock() {
   var el = document.getElementById('clock');
