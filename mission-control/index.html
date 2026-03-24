@@ -168,6 +168,7 @@ main{flex:1;overflow:auto;padding:24px;}
   <div class="nav-section">Projects</div>
   <div class="nav-item" onclick="show('projects',this)"><span class="icon">🗂️</span>Projects<span class="nav-badge" id="proj-badge">10</span></div>
   <div class="nav-section">System</div>
+  <div class="nav-item" onclick="show('capacity',this)"><span class="icon">⚡</span>Capacity</div>
   <div class="nav-item" onclick="show('costs',this)"><span class="icon">💰</span>Costs</div>
   <div class="nav-item" onclick="show('journal',this)"><span class="icon">📓</span>Journal</div>
   <div class="nav-item" onclick="show('playbook',this)"><span class="icon">📚</span>Playbook</div>
@@ -431,6 +432,81 @@ main{flex:1;overflow:auto;padding:24px;}
   <div class="agent-grid" id="agent-mini-grid"></div>
 </div>
 
+<div id="capacity" class="screen">
+  <div class="page-title">⚡ Capacity</div>
+
+  <!-- Runs / Cost today -->
+  <div class="grid-4" style="margin-bottom:16px;">
+    <div class="card" style="text-align:center;">
+      <div class="stat-big" style="color:var(--gold);">—</div>
+      <div class="stat-label">Runs today</div>
+      <div style="font-size:10px;color:var(--muted);margin-top:4px;">pending logging</div>
+    </div>
+    <div class="card" style="text-align:center;">
+      <div class="stat-big" style="color:var(--green);">—</div>
+      <div class="stat-label">Est. cost today</div>
+      <div style="font-size:10px;color:var(--muted);margin-top:4px;">pending logging</div>
+    </div>
+    <div class="card" style="text-align:center;">
+      <div class="stat-big" style="color:var(--blue);">—</div>
+      <div class="stat-label">Runs this week</div>
+      <div style="font-size:10px;color:var(--muted);margin-top:4px;">pending logging</div>
+    </div>
+    <div class="card" style="text-align:center;">
+      <div class="stat-big" style="color:var(--muted);">—</div>
+      <div class="stat-label">Est. cost this week</div>
+      <div style="font-size:10px;color:var(--muted);margin-top:4px;">pending logging</div>
+    </div>
+  </div>
+
+  <!-- Value tier tiles -->
+  <div class="grid-2" style="margin-bottom:16px;">
+    <div class="card">
+      <div class="card-title">Value Tier Breakdown</div>
+      <div style="display:flex;flex-direction:column;gap:10px;margin-top:8px;">
+        <div style="background:rgba(245,200,66,0.08);border:1px solid rgba(245,200,66,0.2);border-radius:8px;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;">
+          <div>
+            <div style="font-size:14px;font-weight:600;color:var(--gold);">💰 Revenue</div>
+            <div style="font-size:11px;color:var(--muted);margin-top:2px;">Outreach videos, social posts, client follow-ups</div>
+          </div>
+          <div style="font-size:22px;font-weight:700;color:var(--gold);">—</div>
+        </div>
+        <div style="background:rgba(59,130,246,0.08);border:1px solid rgba(59,130,246,0.2);border-radius:8px;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;">
+          <div>
+            <div style="font-size:14px;font-weight:600;color:var(--blue);">⚙️ Operational</div>
+            <div style="font-size:11px;color:var(--muted);margin-top:2px;">Briefings, monitoring, KPI reporting</div>
+          </div>
+          <div style="font-size:22px;font-weight:700;color:var(--blue);">—</div>
+        </div>
+        <div style="background:rgba(100,116,139,0.08);border:1px solid rgba(100,116,139,0.2);border-radius:8px;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;">
+          <div>
+            <div style="font-size:14px;font-weight:600;color:var(--muted);">🔧 Overhead</div>
+            <div style="font-size:11px;color:var(--muted);margin-top:2px;">Memory, learning, housekeeping</div>
+          </div>
+          <div style="font-size:22px;font-weight:700;color:var(--muted);">—</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">About This Screen</div>
+      <div style="font-size:13px;color:var(--muted);line-height:1.9;">
+        <p style="margin-bottom:10px;">Live capacity data populates automatically once <strong style="color:var(--gold);">Project 009 Phase 2</strong> logging is active.</p>
+        <p style="margin-bottom:10px;">Each cron and background task will log to <code style="background:var(--surface2);padding:1px 5px;border-radius:3px;">data/task-log.json</code> with:</p>
+        <ul style="padding-left:18px;margin-bottom:10px;">
+          <li>Task type and model used</li>
+          <li>Token counts (input + output)</li>
+          <li>Estimated cost in USD</li>
+          <li>Value tier classification</li>
+        </ul>
+        <div style="background:rgba(245,200,66,0.07);border:1px solid rgba(245,200,66,0.2);border-radius:8px;padding:10px 14px;font-size:12px;color:var(--gold);">
+          ⏳ Live data available after Project 009 Phase 2 logging is active
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div id="costs" class="screen">
   <div class="page-title">💰 API Costs</div>
   <div class="grid-2" style="margin-bottom:20px">
@@ -637,6 +713,39 @@ main{flex:1;overflow:auto;padding:24px;}
     </table>
   </div>
 
+  <!-- Token Radar placeholder — Project 8 -->
+  <div class="card" style="margin-bottom:16px;border-color:rgba(168,85,247,0.2);">
+    <div class="card-title" style="color:#c084fc;">🕸️ Token Radar — Coming Soon</div>
+    <div style="display:flex;flex-direction:column;align-items:center;padding:24px 0;">
+      <!-- Hexagon spider chart placeholder (SVG) -->
+      <svg width="260" height="240" viewBox="0 0 260 240" style="opacity:0.5;">
+        <!-- Outer hex -->
+        <polygon points="130,20 220,70 220,170 130,220 40,170 40,70" fill="none" stroke="rgba(168,85,247,0.4)" stroke-width="1.5"/>
+        <!-- Mid hex -->
+        <polygon points="130,55 192,87 192,152 130,185 68,152 68,87" fill="none" stroke="rgba(168,85,247,0.25)" stroke-width="1"/>
+        <!-- Inner hex -->
+        <polygon points="130,90 165,107 165,142 130,158 95,142 95,107" fill="none" stroke="rgba(168,85,247,0.15)" stroke-width="1"/>
+        <!-- Spokes -->
+        <line x1="130" y1="20" x2="130" y2="220" stroke="rgba(168,85,247,0.2)" stroke-width="1"/>
+        <line x1="220" y1="70" x2="40" y2="170" stroke="rgba(168,85,247,0.2)" stroke-width="1"/>
+        <line x1="220" y1="170" x2="40" y2="70" stroke="rgba(168,85,247,0.2)" stroke-width="1"/>
+        <!-- Data area (placeholder shape) -->
+        <polygon points="130,55 185,100 175,155 130,185 85,155 75,100" fill="rgba(168,85,247,0.12)" stroke="rgba(168,85,247,0.5)" stroke-width="1.5" stroke-dasharray="4,3"/>
+        <!-- Axis labels -->
+        <text x="130" y="12" text-anchor="middle" fill="#c084fc" font-size="11" font-family="Helvetica Neue, Arial, sans-serif">Outreach</text>
+        <text x="232" y="68" text-anchor="start" fill="#c084fc" font-size="11" font-family="Helvetica Neue, Arial, sans-serif">Monitoring</text>
+        <text x="232" y="178" text-anchor="start" fill="#c084fc" font-size="11" font-family="Helvetica Neue, Arial, sans-serif">Research</text>
+        <text x="130" y="236" text-anchor="middle" fill="#c084fc" font-size="11" font-family="Helvetica Neue, Arial, sans-serif">Content</text>
+        <text x="28" y="178" text-anchor="end" fill="#c084fc" font-size="11" font-family="Helvetica Neue, Arial, sans-serif">Ops</text>
+        <text x="28" y="68" text-anchor="end" fill="#c084fc" font-size="11" font-family="Helvetica Neue, Arial, sans-serif">Memory</text>
+      </svg>
+      <div style="margin-top:12px;font-size:13px;color:var(--muted);text-align:center;max-width:360px;line-height:1.7;">
+        <strong style="color:#c084fc;">Token Radar</strong> shows where AI thinking is being spent across 6 categories.<br>
+        <span style="font-size:11px;">Populates after 2-3 days of model routing log data (Project 009 Phase 2)</span>
+      </div>
+    </div>
+  </div>
+
   <!-- Scout notes -->
   <div class="card" style="border-color:rgba(168,85,247,0.2);">
     <div class="card-title" style="color:#c084fc;">🔭 Scout's Notes — Last Run: 2026-03-24</div>
@@ -825,13 +934,13 @@ main{flex:1;overflow:auto;padding:24px;}
           <div style="font-size:10px;color:var(--muted);">🔴 Escalated</div>
         </div>
         <div style="text-align:center;flex:1;min-width:55px;background:rgba(168,85,247,0.12);border-radius:8px;padding:8px 4px;border:1px solid rgba(168,85,247,0.3);">
-          <div style="font-size:24px;font-weight:700;color:#a855f7;">1</div>
+          <div style="font-size:24px;font-weight:700;color:#a855f7;">2</div>
           <div style="font-size:10px;color:var(--muted);">💀 WTH</div>
         </div>
       </div>
       <!-- Ratio -->
       <div style="font-size:12px;color:var(--muted);margin-bottom:12px;padding:8px 10px;background:rgba(168,85,247,0.07);border-radius:6px;border-left:3px solid #a855f7;">
-        0% smooth — 1 WTH event this week
+        🟢 0 / 🟡 0 / 🟠 0 / 🔴 0 / 💀 2 — 2 WTH events this week
       </div>
       <!-- Sparkline trend -->
       <div style="margin-bottom:12px;">
@@ -854,10 +963,17 @@ main{flex:1;overflow:auto;padding:24px;}
           <tbody>
             <tr style="border-bottom:1px solid rgba(255,255,255,0.03);">
               <td style="padding:6px 8px;color:var(--text);">2026-03-24</td>
-              <td style="padding:6px 8px;color:var(--text);">Outreach video email sends</td>
+              <td style="padding:6px 8px;color:var(--text);">Unauthorized emails — 9 contacts</td>
               <td style="padding:6px 8px;"><span style="background:rgba(168,85,247,0.15);color:#a855f7;padding:2px 6px;border-radius:10px;font-size:10px;">💀 WTH</span></td>
-              <td style="padding:6px 8px;color:var(--muted);font-size:11px;">Sent 9 unauthorized emails with broken Wistia links, then 9 more fix emails without approval</td>
-              <td style="padding:6px 8px;color:var(--green);font-size:11px;">Disabled all 11 crons. Fixed Wistia auth. Added abort-on-failure. Hard rules added to MEMORY.md.</td>
+              <td style="padding:6px 8px;color:var(--muted);font-size:11px;">Unauthorized emails sent to 9 contacts without approval</td>
+              <td style="padding:6px 8px;color:var(--green);font-size:11px;">Disabled all 11 crons. Fixed Wistia auth. Hard rules added to MEMORY.md.</td>
+            </tr>
+            <tr style="border-bottom:1px solid rgba(255,255,255,0.03);">
+              <td style="padding:6px 8px;color:var(--text);">2026-03-24</td>
+              <td style="padding:6px 8px;color:var(--text);">Generation loop</td>
+              <td style="padding:6px 8px;"><span style="background:rgba(168,85,247,0.15);color:#a855f7;padding:2px 6px;border-radius:10px;font-size:10px;">💀 WTH</span></td>
+              <td style="padding:6px 8px;color:var(--muted);font-size:11px;">Generation loop — sent 10,000+ lines of self-editing text</td>
+              <td style="padding:6px 8px;color:var(--green);font-size:11px;">Session terminated. Loop detection added. Self-edit guard documented in SOUL.md.</td>
             </tr>
           </tbody>
         </table>
@@ -1020,7 +1136,7 @@ function initQualitySparkline() {
         { label: 'Tweaked', data: [1, 1, 1, 0], backgroundColor: 'rgba(234,179,8,0.6)', stack: 'a' },
         { label: 'Corrected', data: [0, 1, 0, 0], backgroundColor: 'rgba(249,115,22,0.6)', stack: 'a' },
         { label: 'Escalated', data: [0, 0, 0, 0], backgroundColor: 'rgba(239,68,68,0.6)', stack: 'a' },
-        { label: 'WTH', data: [0, 0, 0, 1], backgroundColor: 'rgba(168,85,247,0.8)', stack: 'a' }
+        { label: 'WTH', data: [0, 0, 0, 2], backgroundColor: 'rgba(168,85,247,0.8)', stack: 'a' }
       ]
     },
     options: {
