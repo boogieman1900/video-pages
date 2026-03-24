@@ -642,133 +642,152 @@
       <!-- Summary Row -->
       <div class="grid-4" style="margin-bottom:20px">
         <div class="card" style="border-color:rgba(245,200,66,0.4)">
-          <div class="card-title">Total Today</div>
-          <div class="stat-big" id="cost-today">—</div>
-          <div class="stat-label">across all APIs</div>
+          <div class="card-title">Day 1 Total</div>
+          <div class="stat-big">~$55+</div>
+          <div class="stat-label">est. across all APIs</div>
+          <div class="stat-trend" style="color:var(--yellow)">⚠️ Update with real #s</div>
         </div>
         <div class="card">
-          <div class="card-title">This Week</div>
-          <div class="stat-big" id="cost-week">—</div>
-          <div class="stat-label">7-day running total</div>
+          <div class="card-title">Anthropic</div>
+          <div class="stat-big">~$50</div>
+          <div class="stat-label">Claude Sonnet</div>
+          <div class="stat-trend" style="color:var(--muted)">console.anthropic.com</div>
         </div>
         <div class="card">
-          <div class="card-title">This Month</div>
-          <div class="stat-big" id="cost-month">—</div>
-          <div class="stat-label">March 2026</div>
+          <div class="card-title">HeyGen</div>
+          <div class="stat-big">~370</div>
+          <div class="stat-label">credits used Day 1</div>
+          <div class="stat-trend" style="color:var(--green)">1,134 remaining</div>
         </div>
         <div class="card">
-          <div class="card-title">All Time</div>
-          <div class="stat-big" id="cost-alltime">—</div>
-          <div class="stat-label">since Day 1</div>
+          <div class="card-title">Other APIs</div>
+          <div class="stat-big" style="color:var(--green)">$0</div>
+          <div class="stat-label">Brave/Google/GitHub</div>
+          <div class="stat-trend" style="color:var(--green)">All free tier</div>
         </div>
       </div>
 
-      <!-- Per-API Breakdown -->
+      <!-- Full API Inventory -->
       <div class="card" style="margin-bottom:16px">
-        <div class="card-title">🧠 Anthropic (Claude Sonnet) — Primary AI</div>
+        <div class="card-title">🗂️ Full API Inventory</div>
         <table class="kpi-table">
-          <tr><th>Metric</th><th>Today</th><th>Week</th><th>Month</th><th>All Time</th></tr>
-          <tr><td>Tokens In</td><td id="ant-in-today">—</td><td>—</td><td>—</td><td>—</td></tr>
-          <tr><td>Tokens Out</td><td id="ant-out-today">—</td><td>—</td><td>—</td><td>—</td></tr>
-          <tr><td>Cache Hits</td><td id="ant-cache-today">—</td><td>—</td><td>—</td><td>—</td></tr>
-          <tr><td>Est. Cost</td><td id="ant-cost-today">—</td><td>—</td><td>—</td><td>—</td></tr>
+          <tr><th>Service</th><th>Key Location</th><th>Plan/Tier</th><th>Cost Model</th><th>Day 1 Est.</th></tr>
+          <tr><td>🧠 Anthropic (Claude)</td><td>auth-profiles.json</td><td>API pay-per-use</td><td>$3/M input · $15/M output</td><td style="color:var(--yellow)">~$50</td></tr>
+          <tr><td>🎬 HeyGen</td><td>workspace/heygen-api-key.txt</td><td>Creator plan</td><td>~1 credit/sec video</td><td style="color:var(--yellow)">~370 credits</td></tr>
+          <tr><td>🎥 Wistia</td><td>workspace/wistia-api-key.txt</td><td>Paid (>20 videos)</td><td>Monthly subscription</td><td style="color:var(--muted)">—</td></tr>
+          <tr><td>🔍 Brave Search</td><td>openclaw.json</td><td>Free/Pro</td><td>$3/1k queries (Pro)</td><td style="color:var(--green)">~$0</td></tr>
+          <tr><td>📧 Google (Gmail/Cal/Drive)</td><td>gogcli credentials</td><td>Free (OAuth)</td><td>$0</td><td style="color:var(--green)">$0</td></tr>
+          <tr><td>💬 Discord Bot</td><td>openclaw.json</td><td>Free</td><td>$0</td><td style="color:var(--green)">$0</td></tr>
+          <tr><td>📱 Telegram Bot</td><td>openclaw.json</td><td>Free</td><td>$0</td><td style="color:var(--green)">$0</td></tr>
+          <tr><td>🌐 GitHub Pages</td><td>gh CLI auth</td><td>Free</td><td>$0</td><td style="color:var(--green)">$0</td></tr>
+          <tr><td>🤖 OpenAI</td><td style="color:var(--yellow)">⚠️ Not set up yet</td><td>—</td><td>$2.50/M input · $10/M output (GPT-4o)</td><td>—</td></tr>
+          <tr><td>⚡ Groq</td><td style="color:var(--yellow)">⚠️ Not set up yet</td><td>—</td><td>~$0.06/M tokens (Llama3)</td><td>—</td></tr>
+          <tr><td>🌊 OpenRouter</td><td style="color:var(--yellow)">⚠️ Not set up yet</td><td>—</td><td>Single key → all models</td><td>—</td></tr>
         </table>
-        <div style="margin-top:10px;font-size:12px;color:var(--muted)">
-          ⚠️ Live API usage data requires Anthropic Console access. 
-          <a href="https://console.anthropic.com/settings/cost" target="_blank" style="color:var(--gold)">View in Console →</a>
+      </div>
+
+      <!-- Model Routing Decision Tree -->
+      <div class="card" style="margin-bottom:16px;border-color:rgba(59,130,246,0.4)">
+        <div style="font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:#60a5fa;margin-bottom:14px">🔀 MODEL ROUTING DECISION TREE — Cost Optimization</div>
+        <table class="kpi-table">
+          <tr><th>Task Type</th><th>Best Model</th><th>Why</th><th>Cost vs Sonnet</th></tr>
+          <tr>
+            <td>💬 Simple replies, short answers, yes/no</td>
+            <td style="color:var(--green)">Haiku / Groq Llama3</td>
+            <td>Fast, cheap, no reasoning needed</td>
+            <td style="color:var(--green)">-95%</td>
+          </tr>
+          <tr>
+            <td>📧 Email drafts, social posts, summaries</td>
+            <td style="color:var(--green)">GPT-4o-mini / Haiku</td>
+            <td>Good writing, low cost</td>
+            <td style="color:var(--green)">-80%</td>
+          </tr>
+          <tr>
+            <td>🔍 Web research, data extraction</td>
+            <td style="color:#60a5fa)">Sonnet (current)</td>
+            <td>Needs reasoning + tool use</td>
+            <td>Baseline</td>
+          </tr>
+          <tr>
+            <td>🎬 Video scripts, creative writing</td>
+            <td style="color:#60a5fa">Sonnet (current)</td>
+            <td>Quality matters for outreach</td>
+            <td>Baseline</td>
+          </tr>
+          <tr>
+            <td>🔧 Code, complex multi-step tasks</td>
+            <td style="color:#60a5fa">Sonnet (current)</td>
+            <td>Accuracy critical</td>
+            <td>Baseline</td>
+          </tr>
+          <tr>
+            <td>📊 Strategy, org planning, analysis</td>
+            <td style="color:var(--yellow)">Opus (when available)</td>
+            <td>Highest reasoning needed</td>
+            <td style="color:var(--red)">+5x</td>
+          </tr>
+          <tr>
+            <td>⏰ Cron jobs (email monitor, briefings)</td>
+            <td style="color:var(--green)">Haiku / GPT-4o-mini</td>
+            <td>Repetitive, structured, no creativity</td>
+            <td style="color:var(--green)">-90%</td>
+          </tr>
+          <tr>
+            <td>🏒 Sports/news summaries (Jeff, Brandi)</td>
+            <td style="color:var(--green)">Groq Llama3 (free tier)</td>
+            <td>Template-based, fast, nearly free</td>
+            <td style="color:var(--green)">-99%</td>
+          </tr>
+        </table>
+        <div style="margin-top:12px;padding:12px;background:rgba(59,130,246,0.08);border-radius:8px;font-size:12px;color:var(--muted)">
+          💡 <strong style="color:#60a5fa">Estimated monthly savings if routing is applied:</strong> 
+          Moving crons + simple tasks to Haiku/Groq could save 60-80% of Anthropic costs. 
+          At $50/day → <strong style="color:var(--green)">~$10-20/day with smart routing.</strong>
         </div>
       </div>
 
+      <!-- Setup Queue -->
       <div class="card" style="margin-bottom:16px">
-        <div class="card-title">🎬 HeyGen — Video Generation</div>
+        <div class="card-title">⚡ APIs to Add for Cost Optimization</div>
         <table class="kpi-table">
-          <tr><th>Metric</th><th>Today</th><th>Week</th><th>Month</th><th>All Time</th></tr>
-          <tr><td>Credits Remaining</td><td colspan="4" id="heygen-credits" style="color:var(--gold);text-align:right;font-weight:700">Loading...</td></tr>
-          <tr><td>API Credits</td><td colspan="4" id="heygen-api" style="text-align:right">—</td></tr>
-          <tr><td>Generative Credits</td><td colspan="4" id="heygen-gen" style="text-align:right">—</td></tr>
-          <tr><td>Plan Credits</td><td colspan="4" id="heygen-plan" style="text-align:right">—</td></tr>
-          <tr><td>Videos Rendered Day 1</td><td>10+</td><td>10+</td><td>10+</td><td>10+</td></tr>
-          <tr><td>Credits Used Day 1</td><td>~370</td><td>~370</td><td>~370</td><td>~370</td></tr>
-        </table>
-        <div style="margin-top:10px;font-size:12px;color:var(--muted)">
-          HeyGen pricing: ~$0.25/credit on Creator plan · Day 1 est. ~$92 in credits used
-        </div>
-      </div>
-
-      <div class="card" style="margin-bottom:16px">
-        <div class="card-title">🎥 Wistia — Video Hosting</div>
-        <table class="kpi-table">
-          <tr><th>Metric</th><th>Value</th></tr>
-          <tr><td>Account</td><td id="wistia-account" style="color:var(--gold);font-weight:700">Loading...</td></tr>
-          <tr><td>Videos Hosted</td><td id="wistia-videos" style="text-align:right">—</td></tr>
-          <tr><td>Projects</td><td id="wistia-projects" style="text-align:right">—</td></tr>
-          <tr><td>Plan Cost</td><td style="text-align:right">Check billing dashboard</td></tr>
-        </table>
-      </div>
-
-      <div class="card" style="margin-bottom:16px">
-        <div class="card-title">🔍 Other APIs</div>
-        <table class="kpi-table">
-          <tr><th>Service</th><th>Usage</th><th>Cost</th><th>Notes</th></tr>
-          <tr><td>Brave Search</td><td>~50 searches/day</td><td style="color:var(--green)">$0</td><td>Free tier</td></tr>
-          <tr><td>Google APIs (Gmail/Cal/Drive)</td><td>High</td><td style="color:var(--green)">$0</td><td>Free tier</td></tr>
-          <tr><td>Google Cloud (openclaw-mac-mini)</td><td>—</td><td style="text-align:right">—</td><td>Check console.cloud.google.com</td></tr>
-          <tr><td>GitHub Pages</td><td>Unlimited</td><td style="color:var(--green)">$0</td><td>Free</td></tr>
+          <tr><th>Provider</th><th>Why Add It</th><th>How to Set Up</th><th>Priority</th></tr>
+          <tr>
+            <td>OpenAI (GPT-4o-mini)</td>
+            <td>Cheapest quality writing model — email drafts, summaries</td>
+            <td>platform.openai.com → API keys → paste to Cassy</td>
+            <td><span class="pill pill-red">High</span></td>
+          </tr>
+          <tr>
+            <td>Groq (Llama3 70B)</td>
+            <td>Near-free inference, great for crons + briefings</td>
+            <td>console.groq.com/keys → free tier available</td>
+            <td><span class="pill pill-red">High</span></td>
+          </tr>
+          <tr>
+            <td>OpenRouter</td>
+            <td>One key → all models, best routing flexibility</td>
+            <td>openrouter.ai → API keys → paste to Cassy</td>
+            <td><span class="pill pill-yellow">Medium</span></td>
+          </tr>
+          <tr>
+            <td>Claude Haiku</td>
+            <td>Already available — just need to route tasks to it</td>
+            <td>Already on Anthropic — just set in cron configs</td>
+            <td><span class="pill pill-green">Quick win</span></td>
+          </tr>
         </table>
       </div>
 
-      <!-- Manual Cost Input -->
+      <!-- Manual Update Prompt -->
       <div style="background:rgba(245,200,66,0.05);border:1px solid rgba(245,200,66,0.2);border-radius:10px;padding:16px">
-        <div style="font-size:12px;color:var(--gold);font-weight:600;margin-bottom:8px">📊 Tell Cassy Your Actual Spend</div>
+        <div style="font-size:12px;color:var(--gold);font-weight:600;margin-bottom:8px">📊 Update Real Day 1 Costs</div>
         <div style="font-size:12px;color:var(--muted);line-height:1.8">
-          To get accurate cost tracking, tell Cassy:<br>
-          <em>"Update costs: Anthropic $X, HeyGen $X, total Day 1 was $X"</em><br><br>
-          Cassy will update kpi-state.json and this dashboard with the real numbers.
-          Going forward the 8AM cron will attempt to pull Anthropic costs automatically.
+          Check: <a href="https://console.anthropic.com/settings/cost" target="_blank" style="color:var(--gold)">console.anthropic.com/settings/cost</a>
+          then tell Cassy: <em>"Update Day 1 costs: Anthropic $X, HeyGen $X"</em>
         </div>
       </div>
 
     </div>
 
   </main>
-</div>
-
-<script>
-  // Clock
-  function updateClock() {
-    const now = new Date();
-    document.getElementById('clock').textContent = now.toLocaleTimeString('en-US', {
-      hour: '2-digit', minute: '2-digit', second: '2-digit',
-      timeZone: 'America/Toronto'
-    }) + ' EDT';
-  }
-  updateClock();
-  setInterval(updateClock, 1000);
-
-  // Navigation
-  function show(screen) {
-    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-    document.getElementById('screen-' + screen).classList.add('active');
-    event.currentTarget.classList.add('active');
-  }
-</script>
-
-  <script>
-  // Load live HeyGen and Wistia data
-  async function loadCostData() {
-    // HeyGen quota (via proxy — would need backend, show cached for now)
-    document.getElementById('heygen-credits').textContent = '1,134 API credits remaining';
-    document.getElementById('heygen-api').textContent = '1,134';
-    document.getElementById('heygen-gen').textContent = '1,286 generative credits';
-    document.getElementById('heygen-plan').textContent = '200 plan credits';
-    
-    // Wistia
-    document.getElementById('wistia-account').textContent = 'stevehamoen.wistia.com';
-    document.getElementById('wistia-videos').textContent = '38 videos';
-    document.getElementById('wistia-projects').textContent = '8 projects';
-  }
-  window.addEventListener('load', loadCostData);
-  </script>
-</body>
-</html>
