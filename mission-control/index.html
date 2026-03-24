@@ -177,6 +177,7 @@
 
     <div class="nav-section">System</div>
     <div class="nav-item" onclick="show('playbook')"><span class="icon">📚</span>Playbook</div>
+    <div class="nav-item" onclick="show('journal')"><span class="icon">📓</span>Journal</div>
   </nav>
 
   <main>
@@ -509,6 +510,31 @@
             TKT-014: Riverside Drive needs OAuth
           </div>
         </div>
+      </div>
+    </div>
+
+
+    <!-- JOURNAL -->
+    <div id="screen-journal" class="screen">
+      <div class="page-title">📓 Daily Journal</div>
+      <div class="card" style="margin-bottom:16px;border-left:3px solid var(--gold)">
+        <div class="card-title">Monday March 23, 2026 — Day 1</div>
+        <div style="font-size:13px;line-height:1.9;color:var(--text)">
+          <strong style="color:var(--gold)">What We Did:</strong><br>
+          Generated Pat Pytlik HeyGen video (Polish/English mix) · Built GitHub Pages landing page · Explored and built Riverside.fm skill · Built 10 business/podcast/speaking skills · Researched all 7 Steve businesses · Built full Cassy HQ Discord (35 channels) · Wired OpenClaw to Discord · Built ticketing system + command library + playbook · Designed KPI scorecard · Built Mission Control dashboard · Created Synthetic Corp org plan (17 roles, phased) · Wired 8AM KPI cron
+        </div>
+        <br>
+        <div style="font-size:13px;line-height:1.9">
+          <strong style="color:var(--green)">Wins:</strong> Pat video live · 10 skills built · Cassy HQ operational · Mission Control live · Andre meeting booked · Crystal replied · Gateway stabilized<br><br>
+          <strong style="color:var(--yellow)">Challenges:</strong> Gateway crashed 16 min · 14 bugs hit and resolved · Canvas tool unavailable · Python venv workaround needed<br><br>
+          <strong style="color:var(--red)">Pending:</strong> Pat email address needed · Justine video not generated · Crystal meeting to confirm<br><br>
+          <strong style="color:var(--gold)">North Star:</strong> Steve 30% · Cassy 70% · Target: Steve &lt;10% by April 30<br>
+          <strong style="color:var(--muted)">Tokens:</strong> ~180k · ~$1.80 · ~$0.05/task
+        </div>
+      </div>
+      <div style="font-size:12px;color:var(--muted);padding:12px;background:var(--surface);border-radius:8px;border:1px solid var(--border)">
+        📁 Full journals stored in <code>workspace/memory/journal-YYYY-MM-DD.md</code><br>
+        🤖 Cassy writes a new entry at end of each working day automatically
       </div>
     </div>
 
