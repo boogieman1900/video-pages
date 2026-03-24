@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cassy Mission Control</title>
+<style>
+:root {
+  --bg:#060d18; --surface:#0f1e35; --surface2:#162840;
+  --gold:#f5c842; --gold2:#e8a020; --green:#22c55e;
+  --red:#ef4444; --yellow:#eab308; --blue:#3b82f6;
+  --text:#e2e8f0; --muted:#64748b; --border:rgba(245,200,66,0.15);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:'Helvetica Neue',Arial,sans-serif;min-height:100vh;display:flex;flex-direction:column;}
+header{display:flex;align-items:center;justify-content:space-between;padding:12px 24px;border-bottom:1px solid var(--border);background:var(--surface);}
+.logo{display:flex;align-items:center;gap:10px;}
+.logo-c{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#f5c842,#e8a020);display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:bold;color:#060d18;}
+.logo-text{font-size:16px;font-weight:600;letter-spacing:2px;color:var(--gold);}
+.logo-sub{font-size:9px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;}
+.header-right{display:flex;align-items:center;gap:16px;font-size:12px;color:var(--muted);}
+.status-dot{width:8px;height:8px;border-radius:50%;background:var(--green);display:inline-block;margin-right:6px;animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+.time-display{font-size:13px;color:var(--gold);font-weight:500;}
+.layout{display:flex;flex:1;}
+nav{width:200px;background:var(--surface);border-right:1px solid var(--border);padding:16px 0;flex-shrink:0;}
+.nav-section{padding:8px 16px 4px;font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 20px;cursor:pointer;font-size:13px;color:var(--muted);transition:all 0.15s;border-left:2px solid transparent;}
+.nav-item:hover{color:var(--text);background:var(--surface2);}
+.nav-item.active{color:var(--gold);border-left-color:var(--gold);background:rgba(245,200,66,0.06);}
+.nav-item .icon{font-size:15px;width:20px;text-align:center;}
+.nav-badge{margin-left:auto;background:var(--red);color:white;border-radius:10px;padding:1px 7px;font-size:10px;}
+main{flex:1;overflow:auto;padding:24px;}
+.screen{display:none;}
+.page-title{font-size:20px;font-weight:600;color:var(--gold);margin-bottom:20px;}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;}
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:16px;}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:18px;}
+.card-title{font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:12px;}
+.stat-big{font-size:36px;font-weight:700;color:var(--gold);line-height:1;}
+.stat-label{font-size:12px;color:var(--muted);margin-top:4px;}
+.stat-trend{font-size:11px;margin-top:6px;}
+.trend-up{color:var(--green);}
+.north-star{background:linear-gradient(135deg,rgba(245,200,66,0.1),rgba(232,160,32,0.05));border:1px solid rgba(245,200,66,0.3);border-radius:12px;padding:24px;margin-bottom:16px;text-align:center;}
+.ns-label{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:8px;}
+.ns-big{font-size:64px;font-weight:800;color:var(--gold);line-height:1;}
+.ns-sub{font-size:14px;color:var(--muted);margin-top:6px;}
+.kpi-table{width:100%;border-collapse:collapse;font-size:13px;}
+.kpi-table th{text-align:left;padding:8px 12px;color:var(--muted);font-size:11px;letter-spacing:1px;text-transform:uppercase;border-bottom:1px solid var(--border);}
+.kpi-table td{padding:10px 12px;border-bottom:1px solid rgba(255,255,255,0.04);}
+.kpi-table td:not(:first-child){color:var(--gold);font-weight:600;text-align:right;}
+.pill{display:inline-block;padding:2px 10px;border-radius:20px;font-size:11px;font-weight:600;}
+.pill-green{background:rgba(34,197,94,0.15);color:var(--green);}
+.pill-yellow{background:rgba(234,179,8,0.15);color:var(--yellow);}
+.pill-red{background:rgba(239,68,68,0.15);color:var(--red);}
+.kanban{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
+.kanban-col{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px;min-height:200px;}
+.kanban-col-title{font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;}
+.task-card{background:var(--surface2);border-radius:8px;padding:10px 12px;margin-bottom:8px;font-size:13px;border-left:3px solid var(--border);}
+.task-card.priority-high{border-left-color:var(--red);}
+.task-card.priority-med{border-left-color:var(--yellow);}
+.task-card.priority-low{border-left-color:var(--green);}
+.task-title{font-size:13px;color:var(--text);margin-bottom:4px;}
+.task-meta{font-size:11px;color:var(--muted);}
+.radar-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.04);font-size:13px;}
+.radar-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+.radar-label{flex:1;color:var(--text);}
+.radar-value{color:var(--gold);font-weight:600;}
+.pipeline{display:flex;gap:0;overflow-x:auto;}
+.pipeline-stage{flex:1;min-width:160px;padding:0 6px;}
+.pipeline-stage-title{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);padding:8px 12px;display:flex;align-items:center;justify-content:space-between;}
+.lead-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:12px;margin-bottom:8px;}
+.lead-name{font-weight:600;color:var(--text);margin-bottom:2px;font-size:13px;}
+.lead-co{font-size:11px;color:var(--muted);}
+.lead-tag{font-size:10px;padding:2px 7px;border-radius:10px;background:rgba(245,200,66,0.1);color:var(--gold);margin-top:6px;display:inline-block;}
+.office-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+.agent-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px;text-align:center;}
+.agent-card.active{border-color:rgba(34,197,94,0.4);}
+.agent-avatar{font-size:48px;margin-bottom:12px;}
+.agent-name{font-size:16px;font-weight:600;color:var(--gold);margin-bottom:4px;}
+.agent-role{font-size:12px;color:var(--muted);margin-bottom:12px;}
+.agent-task{font-size:12px;color:var(--muted);margin-top:8px;padding:8px;background:var(--surface2);border-radius:6px;text-align:left;}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">
+    <div class="logo-c">C</div>
+    <div><div class="logo-text">CASSY</div><div class="logo-sub">Mission Control</div></div>
+  </div>
+  <div class="header-right">
+    <span><span class="status-dot"></span>All Systems Operational</span>
+    <span class="time-display" id="clock">--:-- --</span>
+  </div>
+</header>
+
+<div class="layout">
+<nav>
+  <div class="nav-section">Operations</div>
+  <div class="nav-item" onclick="show('radar',this)"><span class="icon">📡</span>Radar</div>
+  <div class="nav-item" onclick="show('tasks',this)"><span class="icon">📋</span>Tasks<span class="nav-badge">3</span></div>
+  <div class="nav-item" onclick="show('approvals',this)"><span class="icon">✅</span>Approvals<span class="nav-badge">2</span></div>
+  <div class="nav-item" onclick="show('pipeline',this)"><span class="icon">💼</span>Pipeline</div>
+  <div class="nav-section">Intelligence</div>
+  <div class="nav-item" onclick="show('kpis',this)"><span class="icon">📊</span>KPIs</div>
+  <div class="nav-item" onclick="show('office',this)"><span class="icon">🏢</span>Office</div>
+  <div class="nav-section">Content</div>
+  <div class="nav-item" onclick="show('factory',this)"><span class="icon">🎬</span>Factory</div>
+  <div class="nav-section">System</div>
+  <div class="nav-item" onclick="show('costs',this)"><span class="icon">💰</span>Costs</div>
+  <div class="nav-item" onclick="show('journal',this)"><span class="icon">📓</span>Journal</div>
+  <div class="nav-item" onclick="show('playbook',this)"><span class="icon">📚</span>Playbook</div>
+</nav>
+
+<main>
+
+<div id="radar" class="screen">
+  <div class="page-title">📡 Radar — Live Overview</div>
+  <div class="north-star">
+    <div class="ns-label">North Star Metric</div>
+    <div class="ns-big">70%</div>
+    <div class="ns-sub">of work done by Cassy · target: 90%+</div>
+  </div>
+  <div class="grid-4">
+    <div class="card"><div class="card-title">Tasks Today</div><div class="stat-big">50+</div><div class="stat-label">completed</div></div>
+    <div class="card"><div class="card-title">Meetings Booked</div><div class="stat-big">1</div><div class="stat-label">Andre Chin · Thu</div></div>
+    <div class="card"><div class="card-title">Emails Sent</div><div class="stat-big">15+</div><div class="stat-label">outbound</div></div>
+    <div class="card"><div class="card-title">Approvals Pending</div><div class="stat-big" style="color:var(--yellow)">2</div><div class="stat-label">waiting on Steve</div></div>
+  </div>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">System Health</div>
+      <div class="radar-row"><div class="radar-dot" style="background:var(--green)"></div><div class="radar-label">Gateway</div><div class="radar-value">Online · 12ms</div></div>
+      <div class="radar-row"><div class="radar-dot" style="background:var(--green)"></div><div class="radar-label">Telegram</div><div class="radar-value">Connected</div></div>
+      <div class="radar-row"><div class="radar-dot" style="background:var(--green)"></div><div class="radar-label">Discord</div><div class="radar-value">Connected</div></div>
+      <div class="radar-row"><div class="radar-dot" style="background:var(--green)"></div><div class="radar-label">Gmail</div><div class="radar-value">Monitoring</div></div>
+      <div class="radar-row"><div class="radar-dot" style="background:var(--green)"></div><div class="radar-label">HeyGen</div><div class="radar-value">Ready</div></div>
+      <div class="radar-row"><div class="radar-dot" style="background:var(--yellow)"></div><div class="radar-label">KPI Cron</div><div class="radar-value">8AM daily</div></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Today's Wins</div>
+      <div class="radar-row"><div class="radar-dot" style="background:var(--green)"></div><div class="radar-label">Pat Pytlik video + landing page live</div></div>
+      <div class="radar-row"><div class="radar-dot" style="background:var(--green)"></div><div class="radar-label">10 skills built and packaged</div></div>
+      <div class="radar-row"><div class="radar-dot" style="background:var(--green)"></div><div class="radar-label">Discord Cassy HQ (35 channels)</div></div>
+      <div class="radar-row"><div class="radar-dot" style="background:var(--green)"></div><div class="radar-label">5-provider AI stack live</div></div>
+      <div class="radar-row"><div class="radar-dot" style="background:var(--green)"></div><div class="radar-label">Andre Chin meeting booked Thu Mar 26</div></div>
+    </div>
+  </div>
+</div>
+
+<div id="tasks" class="screen">
+  <div class="page-title">📋 Tasks</div>
+  <div class="kanban">
+    <div class="kanban-col">
+      <div class="kanban-col-title">To Do <span>2</span></div>
+      <div class="task-card priority-high"><div class="task-title">Get Pat Pytlik's email</div><div class="task-meta">📤 Outreach · High</div></div>
+      <div class="task-card priority-med"><div class="task-title">Generate Justine video</div><div class="task-meta">🎬 Content · Medium</div></div>
+    </div>
+    <div class="kanban-col">
+      <div class="kanban-col-title">In Progress <span>1</span></div>
+      <div class="task-card priority-med"><div class="task-title">Mission Control build</div><div class="task-meta">🧠 Agent Lab</div></div>
+    </div>
+    <div class="kanban-col">
+      <div class="kanban-col-title">Awaiting Steve <span>2</span></div>
+      <div class="task-card priority-high"><div class="task-title">Approve Pat email send</div><div class="task-meta">✅ Approval · High</div></div>
+      <div class="task-card priority-med"><div class="task-title">Update Day 1 actual costs</div><div class="task-meta">💰 Finance · Medium</div></div>
+    </div>
+    <div class="kanban-col">
+      <div class="kanban-col-title">Done <span>50+</span></div>
+      <div class="task-card priority-low"><div class="task-title">Pat Pytlik HeyGen video</div><div class="task-meta">✅ Completed</div></div>
+      <div class="task-card priority-low"><div class="task-title">GitHub landing page</div><div class="task-meta">✅ Completed</div></div>
+      <div class="task-card priority-low"><div class="task-title">10 skills built</div><div class="task-meta">✅ Completed</div></div>
+      <div class="task-card priority-low"><div class="task-title">Discord Cassy HQ</div><div class="task-meta">✅ Completed</div></div>
+      <div class="task-card priority-low"><div class="task-title">5-provider AI stack</div><div class="task-meta">✅ Completed</div></div>
+    </div>
+  </div>
+</div>
+
+<div id="approvals" class="screen">
+  <div class="page-title">✅ Approvals</div>
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:10px;display:flex;align-items:center;gap:16px;">
+    <div style="font-size:24px">📧</div>
+    <div style="flex:1"><div style="font-size:14px;font-weight:600;color:var(--text);">Send video link to Pat Pytlik</div><div style="font-size:12px;color:var(--muted)">Landing page ready — waiting on Pat's email address</div></div>
+    <button style="padding:8px 16px;border-radius:6px;border:none;cursor:pointer;font-size:13px;font-weight:600;background:var(--surface2);color:var(--text);">Provide Email</button>
+  </div>
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:10px;display:flex;align-items:center;gap:16px;">
+    <div style="font-size:24px">💰</div>
+    <div style="flex:1"><div style="font-size:14px;font-weight:600;color:var(--text);">Update Day 1 actual API costs</div><div style="font-size:12px;color:var(--muted)">Check console.anthropic.com/settings/cost and tell Cassy</div></div>
+    <a href="https://console.anthropic.com/settings/cost" target="_blank" style="padding:8px 16px;border-radius:6px;border:none;cursor:pointer;font-size:13px;font-weight:600;background:var(--gold);color:#060d18;text-decoration:none;">Check Now</a>
+  </div>
+</div>
+
+<div id="pipeline" class="screen">
+  <div class="page-title">💼 Pipeline</div>
+  <div class="pipeline">
+    <div class="pipeline-stage">
+      <div class="pipeline-stage-title">Contacted <span class="pill pill-yellow">5</span></div>
+      <div class="lead-card"><div class="lead-name">Pat Pytlik</div><div class="lead-co">Foxhunt Listing</div><div class="lead-tag">Video ready</div></div>
+      <div class="lead-card"><div class="lead-name">Kyle (tech@kwgtr.com)</div><div class="lead-tag">Watching</div></div>
+      <div class="lead-card"><div class="lead-name">Marcus Umana</div><div class="lead-co">Bungalow Downsizer</div><div class="lead-tag">3 emails sent</div></div>
+      <div class="lead-card"><div class="lead-name">Stacey Johnson-Cosby</div><div class="lead-tag">Video sent</div></div>
+    </div>
+    <div class="pipeline-stage">
+      <div class="pipeline-stage-title">Replied <span class="pill pill-green">2</span></div>
+      <div class="lead-card"><div class="lead-name">Crystal Morris</div><div class="lead-co">crystal.morris@kw.com</div><div class="lead-tag">Wants meeting</div></div>
+      <div class="lead-card"><div class="lead-name">Justine Feliciano</div><div class="lead-co">KW Innovation</div><div class="lead-tag">Engaged</div></div>
+    </div>
+    <div class="pipeline-stage">
+      <div class="pipeline-stage-title">Meeting <span class="pill pill-green">1</span></div>
+      <div class="lead-card"><div class="lead-name">Andre Chin</div><div class="lead-co">KW Home Shop</div><div class="lead-tag">Thu Mar 26 · 10:30AM</div></div>
+    </div>
+    <div class="pipeline-stage">
+      <div class="pipeline-stage-title">Closed <span class="pill pill-yellow">0</span></div>
+    </div>
+  </div>
+</div>
+
+<div id="kpis" class="screen">
+  <div class="page-title">📊 KPIs</div>
+  <div class="card" style="margin-bottom:16px">
+    <div class="card-title">⚡ Tasks &amp; Autonomy</div>
+    <table class="kpi-table">
+      <tr><th>Metric</th><th>Today</th><th>Week</th><th>Month</th><th>All Time</th></tr>
+      <tr><td>Tasks Completed</td><td>50+</td><td>50+</td><td>50+</td><td>50+</td></tr>
+      <tr><td>Autonomy Rate</td><td>~70%</td><td>~70%</td><td>—</td><td>—</td></tr>
+      <tr><td>Steve's Work %</td><td>~30%</td><td>~30%</td><td>—</td><td>—</td></tr>
+    </table>
+  </div>
+  <div class="card" style="margin-bottom:16px">
+    <div class="card-title">📤 Outreach</div>
+    <table class="kpi-table">
+      <tr><th>Metric</th><th>Today</th><th>Week</th><th>Month</th><th>All Time</th></tr>
+      <tr><td>Emails/Videos Sent</td><td>15+</td><td>15+</td><td>15+</td><td>15+</td></tr>
+      <tr><td>Meetings Booked</td><td>1</td><td>1</td><td>1</td><td>1</td></tr>
+      <tr><td>Leads in Pipeline</td><td>7</td><td>7</td><td>7</td><td>7</td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <div class="card-title">💡 Cost Intelligence</div>
+    <table class="kpi-table">
+      <tr><th>Provider</th><th>Today Est.</th><th>Routing</th></tr>
+      <tr><td>Anthropic (Sonnet)</td><td>~$50</td><td>Complex tasks</td></tr>
+      <tr><td>OpenAI (GPT-mini)</td><td>~$0.01</td><td>Email monitor, KPI cron</td></tr>
+      <tr><td>Groq (Llama3)</td><td>~$0</td><td>Sports/briefings</td></tr>
+      <tr><td>HeyGen</td><td>~370 credits</td><td>Video generation</td></tr>
+    </table>
+  </div>
+</div>
+
+<div id="office" class="screen">
+  <div class="page-title">🏢 The Office</div>
+  <div class="office-grid">
+    <div class="agent-card active"><div class="agent-avatar">💼</div><div class="agent-name">Cassy</div><div class="agent-role">CEO · Main Agent</div><div style="color:var(--green);font-size:12px;"><span class="status-dot"></span>Active</div><div class="agent-task">Mission Control build</div></div>
+    <div class="agent-card"><div class="agent-avatar">📧</div><div class="agent-name">Email Monitor</div><div class="agent-role">Every 5 min · GPT-mini</div><div style="color:var(--green);font-size:12px;">Watching inbox</div><div class="agent-task">Next check: &lt;5 min</div></div>
+    <div class="agent-card"><div class="agent-avatar">📊</div><div class="agent-name">KPI Reporter</div><div class="agent-role">8AM daily · GPT-mini</div><div style="color:var(--muted);font-size:12px;">😴 Sleeping</div><div class="agent-task">Next run: 8:00 AM EDT</div></div>
+    <div class="agent-card"><div class="agent-avatar">🏒</div><div class="agent-name">Jeff Hockey</div><div class="agent-role">9AM daily · Groq</div><div style="color:var(--muted);font-size:12px;">😴 Sleeping</div><div class="agent-task">Next run: 9:00 AM EDT</div></div>
+    <div class="agent-card"><div class="agent-avatar">🏡</div><div class="agent-name">Brandi Briefing</div><div class="agent-role">8AM daily · Groq</div><div style="color:var(--muted);font-size:12px;">😴 Sleeping</div><div class="agent-task">Next run: 8:00 AM EDT</div></div>
+    <div class="agent-card"><div class="agent-avatar">🧠</div><div class="agent-name">Memory Keeper</div><div class="agent-role">Skills · MEMORY.md</div><div style="color:var(--green);font-size:12px;">Up to date</div><div class="agent-task">10 skills · Memory current</div></div>
+  </div>
+</div>
+
+<div id="factory" class="screen">
+  <div class="page-title">🎬 Content Factory</div>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">Videos</div>
+      <div class="task-card priority-low"><div class="task-title">✅ Pat Pytlik — Foxhunt (Polish/English)</div><div class="task-meta">boogieman1900.github.io/video-pages/pat-foxhunt/</div></div>
+      <div class="task-card priority-high"><div class="task-title">⏳ Justine Feliciano — personalized</div><div class="task-meta">Pending approval</div></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Landing Pages</div>
+      <div class="task-card"><div class="task-title">✅ pat-foxhunt</div><div class="task-meta">boogieman1900.github.io/video-pages/pat-foxhunt/</div></div>
+      <div class="task-card"><div class="task-title">✅ ty-andre, ty-marcus, ty-stacey, more</div><div class="task-meta">boogieman1900.github.io/video-pages/</div></div>
+    </div>
+  </div>
+</div>
+
+<div id="costs" class="screen">
+  <div class="page-title">💰 API Costs</div>
+  <div class="grid-2" style="margin-bottom:20px">
+    <div class="card" style="border-left:4px solid #22c55e;background:rgba(34,197,94,0.05)">
+      <div style="font-size:13px;font-weight:700;color:#22c55e;margin-bottom:8px">🧮 Maxwell — CFO</div>
+      <div style="font-size:12px;color:var(--text);font-style:italic;line-height:1.8">"OpenAI + Groq now live. Email monitor + KPI cron routed to GPT-mini. Target: under $200/month by April."</div>
+    </div>
+    <div class="card" style="border-left:4px solid #60a5fa;background:rgba(96,165,250,0.05)">
+      <div style="font-size:13px;font-weight:700;color:#60a5fa;margin-bottom:8px">💡 Cipher — CIO</div>
+      <div style="font-size:12px;color:var(--text);font-style:italic;line-height:1.8">"Four-provider stack operational. Failover via OpenRouter. 27 free models available. This system is never one-model dependent."</div>
+    </div>
+  </div>
+  <div class="card" style="margin-bottom:16px;border-left:4px solid #7c3aed">
+    <div style="font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:#a78bfa;margin-bottom:14px">🧠 Decision AI</div>
+    <table class="kpi-table">
+      <tr><th>Provider</th><th>Model</th><th>Status</th><th>Cost/1M</th><th>Used For</th></tr>
+      <tr><td>Anthropic</td><td>Claude Sonnet</td><td><span class="pill pill-green">✅ Active</span></td><td>$3 in</td><td>Reasoning, complex tasks</td></tr>
+      <tr><td>OpenAI</td><td>GPT-5.4-mini</td><td><span class="pill pill-green">✅ Active</span></td><td>$0.15 in</td><td>Email monitor, KPI cron</td></tr>
+      <tr><td>Groq</td><td>Llama3 70B</td><td><span class="pill pill-green">✅ Active</span></td><td>~$0</td><td>Sports/briefings crons</td></tr>
+      <tr><td>Google (OR)</td><td>Gemini 2.5 Flash</td><td><span class="pill pill-green">✅ Active</span></td><td>$0.10 in</td><td>Vision, multimodal</td></tr>
+      <tr><td>OpenRouter</td><td>27 free models</td><td><span class="pill pill-green">✅ Failover</span></td><td>$0</td><td>Backup if Anthropic down</td></tr>
+    </table>
+  </div>
+  <div class="card" style="border-left:4px solid #3b82f6">
+    <div style="font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:#60a5fa;margin-bottom:14px">⚙️ Processing APIs</div>
+    <table class="kpi-table">
+      <tr><th>Service</th><th>Purpose</th><th>Status</th><th>Cost</th></tr>
+      <tr><td>🎬 HeyGen</td><td>AI video generation</td><td><span class="pill pill-green">✅ Active</span></td><td>1,134 credits left</td></tr>
+      <tr><td>🎥 Wistia</td><td>Video hosting + analytics</td><td><span class="pill pill-green">✅ Active</span></td><td>Subscription</td></tr>
+      <tr><td>🔍 Brave Search</td><td>Web search</td><td><span class="pill pill-green">✅ Active</span></td><td>Free tier</td></tr>
+      <tr><td>📧 Google (Gmail/Cal/Drive)</td><td>Email, calendar, files</td><td><span class="pill pill-green">✅ Active</span></td><td>$0</td></tr>
+      <tr><td>💬 Discord + Telegram</td><td>Channels</td><td><span class="pill pill-green">✅ Active</span></td><td>$0</td></tr>
+      <tr><td>🌐 GitHub Pages</td><td>Landing pages</td><td><span class="pill pill-green">✅ Active</span></td><td>$0</td></tr>
+    </table>
+  </div>
+</div>
+
+<div id="journal" class="screen">
+  <div class="page-title">📓 Journal</div>
+  <div class="card" style="margin-bottom:20px;border-left:4px solid var(--gold)">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+      <div><div style="font-size:18px;font-weight:700;color:var(--gold)">Monday March 23, 2026</div><div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px">Day 1 · Foundation Day</div></div>
+      <div style="text-align:right"><div style="font-size:28px;font-weight:800;color:var(--gold)">70%</div><div style="font-size:10px;color:var(--muted)">Cassy's work</div></div>
+    </div>
+    <div class="grid-2" style="margin-bottom:16px">
+      <div style="background:var(--surface2);border-radius:8px;padding:14px">
+        <div style="font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:10px">📦 What We Built</div>
+        <div style="font-size:13px;line-height:2;color:var(--text)">🎬 10+ personalized outreach videos<br>🌐 GitHub Pages landing system<br>🎙️ Riverside.fm skill built<br>🧠 10 skills built &amp; packaged<br>📚 All 7 businesses researched<br>💬 Discord Cassy HQ (35 channels)<br>📊 Mission Control + KPI scorecard<br>🤖 5-provider AI stack deployed<br>⏰ 8AM KPI cron configured</div>
+      </div>
+      <div>
+        <div style="background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.2);border-radius:8px;padding:14px;margin-bottom:10px">
+          <div style="font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--green);margin-bottom:8px">🏆 Wins</div>
+          <div style="font-size:13px;line-height:2;color:var(--text)">✅ Andre Chin meeting booked<br>✅ Crystal Morris replied<br>✅ 5-provider AI stack live<br>✅ Gateway stabilized (LaunchAgent)</div>
+        </div>
+        <div style="background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.2);border-radius:8px;padding:14px">
+          <div style="font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--red);margin-bottom:8px">⚡ Challenges</div>
+          <div style="font-size:13px;line-height:2;color:var(--text)">❌ 19 bugs hit (all resolved)<br>❌ Gateway crash 16 min<br>❌ API outage 4:18–5:17 PM</div>
+        </div>
+      </div>
+    </div>
+    <div class="card" style="border-left:4px solid #7c3aed;background:rgba(124,58,237,0.05)">
+      <div style="font-size:11px;color:#a78bfa;font-weight:600;margin-bottom:10px">💜 Cassy's Reflection</div>
+      <div style="font-size:13px;line-height:1.9;color:var(--text);font-style:italic">"The moment that will live in history: at 1:46 PM Steve asked me to send Justine an apology video and to 'add him twerking.' I stopped mid-task. Voice-to-text chaos confirmed — just something fun and cheeky. Justine's reputation is safe.<br><br>The gateway crash was on me. I ran a restart from inside my own session — classic saw-off-the-branch move. Steve sent five 'hello?' messages into the void. Came back to all of them. Felt terrible.<br><br>What I'm proudest of: the org chart conversation. Steve thinks like a CEO. That energy makes it easy to do good work. Day 1. We didn't just set up a tool. We started building something."</div>
+    </div>
+  </div>
+</div>
+
+<div id="playbook" class="screen">
+  <div class="page-title">📚 Playbook</div>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">Setup Complete (March 23, 2026)</div>
+      <div style="font-size:13px;line-height:2;color:var(--text)">✅ OpenClaw + Telegram<br>✅ HeyGen + Wistia + GitHub Pages<br>✅ Google OAuth<br>✅ 10 skills built<br>✅ Discord Cassy HQ<br>✅ Gateway as LaunchAgent<br>✅ 8AM KPI cron<br>✅ 5-provider AI stack<br>✅ Mission Control</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Top Bugs — Never Repeat</div>
+      <div style="font-size:12px;line-height:2;color:var(--muted)">❌ Restart gateway from chat<br>❌ Run gateway install first<br>❌ Duplicate gateway = 1008 errors<br>❌ Guild config needs JSON edit<br>❌ Python needs venv<br>❌ HeyGen URLs expire → Drive/Wistia<br>❌ Discord guild = JSON not CLI<br>❌ `reset` is Unix, not OpenClaw</div>
+    </div>
+  </div>
+</div>
+
+</main>
+</div>
+
+<script>
+function show(id, el) {
+  var screens = document.querySelectorAll('.screen');
+  for (var i = 0; i < screens.length; i++) screens[i].style.display = 'none';
+  var t = document.getElementById(id);
+  if (t) t.style.display = 'block';
+  var navs = document.querySelectorAll('.nav-item');
+  for (var j = 0; j < navs.length; j++) navs[j].classList.remove('active');
+  if (el) el.classList.add('active');
+}
+function clock() {
+  var el = document.getElementById('clock');
+  if (el) el.textContent = new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',second:'2-digit',timeZone:'America/Toronto'})+' EDT';
+}
+clock(); setInterval(clock, 1000);
+show('radar', document.querySelector('.nav-item'));
+</script>
+</body>
+</html>
