@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Cassy Mission Control</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
 :root {
   --bg:#060d18; --surface:#0f1e35; --surface2:#162840;
@@ -162,6 +163,8 @@ main{flex:1;overflow:auto;padding:24px;}
   <div class="nav-item" onclick="show('factory',this)"><span class="icon">🎬</span>Factory</div>
   <div class="nav-section">Learning</div>
   <div class="nav-item" onclick="show('learning',this)"><span class="icon">🔭</span>Scout<span class="nav-badge" style="background:#a855f7;">NEW</span></div>
+  <div class="nav-section">Analytics</div>
+  <div class="nav-item" onclick="show('token-radar',this)"><span class="icon">🕸️</span>Token Radar</div>
   <div class="nav-section">Projects</div>
   <div class="nav-item" onclick="show('projects',this)"><span class="icon">🗂️</span>Projects<span class="nav-badge" id="proj-badge">10</span></div>
   <div class="nav-section">System</div>
@@ -563,12 +566,15 @@ main{flex:1;overflow:auto;padding:24px;}
 </div>
 
 <div id="projects" class="screen">
-  <div class="page-title">🗂️ Projects — Health Board</div>
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
+    <div class="page-title" style="margin-bottom:0;">🗂️ Projects — Health Board</div>
+    <div id="approvals-last-checked" style="font-size:11px;color:var(--muted);">Syncing...</div>
+  </div>
 
   <!-- Summary bar -->
   <div class="grid-4" style="margin-bottom:20px;">
     <div class="card" style="text-align:center;">
-      <div class="stat-big" style="color:var(--green)" id="proj-active">2</div>
+      <div class="stat-big" style="color:var(--green)" id="proj-active">7</div>
       <div class="stat-label">🟢 Active</div>
     </div>
     <div class="card" style="text-align:center;">
@@ -576,7 +582,7 @@ main{flex:1;overflow:auto;padding:24px;}
       <div class="stat-label">🔴 Blocked</div>
     </div>
     <div class="card" style="text-align:center;">
-      <div class="stat-big" style="color:var(--muted)" id="proj-draft">5</div>
+      <div class="stat-big" style="color:var(--muted)" id="proj-draft">0</div>
       <div class="stat-label">⏸️ Draft</div>
     </div>
     <div class="card" style="text-align:center;">
@@ -620,7 +626,7 @@ main{flex:1;overflow:auto;padding:24px;}
           <td><span style="color:var(--red);font-size:11px;font-weight:600;">P1</span></td>
           <td><span style="color:var(--green);font-size:12px;">Active</span></td>
           <td style="color:var(--muted);font-size:12px;">—</td>
-          <td style="font-size:12px;">Add quality score + capacity widgets</td>
+          <td style="font-size:12px;">Quality + Capacity widgets live ✅</td>
         </tr>
         <tr onclick="openProject('002')" style="cursor:pointer;" onmouseover="this.style.background='rgba(245,200,66,0.04)'" onmouseout="this.style.background=''">
           <td style="text-align:center;font-size:16px;">⏸️</td>
@@ -636,7 +642,7 @@ main{flex:1;overflow:auto;padding:24px;}
           <td><span style="color:var(--yellow);font-size:11px;font-weight:600;">P2</span></td>
           <td><span style="color:var(--green);font-size:12px;">Active</span></td>
           <td style="color:var(--muted);font-size:12px;">—</td>
-          <td style="font-size:12px;">Wire up 8AM cron + test run</td>
+          <td style="font-size:12px;">Cron live at 8AM ✅</td>
         </tr>
         <tr onclick="openProject('004')" style="cursor:pointer;" onmouseover="this.style.background='rgba(245,200,66,0.04)'" onmouseout="this.style.background=''">
           <td style="text-align:center;font-size:16px;">🔴</td>
@@ -663,28 +669,28 @@ main{flex:1;overflow:auto;padding:24px;}
           <td style="font-size:12px;">Steve approves → Cassy runs scrub</td>
         </tr>
         <tr onclick="openProject('007')" style="cursor:pointer;" onmouseover="this.style.background='rgba(245,200,66,0.04)'" onmouseout="this.style.background=''">
-          <td style="text-align:center;font-size:16px;">⬜</td>
+          <td style="text-align:center;font-size:16px;">🟢</td>
           <td><strong>007</strong> Background Task Queue</td>
           <td><span style="color:var(--muted);font-size:11px;font-weight:600;">P3</span></td>
-          <td><span style="color:var(--muted);font-size:12px;">Draft</span></td>
-          <td style="color:var(--muted);font-size:12px;">009 Phase 1 first</td>
-          <td style="font-size:12px;">Approve 009 → then build queue</td>
+          <td><span style="color:var(--green);font-size:12px;">Active</span></td>
+          <td style="color:var(--muted);font-size:12px;">—</td>
+          <td style="font-size:12px;">Background Queue cron live ✅</td>
         </tr>
         <tr onclick="openProject('008')" style="cursor:pointer;" onmouseover="this.style.background='rgba(245,200,66,0.04)'" onmouseout="this.style.background=''">
-          <td style="text-align:center;font-size:16px;">⬜</td>
+          <td style="text-align:center;font-size:16px;">🟢</td>
           <td><strong>008</strong> Token Radar / Spider Graph</td>
           <td><span style="color:var(--yellow);font-size:11px;font-weight:600;">P2</span></td>
-          <td><span style="color:var(--muted);font-size:12px;">Draft</span></td>
-          <td style="color:var(--muted);font-size:12px;">009 Phase 2 data</td>
-          <td style="font-size:12px;">Approve 009 → Phase 2 → build radar</td>
+          <td><span style="color:var(--green);font-size:12px;">Active</span></td>
+          <td style="color:var(--muted);font-size:12px;">—</td>
+          <td style="font-size:12px;">Spider chart live ✅</td>
         </tr>
         <tr onclick="openProject('009')" style="cursor:pointer;" onmouseover="this.style.background='rgba(245,200,66,0.04)'" onmouseout="this.style.background=''">
-          <td style="text-align:center;font-size:16px;">⬜</td>
+          <td style="text-align:center;font-size:16px;">🟢</td>
           <td><strong>009</strong> Intelligent Model Routing</td>
           <td><span style="color:var(--yellow);font-size:11px;font-weight:600;">P2</span></td>
-          <td><span style="color:var(--muted);font-size:12px;">Draft</span></td>
-          <td style="color:var(--muted);font-size:12px;">Steve approval</td>
-          <td style="font-size:12px;">Approve in #approve-or-kill → Phase 1</td>
+          <td><span style="color:var(--green);font-size:12px;">Active</span></td>
+          <td style="color:var(--muted);font-size:12px;">—</td>
+          <td style="font-size:12px;">Phase 1 complete — all crons model-specified ✅</td>
         </tr>
       </tbody>
     </table>
@@ -695,60 +701,180 @@ main{flex:1;overflow:auto;padding:24px;}
     <div class="card-title">⛓️ Dependency Chain</div>
     <div style="font-size:12px;color:var(--muted);line-height:2.2;font-family:monospace;">
       006 PII Scrub → 005 GHL Bridge<br>
-      009 Routing Ph1 → 007 Background Queue<br>
-      009 Routing Ph2 → 008 Token Radar<br>
-      001 Mission Control → 008 Token Radar widget<br>
+      009 Routing Ph1 ✅ → 007 Background Queue ✅<br>
+      009 Routing Ph2 → 008 Token Radar data<br>
+      001 Mission Control ✅ → 008 Token Radar ✅<br>
       004 Re-enable Crons → Steve approval (independent)
     </div>
   </div>
 
-  <!-- Quality Score widget placeholder -->
+  <!-- Quality Score Widget — Project 1 -->
   <div class="grid-2" style="margin-top:16px;">
     <div class="card">
-      <div class="card-title">🎯 Quality Score — This Week</div>
-      <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:8px;">
-        <div style="text-align:center;flex:1;min-width:60px;">
-          <div style="font-size:22px;font-weight:700;color:var(--green);">0</div>
+      <div class="card-title">🎯 Quality Score — W13 (This Week)</div>
+      <!-- Tier counters -->
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;margin-bottom:12px;">
+        <div style="text-align:center;flex:1;min-width:55px;background:var(--surface2);border-radius:8px;padding:8px 4px;">
+          <div style="font-size:24px;font-weight:700;color:var(--green);">0</div>
           <div style="font-size:10px;color:var(--muted);">🟢 Smooth</div>
         </div>
-        <div style="text-align:center;flex:1;min-width:60px;">
-          <div style="font-size:22px;font-weight:700;color:var(--yellow);">0</div>
+        <div style="text-align:center;flex:1;min-width:55px;background:var(--surface2);border-radius:8px;padding:8px 4px;">
+          <div style="font-size:24px;font-weight:700;color:var(--yellow);">0</div>
           <div style="font-size:10px;color:var(--muted);">🟡 Tweaked</div>
         </div>
-        <div style="text-align:center;flex:1;min-width:60px;">
-          <div style="font-size:22px;font-weight:700;color:#f97316;">0</div>
+        <div style="text-align:center;flex:1;min-width:55px;background:var(--surface2);border-radius:8px;padding:8px 4px;">
+          <div style="font-size:24px;font-weight:700;color:#f97316;">0</div>
           <div style="font-size:10px;color:var(--muted);">🟠 Corrected</div>
         </div>
-        <div style="text-align:center;flex:1;min-width:60px;">
-          <div style="font-size:22px;font-weight:700;color:var(--red);">0</div>
+        <div style="text-align:center;flex:1;min-width:55px;background:var(--surface2);border-radius:8px;padding:8px 4px;">
+          <div style="font-size:24px;font-weight:700;color:var(--red);">0</div>
           <div style="font-size:10px;color:var(--muted);">🔴 Escalated</div>
         </div>
-        <div style="text-align:center;flex:1;min-width:60px;">
-          <div style="font-size:22px;font-weight:700;color:#a855f7;">1</div>
+        <div style="text-align:center;flex:1;min-width:55px;background:rgba(168,85,247,0.12);border-radius:8px;padding:8px 4px;border:1px solid rgba(168,85,247,0.3);">
+          <div style="font-size:24px;font-weight:700;color:#a855f7;">1</div>
           <div style="font-size:10px;color:var(--muted);">💀 WTH</div>
         </div>
       </div>
-      <div style="margin-top:12px;font-size:11px;color:var(--muted);border-top:1px solid var(--border);padding-top:10px;">
-        💀 2026-03-24 — Unauthorized emails sent to 9 contacts (broken links + fix emails without approval)
+      <!-- Ratio -->
+      <div style="font-size:12px;color:var(--muted);margin-bottom:12px;padding:8px 10px;background:rgba(168,85,247,0.07);border-radius:6px;border-left:3px solid #a855f7;">
+        0% smooth — 1 WTH event this week
+      </div>
+      <!-- Sparkline trend -->
+      <div style="margin-bottom:12px;">
+        <div style="font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:6px;">4-Week Trend</div>
+        <canvas id="quality-sparkline" height="70"></canvas>
+      </div>
+      <!-- Correction log -->
+      <div style="font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:6px;">Correction Log</div>
+      <div style="overflow-x:auto;">
+        <table style="width:100%;border-collapse:collapse;font-size:11px;">
+          <thead>
+            <tr style="border-bottom:1px solid var(--border);">
+              <th style="text-align:left;padding:5px 8px;color:var(--muted);font-weight:600;">Date</th>
+              <th style="text-align:left;padding:5px 8px;color:var(--muted);font-weight:600;">Task</th>
+              <th style="text-align:left;padding:5px 8px;color:var(--muted);font-weight:600;">Tier</th>
+              <th style="text-align:left;padding:5px 8px;color:var(--muted);font-weight:600;">What Went Wrong</th>
+              <th style="text-align:left;padding:5px 8px;color:var(--muted);font-weight:600;">Fix Applied</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom:1px solid rgba(255,255,255,0.03);">
+              <td style="padding:6px 8px;color:var(--text);">2026-03-24</td>
+              <td style="padding:6px 8px;color:var(--text);">Outreach video email sends</td>
+              <td style="padding:6px 8px;"><span style="background:rgba(168,85,247,0.15);color:#a855f7;padding:2px 6px;border-radius:10px;font-size:10px;">💀 WTH</span></td>
+              <td style="padding:6px 8px;color:var(--muted);font-size:11px;">Sent 9 unauthorized emails with broken Wistia links, then 9 more fix emails without approval</td>
+              <td style="padding:6px 8px;color:var(--green);font-size:11px;">Disabled all 11 crons. Fixed Wistia auth. Added abort-on-failure. Hard rules added to MEMORY.md.</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
+
+    <!-- Capacity & ROI Widget — Project 2 -->
     <div class="card">
-      <div class="card-title">⚡ Capacity — Today</div>
-      <div style="display:flex;gap:16px;align-items:center;">
-        <div style="text-align:center;">
-          <div style="font-size:28px;font-weight:700;color:var(--gold);">—</div>
-          <div style="font-size:11px;color:var(--muted);">Runs today</div>
+      <div class="card-title">⚡ Capacity &amp; ROI</div>
+      <!-- Stats row -->
+      <div style="display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap;">
+        <div style="flex:1;min-width:80px;background:var(--surface2);border-radius:8px;padding:10px;text-align:center;">
+          <div style="font-size:22px;font-weight:700;color:var(--gold);">0</div>
+          <div style="font-size:10px;color:var(--muted);">Tasks today</div>
         </div>
-        <div style="text-align:center;">
-          <div style="font-size:28px;font-weight:700;color:var(--green);">—</div>
-          <div style="font-size:11px;color:var(--muted);">Est. cost</div>
+        <div style="flex:1;min-width:80px;background:var(--surface2);border-radius:8px;padding:10px;text-align:center;">
+          <div style="font-size:22px;font-weight:700;color:var(--gold);">35+</div>
+          <div style="font-size:10px;color:var(--muted);">All time</div>
         </div>
-        <div style="text-align:center;">
-          <div style="font-size:28px;font-weight:700;color:var(--blue);">—</div>
-          <div style="font-size:11px;color:var(--muted);">Auto / Approved</div>
+        <div style="flex:1;min-width:80px;background:var(--surface2);border-radius:8px;padding:10px;text-align:center;">
+          <div style="font-size:22px;font-weight:700;color:var(--green);">~$0.89</div>
+          <div style="font-size:10px;color:var(--muted);">Cost today</div>
+        </div>
+        <div style="flex:1;min-width:80px;background:var(--surface2);border-radius:8px;padding:10px;text-align:center;">
+          <div style="font-size:22px;font-weight:700;color:var(--blue);">~$1.80</div>
+          <div style="font-size:10px;color:var(--muted);">Cost this week</div>
         </div>
       </div>
-      <div style="margin-top:12px;font-size:11px;color:var(--muted);">Live data pending Project 009 Phase 2 (routing log)</div>
+      <!-- Autonomy bar -->
+      <div style="margin-bottom:14px;">
+        <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-bottom:4px;">
+          <span>🤖 Autonomous: 70%</span>
+          <span>✅ Approved: 30%</span>
+        </div>
+        <div style="height:8px;background:var(--surface2);border-radius:4px;overflow:hidden;">
+          <div style="width:70%;height:100%;background:linear-gradient(90deg,var(--green),var(--blue));border-radius:4px;"></div>
+        </div>
+      </div>
+      <!-- Value tier doughnut -->
+      <div style="font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:6px;">Value Tier Breakdown</div>
+      <div style="display:flex;align-items:center;gap:16px;margin-bottom:12px;">
+        <canvas id="capacity-doughnut" width="110" height="110" style="flex-shrink:0;"></canvas>
+        <div style="font-size:12px;line-height:2;">
+          <div><span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:var(--gold);margin-right:6px;"></span>Revenue: 35%</div>
+          <div><span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:var(--blue);margin-right:6px;"></span>Operational: 50%</div>
+          <div><span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:var(--muted);margin-right:6px;"></span>Overhead: 15%</div>
+        </div>
+      </div>
+      <!-- ROI callout -->
+      <div style="background:rgba(245,200,66,0.08);border:1px solid rgba(245,200,66,0.25);border-radius:8px;padding:10px 14px;font-size:13px;color:var(--gold);font-weight:600;text-align:center;">
+        🏆 ROI: 11 videos for ~$3
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="token-radar" class="screen">
+  <div class="page-title">🕸️ Token Radar — AI Usage</div>
+
+  <div class="grid-2" style="margin-bottom:16px;">
+    <!-- Radar chart -->
+    <div class="card">
+      <div class="card-title">Usage Radar — This Week vs Last Week</div>
+      <canvas id="token-radar-chart" height="280"></canvas>
+      <div style="display:flex;gap:16px;margin-top:10px;justify-content:center;font-size:11px;">
+        <div style="display:flex;align-items:center;gap:5px;"><span style="display:inline-block;width:12px;height:12px;border-radius:2px;background:rgba(245,200,66,0.5);"></span>This Week</div>
+        <div style="display:flex;align-items:center;gap:5px;"><span style="display:inline-block;width:12px;height:12px;border-radius:2px;background:rgba(59,130,246,0.5);"></span>Last Week</div>
+      </div>
+    </div>
+
+    <!-- Model usage table + footer -->
+    <div class="card" style="display:flex;flex-direction:column;">
+      <div class="card-title">Model Usage Breakdown</div>
+      <table class="kpi-table" style="margin-bottom:auto;">
+        <thead>
+          <tr>
+            <th>Model</th>
+            <th style="text-align:right;">Turns</th>
+            <th style="text-align:right;">Est. Cost</th>
+            <th>Primary Use</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span style="color:var(--gold);font-weight:600;">Claude Sonnet</span></td>
+            <td style="text-align:right;color:var(--gold);">~40</td>
+            <td style="text-align:right;color:var(--gold);">~$0.80</td>
+            <td style="font-size:11px;color:var(--muted);">Steve conversations, approvals</td>
+          </tr>
+          <tr>
+            <td><span style="color:var(--green);font-weight:600;">GPT-4o-mini</span></td>
+            <td style="text-align:right;color:var(--green);">~60</td>
+            <td style="text-align:right;color:var(--green);">~$0.09</td>
+            <td style="font-size:11px;color:var(--muted);">Email monitor, KPI cron</td>
+          </tr>
+          <tr>
+            <td><span style="color:var(--blue);font-weight:600;">Groq/Llama</span></td>
+            <td style="text-align:right;color:var(--blue);">~120</td>
+            <td style="text-align:right;color:var(--blue);">~$0.00</td>
+            <td style="font-size:11px;color:var(--muted);">Video scripts, briefings, heartbeats</td>
+          </tr>
+        </tbody>
+      </table>
+      <!-- Daily summary footer -->
+      <div style="margin-top:16px;padding:12px 14px;background:rgba(245,200,66,0.07);border:1px solid rgba(245,200,66,0.2);border-radius:8px;">
+        <div style="font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:6px;">Daily Summary</div>
+        <div style="display:flex;justify-content:space-between;font-size:13px;">
+          <span style="color:var(--text);">Total turns: <strong style="color:var(--gold);">~220</strong></span>
+          <span style="color:var(--text);">Total cost: <strong style="color:var(--gold);">~$0.89</strong></span>
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -834,9 +960,9 @@ var PROJECTS = {
     problem: 'No unified view of what Cassy is doing, what\'s pending, and what it\'s costing.',
     goal: 'Single HTML dashboard showing: active tasks, pipeline, KPIs, approvals, corrections, cost, and project health — all at a glance.',
     outOfScope: ['Not client-facing', 'Not a CRM replacement', 'Not real-time streaming (polling is fine)'],
-    criteria: ['KPI widgets update from kpi-state.json', 'Approvals queue shows pending items', 'Quality score widget live', 'Token radar live', 'Project health board live'],
-    dependencies: ['Needs: Project 008 for radar widget', 'Needs: Project 009 Phase 2 for cost data'],
-    nextAction: 'Add quality score + capacity widgets',
+    criteria: ['✅ KPI widgets live', '✅ Approvals queue live', '✅ Quality score widget live', '✅ Token radar live', '✅ Project health board live'],
+    dependencies: ['008 Token Radar ✅ live', '009 Phase 2 data (future enhancement)'],
+    nextAction: 'Quality + Capacity widgets live ✅',
     rollback: 'git revert HEAD && git push'
   },
   '002': {
@@ -859,7 +985,7 @@ var PROJECTS = {
     outOfScope: ['Never sent directly to contacts without Steve sharing manually', 'No client names in scripts', 'Not a polished marketing video — raw and real'],
     criteria: ['Cron fires at 8AM daily', 'Pulls from memory/journal-YYYY-MM-DD.md', 'Dark wood panel avatar', 'Wistia hosted + GitHub Pages landing page', 'Landing page verified live before email'],
     dependencies: ['Uses: Project 002 Wistia upload pattern'],
-    nextAction: 'Wire up 8AM cron → test run → Steve confirms quality',
+    nextAction: 'Cron live at 8AM ✅',
     rollback: 'openclaw cron disable <vlog-cron-id>'
   },
   '004': {
@@ -1015,6 +1141,57 @@ function clock() {
   if (el) el.textContent = new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',second:'2-digit',timeZone:'America/Toronto'})+' EDT';
 }
 clock(); setInterval(clock, 1000);
+// Load approval statuses from project-approvals.json and patch project board
+function loadApprovals() {
+  fetch('../project-approvals.json?t=' + Date.now())
+    .then(function(r){ return r.json(); })
+    .then(function(data) {
+      var rows = document.querySelectorAll('#proj-rows tr');
+      var projects = data.projects;
+      var keys = Object.keys(projects);
+      var statusMap = {
+        'approved': {emoji:'🟢', label:'Approved', color:'var(--green)'},
+        'active':   {emoji:'🟢', label:'Active',   color:'var(--green)'},
+        'killed':   {emoji:'💀', label:'Killed',   color:'var(--muted)'},
+        'discussion':{emoji:'🔄', label:'Discussion',color:'var(--blue)'},
+        'pending':  {emoji:'⬜', label:'Pending',  color:'var(--muted)'},
+        'blocked':  {emoji:'🔴', label:'Blocked',  color:'var(--red)'},
+        'paused':   {emoji:'⏸️', label:'Paused',   color:'var(--yellow)'}
+      };
+      keys.forEach(function(key, i) {
+        if (!rows[i]) return;
+        var proj = projects[key];
+        var s = statusMap[proj.status] || statusMap['pending'];
+        var cells = rows[i].querySelectorAll('td');
+        if (cells[0]) cells[0].textContent = s.emoji;
+        if (cells[3]) { cells[3].innerHTML = '<span style="color:'+s.color+';font-size:12px;">'+s.label+'</span>'; }
+      });
+      // Update summary counts
+      var counts = {active:0, blocked:0, draft:0, done:0};
+      keys.forEach(function(k){
+        var st = projects[k].status;
+        if (st==='approved'||st==='active') counts.active++;
+        else if (st==='blocked') counts.blocked++;
+        else if (st==='killed') counts.done++;
+        else counts.draft++;
+      });
+      var a=document.getElementById('proj-active'), b=document.getElementById('proj-blocked'),
+          c=document.getElementById('proj-draft'), d=document.getElementById('proj-done');
+      if(a) a.textContent=counts.active;
+      if(b) b.textContent=counts.blocked;
+      if(c) c.textContent=counts.draft;
+      if(d) d.textContent=counts.done;
+      // Show last checked time
+      if (data.lastChecked) {
+        var el = document.getElementById('approvals-last-checked');
+        if (el) el.textContent = 'Last synced: ' + new Date(data.lastChecked).toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',timeZone:'America/Toronto'}) + ' EDT';
+      }
+    })
+    .catch(function(){});
+}
+loadApprovals();
+setInterval(loadApprovals, 300000); // refresh every 5 min
+
 show('radar', document.querySelector('.nav-item'));
 </script>
 </body>

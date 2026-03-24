@@ -1,0 +1,15 @@
+{
+  "lastChecked": null,
+  "projects": {
+    "P01": { "name": "Quality Score Widget", "messageId": "1486100644996710523", "status": "pending", "decidedAt": null },
+    "P02": { "name": "Capacity ROI Widget", "messageId": "1486100662562455562", "status": "pending", "decidedAt": null },
+    "P03": { "name": "Daily Vlog Cron", "messageId": "1486100686562394264", "status": "pending", "decidedAt": null },
+    "P04": { "name": "Re-enable Outreach Crons", "messageId": "1486100707785314344", "status": "pending", "decidedAt": null },
+    "P05": { "name": "GHL Cassy Bridge", "messageId": "1486100729859932230", "status": "pending", "decidedAt": null },
+    "P06": { "name": "PII Scrub", "messageId": "1486100750693302395", "status": "pending", "decidedAt": null },
+    "P07": { "name": "Background Task Queue", "messageId": "1486100777922465852", "status": "pending", "decidedAt": null },
+    "P08": { "name": "Token Radar Spider Graph", "messageId": "1486100801418952906", "status": "pending", "decidedAt": null },
+    "P09": { "name": "Intelligent Model Routing", "messageId": "1486100826182254703", "status": "pending", "decidedAt": null },
+    "P10": { "name": "Scout Learning Agent", "messageId": "1486100859845611520", "status": "active", "decidedAt": "2026-03-24T16:23:00-04:00" }
+  }
+}
