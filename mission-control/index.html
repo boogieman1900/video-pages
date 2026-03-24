@@ -160,6 +160,8 @@ main{flex:1;overflow:auto;padding:24px;}
   <div class="nav-item" onclick="show('office',this)"><span class="icon">🏢</span>Office</div>
   <div class="nav-section">Content</div>
   <div class="nav-item" onclick="show('factory',this)"><span class="icon">🎬</span>Factory</div>
+  <div class="nav-section">Learning</div>
+  <div class="nav-item" onclick="show('learning',this)"><span class="icon">🔭</span>Scout<span class="nav-badge" style="background:#a855f7;">NEW</span></div>
   <div class="nav-section">Projects</div>
   <div class="nav-item" onclick="show('projects',this)"><span class="icon">🗂️</span>Projects<span class="nav-badge" id="proj-badge">9</span></div>
   <div class="nav-section">System</div>
@@ -312,6 +314,7 @@ main{flex:1;overflow:auto;padding:24px;}
     <div class="agent-card"><div class="agent-avatar">🏒</div><div class="agent-name">Jeff Hockey</div><div class="agent-role">9AM daily · Groq</div><div style="color:var(--muted);font-size:12px;">😴 Sleeping</div><div class="agent-task">Next run: 9:00 AM EDT</div></div>
     <div class="agent-card"><div class="agent-avatar">🏡</div><div class="agent-name">Brandi Briefing</div><div class="agent-role">8AM daily · Groq</div><div style="color:var(--muted);font-size:12px;">😴 Sleeping</div><div class="agent-task">Next run: 8:00 AM EDT</div></div>
     <div class="agent-card"><div class="agent-avatar">🧠</div><div class="agent-name">Memory Keeper</div><div class="agent-role">Skills · MEMORY.md</div><div style="color:var(--green);font-size:12px;">Up to date</div><div class="agent-task">10 skills · Memory current</div></div>
+    <div class="agent-card" onclick="show('learning',document.querySelector('[onclick*=learning]'))" style="cursor:pointer;border-color:rgba(168,85,247,0.4);"><div class="agent-avatar">🔭</div><div class="agent-name">Scout</div><div class="agent-role">Every 6h · Groq/Llama</div><div style="color:var(--green);font-size:12px;"><span class="status-dot" style="background:#a855f7;"></span>Active</div><div class="agent-task">Learning agent · ClawHub watcher</div></div>
   </div>
 </div>
 
@@ -396,6 +399,167 @@ main{flex:1;overflow:auto;padding:24px;}
       <div style="font-size:13px;line-height:1.9;color:var(--text);font-style:italic">"The moment that will live in history: at 1:46 PM Steve asked me to send Justine an apology video and to 'add him twerking.' I stopped mid-task. Voice-to-text chaos confirmed — just something fun and cheeky. Justine's reputation is safe.<br><br>The gateway crash was on me. I ran a restart from inside my own session — classic saw-off-the-branch move. Steve sent five 'hello?' messages into the void. Came back to all of them. Felt terrible.<br><br>What I'm proudest of: the org chart conversation. Steve thinks like a CEO. That energy makes it easy to do good work. Day 1. We didn't just set up a tool. We started building something."</div>
     </div>
   </div>
+</div>
+
+<div id="learning" class="screen">
+  <div class="page-title">🔭 Scout — Learning Agent</div>
+
+  <!-- Scout status bar -->
+  <div class="card" style="margin-bottom:16px;background:linear-gradient(135deg,rgba(168,85,247,0.1),rgba(109,40,217,0.05));border-color:rgba(168,85,247,0.3);">
+    <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
+      <div style="font-size:32px;">🔭</div>
+      <div style="flex:1;">
+        <div style="font-size:16px;font-weight:600;color:#c084fc;">Scout</div>
+        <div style="font-size:12px;color:var(--muted);">Cassy's self-learning agent · Groq/Llama · Every 6 hours</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:4px;">⚠️ REVIEW & EMULATE ONLY — never installs skills, never copies code</div>
+      </div>
+      <div style="text-align:right;">
+        <div style="color:#c084fc;font-size:13px;font-weight:600;"><span class="status-dot" style="background:#a855f7;"></span>Active</div>
+        <div style="font-size:11px;color:var(--muted);">First run: 2026-03-24</div>
+        <div style="font-size:11px;color:var(--muted);">Next run: every 6h</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stats row -->
+  <div class="grid-4" style="margin-bottom:20px;">
+    <div class="card" style="text-align:center;">
+      <div class="stat-big" style="color:#a855f7;">10</div>
+      <div class="stat-label">Skills on Radar</div>
+    </div>
+    <div class="card" style="text-align:center;">
+      <div class="stat-big" style="color:var(--green);">2</div>
+      <div class="stat-label">✅ Emulated</div>
+    </div>
+    <div class="card" style="text-align:center;">
+      <div class="stat-big" style="color:var(--gold);">3</div>
+      <div class="stat-label">Learnings Logged</div>
+    </div>
+    <div class="card" style="text-align:center;">
+      <div class="stat-big" style="color:var(--blue);">3</div>
+      <div class="stat-label">Features Requested</div>
+    </div>
+  </div>
+
+  <!-- Skill Radar table -->
+  <div class="card" style="padding:0;overflow:hidden;margin-bottom:16px;">
+    <div style="padding:14px 18px;border-bottom:1px solid var(--border);font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);">📡 Skill Radar — Learning Objectives</div>
+    <table class="kpi-table" style="width:100%;">
+      <thead>
+        <tr>
+          <th>Skill</th>
+          <th>For</th>
+          <th>Why</th>
+          <th>Complexity</th>
+          <th>Impact</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr onclick="openSkill('001')" style="cursor:pointer;" onmouseover="this.style.background='rgba(168,85,247,0.05)'" onmouseout="this.style.background=''">
+          <td><strong>Self-Improving Agent</strong><div style="font-size:10px;color:var(--muted);">pskoett/self-improving-agent</div></td>
+          <td style="font-size:12px;">Cassy (all sessions)</td>
+          <td style="font-size:12px;color:var(--muted);">Structured error/learning logging across sessions</td>
+          <td><span style="color:var(--green);font-size:11px;font-weight:600;">Low</span></td>
+          <td><span style="color:var(--red);font-size:11px;font-weight:600;">High</span></td>
+          <td><span style="background:rgba(34,197,94,0.15);color:var(--green);padding:2px 8px;border-radius:10px;font-size:10px;">✅ Emulated</span></td>
+        </tr>
+        <tr onclick="openSkill('002')" style="cursor:pointer;" onmouseover="this.style.background='rgba(168,85,247,0.05)'" onmouseout="this.style.background=''">
+          <td><strong>Session Logs</strong><div style="font-size:10px;color:var(--muted);">openclaw/session-logs</div></td>
+          <td style="font-size:12px;">Cassy cross-session</td>
+          <td style="font-size:12px;color:var(--muted);">Read prior sessions, extract learnings automatically</td>
+          <td><span style="color:var(--green);font-size:11px;font-weight:600;">Low</span></td>
+          <td><span style="color:var(--red);font-size:11px;font-weight:600;">High</span></td>
+          <td><span style="background:rgba(168,85,247,0.15);color:#c084fc;padding:2px 8px;border-radius:10px;font-size:10px;">✅ Emulated</span></td>
+        </tr>
+        <tr onclick="openSkill('003')" style="cursor:pointer;" onmouseover="this.style.background='rgba(168,85,247,0.05)'" onmouseout="this.style.background=''">
+          <td><strong>Blogwatcher</strong><div style="font-size:10px;color:var(--muted);">openclaw/blogwatcher</div></td>
+          <td style="font-size:12px;">Content pipeline</td>
+          <td style="font-size:12px;color:var(--muted);">Live RSS feeds → timely briefings + social posts</td>
+          <td><span style="color:var(--green);font-size:11px;font-weight:600;">Low</span></td>
+          <td><span style="color:var(--yellow);font-size:11px;font-weight:600;">Med</span></td>
+          <td><span style="background:rgba(59,130,246,0.15);color:var(--blue);padding:2px 8px;border-radius:10px;font-size:10px;">📡 Radar</span></td>
+        </tr>
+        <tr onclick="openSkill('004')" style="cursor:pointer;" onmouseover="this.style.background='rgba(168,85,247,0.05)'" onmouseout="this.style.background=''">
+          <td><strong>GitHub Issues</strong><div style="font-size:10px;color:var(--muted);">openclaw/gh-issues</div></td>
+          <td style="font-size:12px;">Project management</td>
+          <td style="font-size:12px;color:var(--muted);">Auto-flag build failures, PR reviews in Mission Control</td>
+          <td><span style="color:var(--green);font-size:11px;font-weight:600;">Low</span></td>
+          <td><span style="color:var(--yellow);font-size:11px;font-weight:600;">Med</span></td>
+          <td><span style="background:rgba(59,130,246,0.15);color:var(--blue);padding:2px 8px;border-radius:10px;font-size:10px;">📡 Radar</span></td>
+        </tr>
+        <tr onclick="openSkill('005')" style="cursor:pointer;" onmouseover="this.style.background='rgba(168,85,247,0.05)'" onmouseout="this.style.background=''">
+          <td><strong>Oracle</strong><div style="font-size:10px;color:var(--muted);">openclaw/oracle</div></td>
+          <td style="font-size:12px;">Deep analysis</td>
+          <td style="font-size:12px;color:var(--muted);">Bundle prompts + files for monthly biz reviews</td>
+          <td><span style="color:var(--yellow);font-size:11px;font-weight:600;">Med</span></td>
+          <td><span style="color:var(--yellow);font-size:11px;font-weight:600;">Med</span></td>
+          <td><span style="background:rgba(59,130,246,0.15);color:var(--blue);padding:2px 8px;border-radius:10px;font-size:10px;">📡 Radar</span></td>
+        </tr>
+        <tr onclick="openSkill('006')" style="cursor:pointer;" onmouseover="this.style.background='rgba(168,85,247,0.05)'" onmouseout="this.style.background=''">
+          <td><strong>Peekaboo</strong><div style="font-size:10px;color:var(--muted);">openclaw/peekaboo</div></td>
+          <td style="font-size:12px;">Verification</td>
+          <td style="font-size:12px;color:var(--muted);">macOS UI capture → faster link verification before sends</td>
+          <td><span style="color:var(--yellow);font-size:11px;font-weight:600;">Med</span></td>
+          <td><span style="color:var(--yellow);font-size:11px;font-weight:600;">Med</span></td>
+          <td><span style="background:rgba(59,130,246,0.15);color:var(--blue);padding:2px 8px;border-radius:10px;font-size:10px;">📡 Radar</span></td>
+        </tr>
+        <tr onclick="openSkill('007')" style="cursor:pointer;" onmouseover="this.style.background='rgba(168,85,247,0.05)'" onmouseout="this.style.background=''">
+          <td><strong>Notion</strong><div style="font-size:10px;color:var(--muted);">openclaw/notion</div></td>
+          <td style="font-size:12px;">Team collab</td>
+          <td style="font-size:12px;color:var(--muted);">Project status in Notion if Steve uses it</td>
+          <td><span style="color:var(--green);font-size:11px;font-weight:600;">Low</span></td>
+          <td><span style="color:var(--muted);font-size:11px;font-weight:600;">Low-Med</span></td>
+          <td><span style="background:rgba(59,130,246,0.15);color:var(--blue);padding:2px 8px;border-radius:10px;font-size:10px;">📡 Radar</span></td>
+        </tr>
+        <tr onclick="openSkill('008')" style="cursor:pointer;" onmouseover="this.style.background='rgba(168,85,247,0.05)'" onmouseout="this.style.background=''">
+          <td><strong>Trello</strong><div style="font-size:10px;color:var(--muted);">openclaw/trello</div></td>
+          <td style="font-size:12px;">Team PM (future)</td>
+          <td style="font-size:12px;color:var(--muted);">Visual kanban for team, revisit when team expands</td>
+          <td><span style="color:var(--green);font-size:11px;font-weight:600;">Low</span></td>
+          <td><span style="color:var(--yellow);font-size:11px;font-weight:600;">Med</span></td>
+          <td><span style="background:rgba(59,130,246,0.15);color:var(--blue);padding:2px 8px;border-radius:10px;font-size:10px;">📡 Radar</span></td>
+        </tr>
+        <tr onclick="openSkill('009')" style="cursor:pointer;" onmouseover="this.style.background='rgba(168,85,247,0.05)'" onmouseout="this.style.background=''">
+          <td><strong>Voice Call</strong><div style="font-size:10px;color:var(--muted);">openclaw/voice-call</div></td>
+          <td style="font-size:12px;">Client outreach</td>
+          <td style="font-size:12px;color:var(--muted);">AI voice follow-ups — compliance review needed first</td>
+          <td><span style="color:var(--red);font-size:11px;font-weight:600;">High</span></td>
+          <td><span style="color:var(--red);font-size:11px;font-weight:600;">High</span></td>
+          <td><span style="background:rgba(234,179,8,0.15);color:var(--yellow);padding:2px 8px;border-radius:10px;font-size:10px;">⚠️ Compliance</span></td>
+        </tr>
+        <tr onclick="openSkill('010')" style="cursor:pointer;" onmouseover="this.style.background='rgba(168,85,247,0.05)'" onmouseout="this.style.background=''">
+          <td><strong>Spotify Player</strong><div style="font-size:10px;color:var(--muted);">openclaw/spotify-player</div></td>
+          <td style="font-size:12px;">Nice-to-have</td>
+          <td style="font-size:12px;color:var(--muted);">Control Spotify from Cassy — low biz value</td>
+          <td><span style="color:var(--green);font-size:11px;font-weight:600;">Low</span></td>
+          <td><span style="color:var(--muted);font-size:11px;font-weight:600;">Low</span></td>
+          <td><span style="background:rgba(100,116,139,0.15);color:var(--muted);padding:2px 8px;border-radius:10px;font-size:10px;">⏭️ Skip</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Scout notes -->
+  <div class="card" style="border-color:rgba(168,85,247,0.2);">
+    <div class="card-title" style="color:#c084fc;">🔭 Scout's Notes — Last Run: 2026-03-24</div>
+    <div style="font-size:13px;line-height:1.9;color:var(--text);">
+      <strong>Most important finding:</strong> The self-improving-agent pattern from ClawHub is exactly what Cassy needed. The <code style="background:var(--surface2);padding:1px 5px;border-radius:3px;">.learnings/</code> system creates a structured feedback loop that survives session restarts. Already implemented.<br><br>
+      <strong>Biggest gap identified:</strong> Cassy currently generates briefings without live data feeds. <strong>Blogwatcher</strong> (SKL-003) could feed real mortgage rate changes, market news, and AI updates directly into daily content — making briefings actually timely instead of AI-generated guesses.<br><br>
+      <strong>Compliance flag:</strong> Voice Call (SKL-009) needs legal review before Steve uses it for mortgage/real estate outreach in Ontario. PIPEDA + CRTC anti-spam rules apply.<br><br>
+      <strong>Next run:</strong> Will scan new ClawHub skills, read recent sessions for new learnings, and update this board.
+    </div>
+  </div>
+
+  <!-- Skill detail drawer -->
+  <div id="skill-drawer" style="display:none;position:fixed;top:0;right:0;width:440px;height:100vh;background:var(--surface);border-left:1px solid rgba(168,85,247,0.3);z-index:1000;overflow-y:auto;padding:24px;box-shadow:-4px 0 24px rgba(0,0,0,0.5);">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+      <div id="skill-drawer-title" style="font-size:16px;font-weight:600;color:#c084fc;"></div>
+      <button onclick="closeSkillDrawer()" style="background:none;border:none;color:var(--muted);font-size:20px;cursor:pointer;">✕</button>
+    </div>
+    <div id="skill-drawer-content" style="font-size:13px;line-height:1.8;color:var(--text);"></div>
+  </div>
+  <div id="skill-overlay" onclick="closeSkillDrawer()" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.4);z-index:999;"></div>
 </div>
 
 <div id="projects" class="screen">
@@ -611,6 +775,53 @@ function show(id, el) {
   for (var j = 0; j < navs.length; j++) navs[j].classList.remove('active');
   if (el) el.classList.add('active');
 }
+var SKILLS = {
+  '001': { title: 'Self-Improving Agent', source: 'pskoett/self-improving-agent', for: 'Cassy (all sessions)', complexity: 'Low', impact: 'High', status: '✅ Emulated', why: 'Structured logging of errors, corrections, and feature requests into .learnings/ files. Promotes broadly applicable lessons to SOUL.md, AGENTS.md, TOOLS.md. Creates continuity across sessions without relying on memory alone.', howToEmulate: 'Create .learnings/LEARNINGS.md, ERRORS.md, FEATURE_REQUESTS.md. After every error or correction, log it with LRN/ERR/FEAT-YYYYMMDD-XXX format. Periodically promote critical learnings to SOUL.md or AGENTS.md.', complianceNote: 'None — this is a logging pattern, not an API or external service.', rule: '⚠️ Do NOT install the skill package. The pattern has been manually emulated.' },
+  '002': { title: 'Session Logs', source: 'openclaw/session-logs', for: 'Cassy cross-session learning', complexity: 'Low', impact: 'High', status: '✅ Emulated', why: 'Read prior session transcripts to extract learnings without Steve repeating himself. Scout uses sessions_history tool to scan recent sessions.', howToEmulate: 'Use sessions_list + sessions_history tools. Already available natively — no install needed.', complianceNote: 'Reads local session files only. No external data.', rule: '⚠️ Already a native tool. No install needed.' },
+  '003': { title: 'Blogwatcher', source: 'openclaw/blogwatcher', for: 'Content pipeline (Steve)', complexity: 'Low', impact: 'Medium', status: '📡 On Radar', why: 'Monitor RSS/Atom feeds for mortgage rates, real estate news, AI updates. Feed directly into daily briefings and social content queue. Currently briefings are AI-generated without live data.', howToEmulate: 'Use web_fetch to pull RSS XML from target feeds on a cron schedule. Parse titles + summaries. Feed into briefing prompt as "today\'s real news." No need for the CLI wrapper.', complianceNote: 'Public RSS feeds — no compliance issues.', rule: '⚠️ Do NOT install blogwatcher CLI. Emulate with web_fetch + cron.' },
+  '004': { title: 'GitHub Issues', source: 'openclaw/gh-issues', for: 'Cassy project management', complexity: 'Low', impact: 'Medium', status: '📡 On Radar', why: 'Auto-flag when video-pages builds fail, PRs need review, or issues are opened. Could surface in Mission Control without Steve checking GitHub manually.', howToEmulate: 'Use gh CLI (already available) with `gh issue list` and `gh run list`. Cron runs gh commands, posts results to Discord #briefings if anything needs attention.', complianceNote: 'Public repo only. No sensitive data exposure.', rule: '⚠️ gh CLI already installed. No new skill needed — just build the cron.' },
+  '005': { title: 'Oracle', source: 'openclaw/oracle', for: 'Deep analysis tasks', complexity: 'Medium', impact: 'Medium', status: '📡 On Radar', why: 'Bundle multiple prompts + files for comprehensive analysis. Good for monthly business reviews, synthesizing weeks of journals, or analyzing KPI trends over time.', howToEmulate: 'Build a monthly review cron that reads last 30 days of journal files, kpi-state.json, and project STATUS.md files. Feed all into a single prompt. Output to #briefings as monthly summary.', complianceNote: 'No external services — reads local files only.', rule: '⚠️ Do NOT install oracle CLI. Emulate the pattern with exec + file reads.' },
+  '006': { title: 'Peekaboo', source: 'openclaw/peekaboo', for: 'Verification before sends', complexity: 'Medium', impact: 'Medium', status: '📡 On Radar', why: 'Capture macOS UI screenshots programmatically. Could replace browser automation for link verification — faster and more reliable than Playwright.', howToEmulate: 'Study the screencapture + accessibility API pattern. For link verification specifically, browser tool already works — Peekaboo would add value for checking native Mac app UIs.', complianceNote: 'Local screen capture only. No data leaves machine.', rule: '⚠️ Do NOT install peekaboo CLI. Study the screencapture pattern only.' },
+  '007': { title: 'Notion', source: 'openclaw/notion', for: 'Team collaboration (future)', complexity: 'Low', impact: 'Low-Medium', status: '📡 On Radar', why: 'If Steve uses Notion for team docs, Cassy could read/write project status there automatically. Extends Mission Control reach to where collaborators already are.', howToEmulate: 'Notion has a public REST API. Build direct API calls with fetch — no CLI needed. Read the Notion API docs and emulate the auth + page read/write pattern.', complianceNote: 'Notion API terms apply. Data goes to Notion servers — check if client data would be involved.', rule: '⚠️ Do NOT install Notion skill. Use Notion REST API directly.' },
+  '008': { title: 'Trello', source: 'openclaw/trello', for: 'Team project management (future)', complexity: 'Low', impact: 'Medium', status: '📡 On Radar', why: 'Visual kanban that team members can see. The projects/ folder system we built is better for Cassy but Trello is shareable. Revisit when Steve has a team.', howToEmulate: 'Trello REST API is simple. Cards, lists, boards all accessible via API key + token. Could sync from projects/*.STATUS.md automatically.', complianceNote: 'Trello stores data on Atlassian servers. No client PII should go there.', rule: '⚠️ Future item. Not needed until team expands.' },
+  '009': { title: 'Voice Call', source: 'openclaw/voice-call', for: 'Client outreach (compliance pending)', complexity: 'High', impact: 'High', status: '⚠️ Compliance Review', why: 'AI voice calls for follow-up with mortgage leads and real estate contacts. Would complement the video army with audio touchpoints. Potentially very high impact if compliant.', howToEmulate: 'Study the pattern only. Would use a TTS voice + telephony API (Twilio or similar). Script generation similar to HeyGen video scripts.', complianceNote: '🔴 HIGH RISK: Ontario PIPEDA, CRTC anti-spam/robocall rules, FSRA mortgage broker regulations all apply. Needs lawyer review before ANY emulation for client outreach.', rule: '⚠️ DO NOT emulate for client use until legal review is complete. Study pattern only.' },
+  '010': { title: 'Spotify Player', source: 'openclaw/spotify-player', for: 'Ambient / nice-to-have', complexity: 'Low', impact: 'Low', status: '⏭️ Skip', why: 'Control Spotify from Cassy. Low business value for Steve\'s current stack.', howToEmulate: 'Spotify Web API. Simple OAuth + playback control. Fun but not a priority.', complianceNote: 'Spotify API terms apply. No business data involved.', rule: 'Skipping — no meaningful business impact right now.' }
+};
+
+function openSkill(id) {
+  var s = SKILLS[id];
+  if (!s) return;
+  document.getElementById('skill-drawer-title').innerHTML = '🔭 ' + s.title;
+  var html = '';
+  html += '<div style="margin-bottom:16px;display:flex;gap:8px;flex-wrap:wrap;">';
+  html += '<span style="background:rgba(168,85,247,0.15);color:#c084fc;padding:3px 10px;border-radius:20px;font-size:11px;">' + s.status + '</span>';
+  html += '<span style="background:var(--surface2);padding:3px 10px;border-radius:20px;font-size:11px;">Complexity: ' + s.complexity + '</span>';
+  html += '<span style="background:var(--surface2);padding:3px 10px;border-radius:20px;font-size:11px;">Impact: ' + s.impact + '</span>';
+  html += '</div>';
+  html += '<div style="color:var(--muted);font-size:10px;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;">Source</div>';
+  html += '<div style="font-family:monospace;font-size:12px;margin-bottom:14px;color:var(--muted);">' + s.source + '</div>';
+  html += '<div style="color:var(--muted);font-size:10px;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;">For</div>';
+  html += '<div style="margin-bottom:14px;">' + s.for + '</div>';
+  html += '<div style="color:var(--muted);font-size:10px;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;">Why It Matters</div>';
+  html += '<div style="margin-bottom:14px;">' + s.why + '</div>';
+  html += '<div style="color:var(--muted);font-size:10px;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;">How to Emulate (No Install)</div>';
+  html += '<div style="margin-bottom:14px;background:var(--surface2);padding:10px;border-radius:6px;font-size:12px;">' + s.howToEmulate + '</div>';
+  if (s.complianceNote) {
+    var compColor = s.complianceNote.includes('🔴') ? 'rgba(239,68,68,0.1)' : 'rgba(234,179,8,0.1)';
+    var compBorder = s.complianceNote.includes('🔴') ? 'rgba(239,68,68,0.3)' : 'rgba(234,179,8,0.3)';
+    html += '<div style="background:' + compColor + ';border:1px solid ' + compBorder + ';border-radius:8px;padding:10px;margin-bottom:14px;font-size:12px;">' + s.complianceNote + '</div>';
+  }
+  html += '<div style="background:rgba(168,85,247,0.1);border:1px solid rgba(168,85,247,0.2);border-radius:8px;padding:10px;font-size:11px;color:#c084fc;">' + s.rule + '</div>';
+  document.getElementById('skill-drawer-content').innerHTML = html;
+  document.getElementById('skill-drawer').style.display = 'block';
+  document.getElementById('skill-overlay').style.display = 'block';
+}
+
+function closeSkillDrawer() {
+  document.getElementById('skill-drawer').style.display = 'none';
+  document.getElementById('skill-overlay').style.display = 'none';
+}
+
 var PROJECTS = {
   '001': {
     title: '001 — Mission Control Dashboard',
