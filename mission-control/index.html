@@ -586,12 +586,17 @@ main{flex:1;overflow:auto;padding:24px;}
   </div>
 
   <!-- Slide-out drawer -->
-  <div id="proj-drawer" style="display:none;position:fixed;top:0;right:0;width:480px;height:100vh;background:var(--surface);border-left:1px solid var(--border);z-index:1000;overflow-y:auto;padding:24px;box-shadow:-4px 0 24px rgba(0,0,0,0.5);">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
-      <div id="drawer-title" style="font-size:16px;font-weight:600;color:var(--gold);"></div>
-      <button onclick="closeDrawer()" style="background:none;border:none;color:var(--muted);font-size:20px;cursor:pointer;">✕</button>
+  <div id="proj-drawer" style="display:none;position:fixed;top:0;right:0;width:480px;height:100vh;background:var(--surface);border-left:1px solid rgba(245,200,66,0.25);z-index:1000;overflow-y:auto;padding:0;box-shadow:-6px 0 32px rgba(0,0,0,0.6);">
+    <!-- Drawer header -->
+    <div style="position:sticky;top:0;background:var(--surface);border-bottom:1px solid var(--border);padding:18px 24px;display:flex;justify-content:space-between;align-items:flex-start;z-index:2;">
+      <div>
+        <div id="drawer-eyebrow" style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:4px;">Project Brief</div>
+        <div id="drawer-title" style="font-size:16px;font-weight:600;color:var(--gold);line-height:1.3;"></div>
+      </div>
+      <button onclick="closeDrawer()" style="background:var(--surface2);border:1px solid var(--border);color:var(--muted);font-size:16px;cursor:pointer;border-radius:6px;width:32px;height:32px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-left:12px;margin-top:2px;">✕</button>
     </div>
-    <div id="drawer-content" style="font-size:13px;line-height:1.8;color:var(--text);"></div>
+    <!-- Drawer body -->
+    <div id="drawer-content" style="padding:24px;font-size:13px;line-height:1.8;color:var(--text);"></div>
   </div>
   <div id="drawer-overlay" onclick="closeDrawer()" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.4);z-index:999;"></div>
 
@@ -925,38 +930,79 @@ var PROJECTS = {
   }
 };
 
+function statusChip(s) {
+  var color = s.includes('Active') ? 'rgba(34,197,94,0.15);color:var(--green)' : s.includes('Blocked') ? 'rgba(239,68,68,0.15);color:var(--red)' : s.includes('Paused') ? 'rgba(234,179,8,0.15);color:var(--yellow)' : s.includes('Draft') ? 'rgba(100,116,139,0.15);color:var(--muted)' : 'rgba(245,200,66,0.15);color:var(--gold)';
+  return '<span style="background:' + color + ';padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600;">' + s + '</span>';
+}
+function prioChip(p) {
+  var color = p==='P1'?'var(--red)':p==='P2'?'var(--yellow)':'var(--muted)';
+  return '<span style="background:var(--surface2);color:' + color + ';padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600;">Priority: ' + p + '</span>';
+}
+function sectionLabel(t) {
+  return '<div style="color:var(--muted);font-size:9px;letter-spacing:1.5px;text-transform:uppercase;margin:18px 0 6px;border-bottom:1px solid var(--border);padding-bottom:4px;">' + t + '</div>';
+}
+
 function openProject(id) {
   var p = PROJECTS[id];
   if (!p) return;
   document.getElementById('drawer-title').innerHTML = p.title;
   var html = '';
-  html += '<div style="margin-bottom:16px;display:flex;gap:12px;flex-wrap:wrap;">';
-  html += '<span style="background:var(--surface2);padding:3px 10px;border-radius:20px;font-size:11px;">' + p.status + '</span>';
-  html += '<span style="background:var(--surface2);padding:3px 10px;border-radius:20px;font-size:11px;color:var(--gold);">Priority: ' + p.priority + '</span>';
-  html += '<span style="background:var(--surface2);padding:3px 10px;border-radius:20px;font-size:11px;color:var(--muted);">Owner: ' + p.owner + '</span>';
+
+  // Status chips
+  html += '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px;">';
+  html += statusChip(p.status);
+  html += prioChip(p.priority);
+  html += '<span style="background:var(--surface2);color:var(--muted);padding:3px 10px;border-radius:20px;font-size:11px;">Owner: ' + p.owner + '</span>';
   html += '</div>';
-  html += '<div style="color:var(--muted);font-size:10px;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;">Problem</div>';
-  html += '<div style="margin-bottom:14px;">' + p.problem + '</div>';
-  html += '<div style="color:var(--muted);font-size:10px;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;">Goal</div>';
-  html += '<div style="margin-bottom:14px;">' + p.goal + '</div>';
+
+  // Problem
+  html += sectionLabel('Problem');
+  html += '<div style="background:rgba(239,68,68,0.06);border-left:3px solid var(--red);padding:10px 14px;border-radius:0 6px 6px 0;margin-bottom:4px;">' + p.problem + '</div>';
+
+  // Goal
+  html += sectionLabel('Goal');
+  html += '<div style="background:rgba(34,197,94,0.06);border-left:3px solid var(--green);padding:10px 14px;border-radius:0 6px 6px 0;">' + p.goal + '</div>';
+
+  // Out of scope
   if (p.outOfScope && p.outOfScope.length) {
-    html += '<div style="color:var(--muted);font-size:10px;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;">Out of Scope</div>';
-    html += '<ul style="margin-bottom:14px;padding-left:18px;">' + p.outOfScope.map(function(i){return '<li style="color:var(--muted);font-size:12px;">'+i+'</li>';}).join('') + '</ul>';
+    html += sectionLabel('Out of Scope');
+    html += '<ul style="padding-left:18px;">' + p.outOfScope.map(function(i){ return '<li style="color:var(--muted);font-size:12px;margin-bottom:3px;">'+i+'</li>'; }).join('') + '</ul>';
   }
-  html += '<div style="color:var(--muted);font-size:10px;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;">Success Criteria</div>';
-  html += '<ul style="margin-bottom:14px;padding-left:18px;">' + p.criteria.map(function(i){return '<li style="font-size:12px;">'+i+'</li>';}).join('') + '</ul>';
-  html += '<div style="color:var(--muted);font-size:10px;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;">Dependencies</div>';
-  html += '<ul style="margin-bottom:14px;padding-left:18px;">' + p.dependencies.map(function(i){return '<li style="font-size:12px;color:var(--muted);">'+i+'</li>';}).join('') + '</ul>';
-  html += '<div style="color:var(--muted);font-size:10px;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;">Next Action</div>';
-  html += '<div style="margin-bottom:14px;color:var(--gold);">' + p.nextAction + '</div>';
+
+  // Success criteria
+  html += sectionLabel('Success Criteria');
+  html += '<ul style="list-style:none;padding:0;">' + p.criteria.map(function(i){
+    var done = i.startsWith('✅');
+    return '<li style="display:flex;gap:8px;align-items:flex-start;margin-bottom:6px;font-size:12px;">'
+      + '<span style="color:' + (done ? 'var(--green)' : 'var(--muted)') + ';margin-top:1px;">' + (done ? '✅' : '◻') + '</span>'
+      + '<span>' + i.replace('✅ ','') + '</span></li>';
+  }).join('') + '</ul>';
+
+  // Dependencies
+  html += sectionLabel('Dependencies');
+  html += '<div style="display:flex;flex-direction:column;gap:6px;">' + p.dependencies.map(function(i){
+    var isBlock = i.toLowerCase().includes('block');
+    return '<div style="background:var(--surface2);padding:7px 12px;border-radius:6px;font-size:12px;color:var(--muted);border-left:2px solid ' + (isBlock ? 'var(--red)' : 'var(--blue)') + ';">' + i + '</div>';
+  }).join('') + '</div>';
+
+  // Next action
+  html += sectionLabel('Next Action');
+  html += '<div style="background:rgba(245,200,66,0.08);border:1px solid rgba(245,200,66,0.2);border-radius:8px;padding:12px 14px;color:var(--gold);font-size:13px;font-weight:500;">→ ' + p.nextAction + '</div>';
+
+  // Incident banner
   if (p.incident) {
-    html += '<div style="background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);border-radius:8px;padding:10px;margin-bottom:14px;font-size:12px;color:#fca5a5;">' + p.incident + '</div>';
+    html += sectionLabel('Incident Log');
+    html += '<div style="background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);border-radius:8px;padding:12px 14px;font-size:12px;color:#fca5a5;">' + p.incident + '</div>';
   }
-  html += '<div style="color:var(--muted);font-size:10px;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;">Rollback</div>';
-  html += '<div style="font-family:monospace;font-size:11px;background:var(--surface2);padding:8px;border-radius:6px;color:var(--muted);">' + p.rollback + '</div>';
+
+  // Rollback
+  html += sectionLabel('Rollback');
+  html += '<div style="background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:10px 14px;font-family:monospace;font-size:11px;color:var(--muted);">' + p.rollback + '</div>';
+
   document.getElementById('drawer-content').innerHTML = html;
   document.getElementById('proj-drawer').style.display = 'block';
   document.getElementById('drawer-overlay').style.display = 'block';
+  document.getElementById('proj-drawer').scrollTop = 0;
 }
 
 function closeDrawer() {
