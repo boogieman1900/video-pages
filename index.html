@@ -419,22 +419,22 @@ main{flex:1;overflow:auto;padding:24px;}
   </div>
 
   <style>
-    .office-room { position:relative; width:100%; height:585px; background:#060f1e; border:1px solid var(--border); border-radius:12px; overflow:hidden; }
+    .office-room { position:relative; width:100%; height:0; padding-bottom:55%; min-height:500px; max-height:700px; background:#060f1e; border:1px solid var(--border); border-radius:12px; overflow:hidden; }
     /* Zone backgrounds — CSS grid approach for clean layout */
     .zone { position:absolute; border-radius:8px; }
     /* TOP ROW — 4 zones ~24% each */
-    .zone-build      { left:1%;   top:16px;  width:28%; height:210px; background:rgba(59,130,246,0.07);  border:1px solid rgba(59,130,246,0.25); }
-    .zone-studio     { left:30%;  top:16px;  width:20%; height:210px; background:rgba(239,68,68,0.06);   border:1px solid rgba(239,68,68,0.25); }
-    .zone-library    { left:51%;  top:16px;  width:20%; height:210px; background:rgba(168,85,247,0.06);  border:1px solid rgba(168,85,247,0.25); }
-    .zone-management { left:72%;  top:16px;  width:27%; height:210px; background:rgba(245,200,66,0.07);  border:1px solid rgba(245,200,66,0.3); }
+    .zone-build      { left:1%;   top:2.7%;  width:28%; height:36%; background:rgba(59,130,246,0.07);  border:1px solid rgba(59,130,246,0.25); }
+    .zone-studio     { left:30%;  top:2.7%;  width:20%; height:36%; background:rgba(239,68,68,0.06);   border:1px solid rgba(239,68,68,0.25); }
+    .zone-library    { left:51%;  top:2.7%;  width:20%; height:36%; background:rgba(168,85,247,0.06);  border:1px solid rgba(168,85,247,0.25); }
+    .zone-management { left:72%;  top:2.7%;  width:27%; height:36%; background:rgba(245,200,66,0.07);  border:1px solid rgba(245,200,66,0.3); }
     /* BOTTOM ROW — ops 35%, boardroom 23%, break 17%, lounge 21% */
     /* MIDDLE ROW: Ops | Bullpen | Boardroom | Break */
-    .zone-ops        { left:1%;   top:242px; width:17%; height:210px; background:rgba(34,197,94,0.05);   border:1px solid rgba(34,197,94,0.2); }
-    .zone-bullpen    { left:21%;  top:242px; width:35%; height:210px; background:rgba(251,146,60,0.05);  border:1px solid rgba(251,146,60,0.2); }
-    .zone-boardroom  { left:57%;  top:242px; width:22%; height:210px; background:rgba(20,184,166,0.06);  border:1px solid rgba(20,184,166,0.25); }
-    .zone-break      { left:80%;  top:242px; width:19%; height:210px; background:rgba(245,200,66,0.05);  border:1px solid rgba(245,200,66,0.12); }
+    .zone-ops        { left:1%;   top:41.4%; width:17%; height:36%; background:rgba(34,197,94,0.05);   border:1px solid rgba(34,197,94,0.2); }
+    .zone-bullpen    { left:22%;  top:41.4%; width:34%; height:36%; background:rgba(251,146,60,0.05);  border:1px solid rgba(251,146,60,0.2); }
+    .zone-boardroom  { left:57%;  top:41.4%; width:22%; height:36%; background:rgba(20,184,166,0.06);  border:1px solid rgba(20,184,166,0.25); }
+    .zone-break      { left:80%;  top:41.4%; width:19%; height:36%; background:rgba(245,200,66,0.05);  border:1px solid rgba(245,200,66,0.12); }
     /* BOTTOM ROW: Lounge spans full width */
-    .zone-lounge     { left:1%;   top:468px; width:98%; height:100px; background:rgba(100,116,139,0.05); border:1px solid rgba(100,116,139,0.12); }
+    .zone-lounge     { left:1%;   top:80%; width:98%; height:17%; background:rgba(100,116,139,0.05); border:1px solid rgba(100,116,139,0.12); }
     .zone-label   { position:absolute; top:8px; left:10px; font-size:9px; letter-spacing:1.5px; text-transform:uppercase; opacity:0.5; }
 
     /* Desks */
@@ -527,7 +527,6 @@ main{flex:1;overflow:auto;padding:24px;}
     <!-- 🛋️ Lounge -->
     <div class="zone zone-lounge">
       <div class="zone-label" style="color:rgba(100,116,139,0.7);">🛋️ Lounge</div>
-      <div class="couch-obj" style="bottom:30px;left:50%;transform:translateX(-50%);width:110px;"></div>
     </div>
     <!-- 💼 Management Suite -->
     <div class="zone zone-management">
