@@ -333,14 +333,16 @@ main{flex:1;overflow:auto;padding:24px;}
     .office-room { position:relative; width:100%; height:520px; background:#060f1e; border:1px solid var(--border); border-radius:12px; overflow:hidden; }
     /* Zone backgrounds — CSS grid approach for clean layout */
     .zone { position:absolute; border-radius:8px; }
-    /* TOP ROW — 3 equal zones */
-    .zone-build   { left:1%;   top:16px;  width:32%; height:210px; background:rgba(59,130,246,0.07);  border:1px solid rgba(59,130,246,0.25); }
-    .zone-studio  { left:34%;  top:16px;  width:32%; height:210px; background:rgba(239,68,68,0.06);   border:1px solid rgba(239,68,68,0.25); }
-    .zone-library { left:67%;  top:16px;  width:32%; height:210px; background:rgba(168,85,247,0.06);  border:1px solid rgba(168,85,247,0.25); }
-    /* BOTTOM ROW — 3 equal zones */
-    .zone-ops     { left:1%;   top:242px; width:40%; height:255px; background:rgba(34,197,94,0.05);   border:1px solid rgba(34,197,94,0.2); }
-    .zone-break   { left:42%;  top:242px; width:22%; height:255px; background:rgba(245,200,66,0.05);  border:1px solid rgba(245,200,66,0.18); }
-    .zone-lounge  { left:65%;  top:242px; width:34%; height:255px; background:rgba(100,116,139,0.05); border:1px solid rgba(100,116,139,0.18); }
+    /* TOP ROW — 4 zones ~24% each */
+    .zone-build      { left:1%;   top:16px;  width:23%; height:210px; background:rgba(59,130,246,0.07);  border:1px solid rgba(59,130,246,0.25); }
+    .zone-studio     { left:25%;  top:16px;  width:23%; height:210px; background:rgba(239,68,68,0.06);   border:1px solid rgba(239,68,68,0.25); }
+    .zone-library    { left:49%;  top:16px;  width:23%; height:210px; background:rgba(168,85,247,0.06);  border:1px solid rgba(168,85,247,0.25); }
+    .zone-management { left:73%;  top:16px;  width:26%; height:210px; background:rgba(245,200,66,0.07);  border:1px solid rgba(245,200,66,0.3); }
+    /* BOTTOM ROW — ops 35%, boardroom 23%, break 17%, lounge 21% */
+    .zone-ops        { left:1%;   top:242px; width:35%; height:255px; background:rgba(34,197,94,0.05);   border:1px solid rgba(34,197,94,0.2); }
+    .zone-boardroom  { left:37%;  top:242px; width:23%; height:255px; background:rgba(20,184,166,0.06);  border:1px solid rgba(20,184,166,0.25); }
+    .zone-break      { left:61%;  top:242px; width:17%; height:255px; background:rgba(245,200,66,0.05);  border:1px solid rgba(245,200,66,0.18); }
+    .zone-lounge     { left:79%;  top:242px; width:20%; height:255px; background:rgba(100,116,139,0.05); border:1px solid rgba(100,116,139,0.18); }
     .zone-label   { position:absolute; top:8px; left:10px; font-size:9px; letter-spacing:1.5px; text-transform:uppercase; opacity:0.5; }
 
     /* Desks */
@@ -426,7 +428,26 @@ main{flex:1;overflow:auto;padding:24px;}
     <!-- 🛋️ Lounge -->
     <div class="zone zone-lounge">
       <div class="zone-label" style="color:rgba(100,116,139,0.7);">🛋️ Lounge</div>
-      <div class="couch-obj" style="bottom:30px;left:50%;transform:translateX(-50%);width:140px;"></div>
+      <div class="couch-obj" style="bottom:30px;left:50%;transform:translateX(-50%);width:110px;"></div>
+    </div>
+    <!-- 💼 Management Suite -->
+    <div class="zone zone-management">
+      <div class="zone-label" style="color:rgba(245,200,66,0.9);">💼 Management</div>
+      <div class="desk-obj" style="left:50%;top:70px;transform:translateX(-50%);width:70px;height:40px;border-color:rgba(245,200,66,0.4);"></div>
+      <div style="position:absolute;left:50%;top:130px;transform:translateX(-50%);width:50px;height:30px;border:1px solid rgba(245,200,66,0.3);border-radius:3px;background:rgba(245,200,66,0.05);"></div>
+    </div>
+    <!-- 🪑 Board Room -->
+    <div class="zone zone-boardroom">
+      <div class="zone-label" style="color:rgba(20,184,166,0.9);">🪑 Board Room</div>
+      <!-- Long conference table -->
+      <div style="position:absolute;left:50%;top:90px;transform:translateX(-50%);width:120px;height:30px;background:#0d2a28;border:1px solid rgba(20,184,166,0.35);border-radius:4px;"></div>
+      <!-- Chair dots around the table -->
+      <div style="position:absolute;left:50%;top:74px;transform:translateX(-50%);width:10px;height:10px;border-radius:50%;background:rgba(20,184,166,0.3);margin-left:-40px;"></div>
+      <div style="position:absolute;left:50%;top:74px;transform:translateX(-50%);width:10px;height:10px;border-radius:50%;background:rgba(20,184,166,0.3);margin-left:-5px;"></div>
+      <div style="position:absolute;left:50%;top:74px;transform:translateX(-50%);width:10px;height:10px;border-radius:50%;background:rgba(20,184,166,0.3);margin-left:30px;"></div>
+      <div style="position:absolute;left:50%;top:130px;transform:translateX(-50%);width:10px;height:10px;border-radius:50%;background:rgba(20,184,166,0.3);margin-left:-40px;"></div>
+      <div style="position:absolute;left:50%;top:130px;transform:translateX(-50%);width:10px;height:10px;border-radius:50%;background:rgba(20,184,166,0.3);margin-left:-5px;"></div>
+      <div style="position:absolute;left:50%;top:130px;transform:translateX(-50%);width:10px;height:10px;border-radius:50%;background:rgba(20,184,166,0.3);margin-left:30px;"></div>
     </div>
     <!-- Agents injected by JS -->
   </div>
@@ -1465,7 +1486,13 @@ function closeDrawer() {
 var AGENTS = [
   { id:'cassy', name:'Cassy', emoji:'💼', role:'Main Agent · Sonnet', color:'#f5c842',
     getStatus: function() {
-      return { zone:'build', anim:'typing', task:'Building · responding to Steve in #orders' };
+      // If 3+ other agents are in active zones, Cassy moves to boardroom for team briefing
+      var activeOthers = AGENTS.slice(1).filter(function(a){
+        var z = a.getStatus().zone;
+        return z==='build'||z==='studio'||z==='library'||z==='ops';
+      }).length;
+      if (activeOthers >= 3) return { zone:'boardroom', anim:'typing', task:'Team briefing in progress' };
+      return { zone:'management', anim:'typing', task:'Planning + executive oversight' };
     }
   },
   { id:'email', name:'Email Mon.', emoji:'📧', role:'Every 5m · GPT-mini', color:'#3b82f6',
@@ -1532,8 +1559,10 @@ var AGENTS = [
 
 // Zone spawn coordinates [x%, y%] within each zone element
 var ZONE_SLOTS = {
-  build:   [[15,45],[45,45],[75,45],[15,78],[45,78],[75,78]],
-  studio:  [[15,45],[45,45],[75,45],[15,78],[45,78],[75,78]],
+  build:      [[15,45],[45,45],[75,45],[15,78],[45,78],[75,78]],
+  studio:     [[15,45],[45,45],[75,45],[15,78],[45,78],[75,78]],
+  management: [[25,45],[55,45],[80,45],[25,75],[55,75]],
+  boardroom:  [[20,45],[50,45],[80,45],[20,75],[50,75],[80,75]],
   library: [[15,40],[48,40],[80,40],[15,72],[48,72],[80,72]],
   ops:     [[10,38],[27,38],[44,38],[61,38],[78,38],[10,72],[27,72],[44,72]],
   break:   [[25,42],[65,42],[25,72],[65,72]],
@@ -1548,7 +1577,7 @@ function placeAgents() {
   // Remove old sprites
   room.querySelectorAll('.agent-sprite').forEach(function(el){ el.remove(); });
   miniGrid.innerHTML = '';
-  _slotIdx = { desk:0, library:0, break:0, lounge:0 };
+  _slotIdx = { build:0, studio:0, library:0, management:0, ops:0, boardroom:0, break:0, lounge:0 };
 
   AGENTS.forEach(function(agent) {
     var st = agent.getStatus();
@@ -1584,8 +1613,8 @@ function placeAgents() {
     room.appendChild(sprite);
 
     // Mini card
-    var statusColors = { build:'var(--blue)', studio:'var(--red)', library:'#a855f7', ops:'var(--green)', break:'var(--yellow)', lounge:'var(--muted)' };
-    var statusLabels = { build:'🔨 Building', studio:'🎙️ On Air', library:'📚 Researching', ops:'⚙️ Ops Running', break:'☕ Up Soon', lounge:'💤 Idle' };
+    var statusColors = { build:'var(--blue)', studio:'var(--red)', library:'#a855f7', ops:'var(--green)', break:'var(--yellow)', lounge:'var(--muted)', management:'#f5c842', boardroom:'#14b8a6' };
+    var statusLabels = { build:'🔨 Building', studio:'🎙️ On Air', library:'📚 Researching', ops:'⚙️ Ops Running', break:'☕ Up Soon', lounge:'💤 Idle', management:'💼 Planning', boardroom:'🪑 In Meeting' };
     // Studio ON AIR light
     var studioOccupied = AGENTS.some(function(a){ return a.getStatus().zone==='studio'; });
     var studioLight = document.getElementById('studio-light');
@@ -1610,7 +1639,7 @@ function officeTime() {
   if (el) {
     var now = new Date();
     var h = now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',timeZone:'America/Toronto'});
-    var active = AGENTS.filter(function(a){ var z=a.getStatus().zone; return z==='build'||z==='studio'||z==='library'||z==='ops'; }).length;
+    var active = AGENTS.filter(function(a){ var z=a.getStatus().zone; return z==='build'||z==='studio'||z==='library'||z==='ops'||z==='management'||z==='boardroom'; }).length;
     var idle   = AGENTS.filter(function(a){ return a.getStatus().zone==='lounge'; }).length;
     var soon   = AGENTS.filter(function(a){ return a.getStatus().zone==='break'; }).length;
     el.textContent = h + ' EDT  ·  🔨 ' + active + ' active  ·  ☕ ' + soon + ' up soon  ·  💤 ' + idle + ' idle';
