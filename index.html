@@ -1,3 +1,1673 @@
-<!DOCTYPE html><html><body style="background:#000;color:#fff;font-family:sans-serif;text-align:center;padding:40px;">
-<p>Video pages</p>
-</body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cassy Mission Control</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+:root {
+  --bg:#060d18; --surface:#0f1e35; --surface2:#162840;
+  --gold:#f5c842; --gold2:#e8a020; --green:#22c55e;
+  --red:#ef4444; --yellow:#eab308; --blue:#3b82f6;
+  --text:#e2e8f0; --muted:#64748b; --border:rgba(245,200,66,0.15);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:'Helvetica Neue',Arial,sans-serif;min-height:100vh;display:flex;flex-direction:column;}
+header{display:flex;align-items:center;justify-content:space-between;padding:12px 24px;border-bottom:1px solid var(--border);background:var(--surface);}
+.logo{display:flex;align-items:center;gap:10px;}
+.logo-c{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#f5c842,#e8a020);display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:bold;color:#060d18;}
+.logo-text{font-size:16px;font-weight:600;letter-spacing:2px;color:var(--gold);}
+.logo-sub{font-size:9px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;}
+.header-right{display:flex;align-items:center;gap:16px;font-size:12px;color:var(--muted);}
+.status-dot{width:8px;height:8px;border-radius:50%;background:var(--green);display:inline-block;margin-right:6px;animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+.time-display{font-size:13px;color:var(--gold);font-weight:500;}
+.layout{display:flex;flex:1;}
+nav{width:200px;background:var(--surface);border-right:1px solid var(--border);padding:16px 0;flex-shrink:0;}
+.nav-section{padding:8px 16px 4px;font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 20px;cursor:pointer;font-size:13px;color:var(--muted);transition:all 0.15s;border-left:2px solid transparent;}
+.nav-item:hover{color:var(--text);background:var(--surface2);}
+.nav-item.active{color:var(--gold);border-left-color:var(--gold);background:rgba(245,200,66,0.06);}
+.nav-item .icon{font-size:15px;width:20px;text-align:center;}
+.nav-badge{margin-left:auto;background:var(--red);color:white;border-radius:10px;padding:1px 7px;font-size:10px;}
+main{flex:1;overflow:auto;padding:24px;}
+.screen{display:none;}
+.page-title{font-size:20px;font-weight:600;color:var(--gold);margin-bottom:20px;}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;}
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:16px;}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:18px;}
+.card-title{font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:12px;}
+.stat-big{font-size:36px;font-weight:700;color:var(--gold);line-height:1;}
+.stat-label{font-size:12px;color:var(--muted);margin-top:4px;}
+.stat-trend{font-size:11px;margin-top:6px;}
+.trend-up{color:var(--green);}
+.north-star{background:linear-gradient(135deg,rgba(245,200,66,0.1),rgba(232,160,32,0.05));border:1px solid rgba(245,200,66,0.3);border-radius:12px;padding:24px;margin-bottom:16px;text-align:center;}
+.ns-label{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:8px;}
+.ns-big{font-size:64px;font-weight:800;color:var(--gold);line-height:1;}
+.ns-sub{font-size:14px;color:var(--muted);margin-top:6px;}
+.kpi-table{width:100%;border-collapse:collapse;font-size:13px;}
+.kpi-table th{text-align:left;padding:8px 12px;color:var(--muted);font-size:11px;letter-spacing:1px;text-transform:uppercase;border-bottom:1px solid var(--border);}
+.kpi-table td{padding:10px 12px;border-bottom:1px solid rgba(255,255,255,0.04);}
+.kpi-table td:not(:first-child){color:var(--gold);font-weight:600;text-align:right;}
+.pill{display:inline-block;padding:2px 10px;border-radius:20px;font-size:11px;font-weight:600;}
+.pill-green{background:rgba(34,197,94,0.15);color:var(--green);}
+.pill-yellow{background:rgba(234,179,8,0.15);color:var(--yellow);}
+.pill-red{background:rgba(239,68,68,0.15);color:var(--red);}
+.kanban{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
+.kanban-col{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px;min-height:200px;}
+.kanban-col-title{font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;}
+.task-card{background:var(--surface2);border-radius:8px;padding:10px 12px;margin-bottom:8px;font-size:13px;border-left:3px solid var(--border);}
+.task-card.priority-high{border-left-color:var(--red);}
+.task-card.priority-med{border-left-color:var(--yellow);}
+.task-card.priority-low{border-left-color:var(--green);}
+.task-title{font-size:13px;color:var(--text);margin-bottom:4px;}
+.task-meta{font-size:11px;color:var(--muted);}
+.radar-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.04);font-size:13px;}
+.radar-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+.radar-label{flex:1;color:var(--text);}
+.radar-value{color:var(--gold);font-weight:600;}
+.pipeline{display:flex;gap:0;overflow-x:auto;}
+.pipeline-stage{flex:1;min-width:160px;padding:0 6px;}
+.pipeline-stage-title{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);padding:8px 12px;display:flex;align-items:center;justify-content:space-between;}
+.lead-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:12px;margin-bottom:8px;}
+.lead-name{font-weight:600;color:var(--text);margin-bottom:2px;font-size:13px;}
+.lead-co{font-size:11px;color:var(--muted);}
+.lead-tag{font-size:10px;padding:2px 7px;border-radius:10px;background:rgba(245,200,66,0.1);color:var(--gold);margin-top:6px;display:inline-block;}
+.office-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+.agent-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px;text-align:center;}
+.agent-card.active{border-color:rgba(34,197,94,0.4);}
+.agent-avatar{font-size:48px;margin-bottom:12px;}
+.agent-name{font-size:16px;font-weight:600;color:var(--gold);margin-bottom:4px;}
+.agent-role{font-size:12px;color:var(--muted);margin-bottom:12px;}
+.agent-task{font-size:12px;color:var(--muted);margin-top:8px;padding:8px;background:var(--surface2);border-radius:6px;text-align:left;}
+
+/* ── MOBILE ── */
+@media (max-width: 768px) {
+  header { padding: 10px 16px; }
+  .logo-text { font-size: 14px; }
+  .logo-sub { display: none; }
+  .layout { flex-direction: column; }
+  nav {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+    padding: 8px 0;
+    display: flex;
+    flex-direction: row;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .nav-section { display: none; }
+  .nav-item {
+    flex-direction: column;
+    padding: 8px 12px;
+    gap: 4px;
+    border-left: none;
+    border-bottom: 2px solid transparent;
+    white-space: nowrap;
+    font-size: 10px;
+    min-width: fit-content;
+  }
+  .nav-item.active {
+    border-left: none;
+    border-bottom-color: var(--gold);
+    background: rgba(245,200,66,0.06);
+  }
+  .nav-item .icon { font-size: 18px; width: auto; }
+  .nav-badge { margin-left: 0; font-size: 9px; padding: 0 5px; }
+  main { padding: 16px; }
+  .page-title { font-size: 16px; margin-bottom: 16px; }
+  .grid-2 { grid-template-columns: 1fr; }
+  .grid-4 { grid-template-columns: 1fr 1fr; }
+  .kanban { grid-template-columns: 1fr; }
+  .north-star { padding: 16px; }
+  .ns-big { font-size: 48px; }
+  .pipeline { flex-direction: column; gap: 16px; }
+  .pipeline-stage { min-width: unset; }
+  .office-grid { grid-template-columns: 1fr 1fr; }
+  .stat-big { font-size: 28px; }
+  .kpi-table { font-size: 12px; }
+  .kpi-table th, .kpi-table td { padding: 6px 8px; }
+}
+@media (max-width: 400px) {
+  .grid-4 { grid-template-columns: 1fr; }
+  .office-grid { grid-template-columns: 1fr; }
+}
+
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">
+    <div class="logo-c">C</div>
+    <div><div class="logo-text">CASSY</div><div class="logo-sub">Mission Control</div></div>
+  </div>
+  <div class="header-right">
+    <span><span class="status-dot"></span>All Systems Operational</span>
+    <span class="time-display" id="clock">--:-- --</span>
+  </div>
+</header>
+
+<div class="layout">
+<nav>
+  <div class="nav-section">Operations</div>
+  <div class="nav-item" onclick="show('radar',this)"><span class="icon">📡</span>Radar</div>
+  <div class="nav-item" onclick="show('tasks',this)"><span class="icon">📋</span>Tasks<span class="nav-badge">3</span></div>
+  <div class="nav-item" onclick="show('approvals',this)"><span class="icon">✅</span>Approvals<span class="nav-badge">2</span></div>
+  <div class="nav-item" onclick="show('pipeline',this)"><span class="icon">💼</span>Pipeline</div>
+  <div class="nav-section">Intelligence</div>
+  <div class="nav-item" onclick="show('kpis',this)"><span class="icon">📊</span>KPIs</div>
+  <div class="nav-item" onclick="show('office',this)"><span class="icon">🏢</span>Office</div>
+  <div class="nav-section">Content</div>
+  <div class="nav-item" onclick="show('factory',this)"><span class="icon">🎬</span>Factory</div>
+  <div class="nav-section">Learning</div>
+  <div class="nav-item" onclick="show('learning',this)"><span class="icon">🔭</span>Scout<span class="nav-badge" style="background:#a855f7;">NEW</span></div>
+  <div class="nav-section">Analytics</div>
+  <div class="nav-item" onclick="show('token-radar',this)"><span class="icon">🕸️</span>Token Radar</div>
+  <div class="nav-section">Projects</div>
+  <div class="nav-item" onclick="show('projects',this)"><span class="icon">🗂️</span>Projects<span class="nav-badge" id="proj-badge">10</span></div>
+  <div class="nav-section">System</div>
+  <div class="nav-item" onclick="show('capacity',this)"><span class="icon">⚡</span>Capacity</div>
+  <div class="nav-item" onclick="show('costs',this)"><span class="icon">💰</span>Costs</div>
+  <div class="nav-item" onclick="show('journal',this)"><span class="icon">📓</span>Journal</div>
+  <div class="nav-item" onclick="show('playbook',this)"><span class="icon">📚</span>Playbook</div>
+</nav>
+
+<main>
+
+<div id="radar" class="screen">
+  <div class="page-title">📡 Radar — Live Overview</div>
+  <div class="north-star">
+    <div class="ns-label">North Star Metric</div>
+    <div class="ns-big">70%</div>
+    <div class="ns-sub">of work done by Cassy · target: 90%+</div>
+  </div>
+  <div class="grid-4">
+    <div class="card"><div class="card-title">Tasks Today</div><div class="stat-big">50+</div><div class="stat-label">completed</div></div>
+    <div class="card"><div class="card-title">Meetings Booked</div><div class="stat-big">1</div><div class="stat-label">Andre Chin · Thu</div></div>
+    <div class="card"><div class="card-title">Emails Sent</div><div class="stat-big">15+</div><div class="stat-label">outbound</div></div>
+    <div class="card"><div class="card-title">Approvals Pending</div><div class="stat-big" style="color:var(--yellow)">2</div><div class="stat-label">waiting on Steve</div></div>
+  </div>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">System Health</div>
+      <div class="radar-row"><div class="radar-dot" style="background:var(--green)"></div><div class="radar-label">Gateway</div><div class="radar-value">Online · 12ms</div></div>
+      <div class="radar-row"><div class="radar-dot" style="background:var(--green)"></div><div class="radar-label">Telegram</div><div class="radar-value">Connected</div></div>
+      <div class="radar-row"><div class="radar-dot" style="background:var(--green)"></div><div class="radar-label">Discord</div><div class="radar-value">Connected</div></div>
+      <div class="radar-row"><div class="radar-dot" style="background:var(--green)"></div><div class="radar-label">Gmail</div><div class="radar-value">Monitoring</div></div>
+      <div class="radar-row"><div class="radar-dot" style="background:var(--green)"></div><div class="radar-label">HeyGen</div><div class="radar-value">Ready</div></div>
+      <div class="radar-row"><div class="radar-dot" style="background:var(--yellow)"></div><div class="radar-label">KPI Cron</div><div class="radar-value">8AM daily</div></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Today's Wins</div>
+      <div class="radar-row"><div class="radar-dot" style="background:var(--green)"></div><div class="radar-label">Pat Pytlik video + landing page live</div></div>
+      <div class="radar-row"><div class="radar-dot" style="background:var(--green)"></div><div class="radar-label">10 skills built and packaged</div></div>
+      <div class="radar-row"><div class="radar-dot" style="background:var(--green)"></div><div class="radar-label">Discord Cassy HQ (35 channels)</div></div>
+      <div class="radar-row"><div class="radar-dot" style="background:var(--green)"></div><div class="radar-label">5-provider AI stack live</div></div>
+      <div class="radar-row"><div class="radar-dot" style="background:var(--green)"></div><div class="radar-label">Andre Chin meeting booked Thu Mar 26</div></div>
+    </div>
+  </div>
+</div>
+
+<div id="tasks" class="screen">
+  <div class="page-title">📋 Tasks</div>
+  <div class="kanban">
+    <div class="kanban-col">
+      <div class="kanban-col-title">To Do <span>2</span></div>
+      <div class="task-card priority-high"><div class="task-title">Get Pat Pytlik's email</div><div class="task-meta">📤 Outreach · High</div></div>
+      <div class="task-card priority-med"><div class="task-title">Generate Justine video</div><div class="task-meta">🎬 Content · Medium</div></div>
+    </div>
+    <div class="kanban-col">
+      <div class="kanban-col-title">In Progress <span>1</span></div>
+      <div class="task-card priority-med"><div class="task-title">Mission Control build</div><div class="task-meta">🧠 Agent Lab</div></div>
+    </div>
+    <div class="kanban-col">
+      <div class="kanban-col-title">Awaiting Steve <span>2</span></div>
+      <div class="task-card priority-high"><div class="task-title">Approve Pat email send</div><div class="task-meta">✅ Approval · High</div></div>
+      <div class="task-card priority-med"><div class="task-title">Update Day 1 actual costs</div><div class="task-meta">💰 Finance · Medium</div></div>
+    </div>
+    <div class="kanban-col">
+      <div class="kanban-col-title">Done <span>50+</span></div>
+      <div class="task-card priority-low"><div class="task-title">Pat Pytlik HeyGen video</div><div class="task-meta">✅ Completed</div></div>
+      <div class="task-card priority-low"><div class="task-title">GitHub landing page</div><div class="task-meta">✅ Completed</div></div>
+      <div class="task-card priority-low"><div class="task-title">10 skills built</div><div class="task-meta">✅ Completed</div></div>
+      <div class="task-card priority-low"><div class="task-title">Discord Cassy HQ</div><div class="task-meta">✅ Completed</div></div>
+      <div class="task-card priority-low"><div class="task-title">5-provider AI stack</div><div class="task-meta">✅ Completed</div></div>
+    </div>
+  </div>
+</div>
+
+<div id="approvals" class="screen">
+  <div class="page-title">✅ Approvals</div>
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:10px;display:flex;align-items:center;gap:16px;">
+    <div style="font-size:24px">📧</div>
+    <div style="flex:1"><div style="font-size:14px;font-weight:600;color:var(--text);">Send video link to Pat Pytlik</div><div style="font-size:12px;color:var(--muted)">Landing page ready — waiting on Pat's email address</div></div>
+    <button style="padding:8px 16px;border-radius:6px;border:none;cursor:pointer;font-size:13px;font-weight:600;background:var(--surface2);color:var(--text);">Provide Email</button>
+  </div>
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:10px;display:flex;align-items:center;gap:16px;">
+    <div style="font-size:24px">💰</div>
+    <div style="flex:1"><div style="font-size:14px;font-weight:600;color:var(--text);">Update Day 1 actual API costs</div><div style="font-size:12px;color:var(--muted)">Check console.anthropic.com/settings/cost and tell Cassy</div></div>
+    <a href="https://console.anthropic.com/settings/cost" target="_blank" style="padding:8px 16px;border-radius:6px;border:none;cursor:pointer;font-size:13px;font-weight:600;background:var(--gold);color:#060d18;text-decoration:none;">Check Now</a>
+  </div>
+</div>
+
+<div id="pipeline" class="screen">
+  <div class="page-title">💼 Pipeline</div>
+  <div class="pipeline">
+    <div class="pipeline-stage">
+      <div class="pipeline-stage-title">Contacted <span class="pill pill-yellow">5</span></div>
+      <div class="lead-card"><div class="lead-name">Pat Pytlik</div><div class="lead-co">Foxhunt Listing</div><div class="lead-tag">Video ready</div></div>
+      <div class="lead-card"><div class="lead-name">Kyle (tech@kwgtr.com)</div><div class="lead-tag">Watching</div></div>
+      <div class="lead-card"><div class="lead-name">Marcus Umana</div><div class="lead-co">Bungalow Downsizer</div><div class="lead-tag">3 emails sent</div></div>
+      <div class="lead-card"><div class="lead-name">Stacey Johnson-Cosby</div><div class="lead-tag">Video sent</div></div>
+    </div>
+    <div class="pipeline-stage">
+      <div class="pipeline-stage-title">Replied <span class="pill pill-green">2</span></div>
+      <div class="lead-card"><div class="lead-name">Crystal Morris</div><div class="lead-co">crystal.morris@kw.com</div><div class="lead-tag">Wants meeting</div></div>
+      <div class="lead-card"><div class="lead-name">Justine Feliciano</div><div class="lead-co">KW Innovation</div><div class="lead-tag">Engaged</div></div>
+    </div>
+    <div class="pipeline-stage">
+      <div class="pipeline-stage-title">Meeting <span class="pill pill-green">1</span></div>
+      <div class="lead-card"><div class="lead-name">Andre Chin</div><div class="lead-co">KW Home Shop</div><div class="lead-tag">Thu Mar 26 · 10:30AM</div></div>
+    </div>
+    <div class="pipeline-stage">
+      <div class="pipeline-stage-title">Closed <span class="pill pill-yellow">0</span></div>
+    </div>
+  </div>
+</div>
+
+<div id="kpis" class="screen">
+  <div class="page-title">📊 KPIs</div>
+  <div class="card" style="margin-bottom:16px">
+    <div class="card-title">⚡ Tasks &amp; Autonomy</div>
+    <table class="kpi-table">
+      <tr><th>Metric</th><th>Today</th><th>Week</th><th>Month</th><th>All Time</th></tr>
+      <tr><td>Tasks Completed</td><td>50+</td><td>50+</td><td>50+</td><td>50+</td></tr>
+      <tr><td>Autonomy Rate</td><td>~70%</td><td>~70%</td><td>—</td><td>—</td></tr>
+      <tr><td>Steve's Work %</td><td>~30%</td><td>~30%</td><td>—</td><td>—</td></tr>
+    </table>
+  </div>
+  <div class="card" style="margin-bottom:16px">
+    <div class="card-title">📤 Outreach</div>
+    <table class="kpi-table">
+      <tr><th>Metric</th><th>Today</th><th>Week</th><th>Month</th><th>All Time</th></tr>
+      <tr><td>Emails/Videos Sent</td><td>15+</td><td>15+</td><td>15+</td><td>15+</td></tr>
+      <tr><td>Meetings Booked</td><td>1</td><td>1</td><td>1</td><td>1</td></tr>
+      <tr><td>Leads in Pipeline</td><td>7</td><td>7</td><td>7</td><td>7</td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <div class="card-title">💡 Cost Intelligence</div>
+    <table class="kpi-table">
+      <tr><th>Provider</th><th>Today Est.</th><th>Routing</th></tr>
+      <tr><td>Anthropic (Sonnet)</td><td>~$50</td><td>Complex tasks</td></tr>
+      <tr><td>OpenAI (GPT-mini)</td><td>~$0.01</td><td>Email monitor, KPI cron</td></tr>
+      <tr><td>Groq (Llama3)</td><td>~$0</td><td>Sports/briefings</td></tr>
+      <tr><td>HeyGen</td><td>~370 credits</td><td>Video generation</td></tr>
+    </table>
+  </div>
+</div>
+
+<div id="office" class="screen">
+  <div class="page-title">🏢 The Office</div>
+  <div class="office-grid">
+    <div class="agent-card active"><div class="agent-avatar">💼</div><div class="agent-name">Cassy</div><div class="agent-role">CEO · Main Agent</div><div style="color:var(--green);font-size:12px;"><span class="status-dot"></span>Active</div><div class="agent-task">Mission Control build</div></div>
+    <div class="agent-card"><div class="agent-avatar">📧</div><div class="agent-name">Email Monitor</div><div class="agent-role">Every 5 min · GPT-mini</div><div style="color:var(--green);font-size:12px;">Watching inbox</div><div class="agent-task">Next check: &lt;5 min</div></div>
+    <div class="agent-card"><div class="agent-avatar">📊</div><div class="agent-name">KPI Reporter</div><div class="agent-role">8AM daily · GPT-mini</div><div style="color:var(--muted);font-size:12px;">😴 Sleeping</div><div class="agent-task">Next run: 8:00 AM EDT</div></div>
+    <div class="agent-card"><div class="agent-avatar">🏒</div><div class="agent-name">Jeff Hockey</div><div class="agent-role">9AM daily · Groq</div><div style="color:var(--muted);font-size:12px;">😴 Sleeping</div><div class="agent-task">Next run: 9:00 AM EDT</div></div>
+    <div class="agent-card"><div class="agent-avatar">🏡</div><div class="agent-name">Brandi Briefing</div><div class="agent-role">8AM daily · Groq</div><div style="color:var(--muted);font-size:12px;">😴 Sleeping</div><div class="agent-task">Next run: 8:00 AM EDT</div></div>
+    <div class="agent-card"><div class="agent-avatar">🧠</div><div class="agent-name">Memory Keeper</div><div class="agent-role">Skills · MEMORY.md</div><div style="color:var(--green);font-size:12px;">Up to date</div><div class="agent-task">10 skills · Memory current</div></div>
+    <div class="agent-card" onclick="show('learning',document.querySelector('[onclick*=learning]'))" style="cursor:pointer;border-color:rgba(168,85,247,0.4);"><div class="agent-avatar">🔭</div><div class="agent-name">Scout</div><div class="agent-role">Every 6h · Groq/Llama</div><div style="color:var(--green);font-size:12px;"><span class="status-dot" style="background:#a855f7;"></span>Active</div><div class="agent-task">Learning agent · ClawHub watcher</div></div>
+  </div>
+</div>
+
+<div id="factory" class="screen">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+    <div class="page-title" style="margin-bottom:0;">🏢 The Agency</div>
+    <div id="office-time" style="font-size:11px;color:var(--muted);"></div>
+  </div>
+
+  <style>
+    .office-room { position:relative; width:100%; height:420px; background:#0a1628; border:1px solid var(--border); border-radius:12px; overflow:hidden; }
+    /* Zone backgrounds */
+    .zone { position:absolute; border-radius:8px; }
+    /* 5-zone layout: top row 3 | bottom row 2 */
+    .zone-build   { left:20px;   top:20px;    width:210px; height:175px; background:rgba(59,130,246,0.07);  border:1px solid rgba(59,130,246,0.2); }
+    .zone-studio  { left:245px;  top:20px;    width:210px; height:175px; background:rgba(239,68,68,0.06);   border:1px solid rgba(239,68,68,0.2); }
+    .zone-library { right:20px;  top:20px;    width:165px; height:175px; background:rgba(168,85,247,0.06);  border:1px solid rgba(168,85,247,0.2); }
+    .zone-ops     { left:20px;   top:215px;   width:250px; height:155px; background:rgba(34,197,94,0.05);   border:1px solid rgba(34,197,94,0.15); }
+    .zone-break   { left:285px;  top:215px;   width:130px; height:155px; background:rgba(245,200,66,0.05);  border:1px solid rgba(245,200,66,0.12); }
+    .zone-lounge  { right:20px;  top:215px;   width:175px; height:155px; background:rgba(100,116,139,0.05); border:1px solid rgba(100,116,139,0.12); }
+    .zone-label   { position:absolute; top:8px; left:10px; font-size:9px; letter-spacing:1.5px; text-transform:uppercase; opacity:0.5; }
+
+    /* Desks */
+    .desk-obj { position:absolute; width:44px; height:28px; background:#162840; border:1px solid rgba(59,130,246,0.3); border-radius:4px; }
+    .bookshelf { position:absolute; width:20px; height:70px; background:#1e1035; border:1px solid rgba(168,85,247,0.3); border-radius:3px; }
+    .couch-obj { position:absolute; width:120px; height:36px; background:#1a2030; border:1px solid rgba(100,116,139,0.3); border-radius:6px; }
+    .table-obj { position:absolute; width:60px; height:40px; background:#1a1a10; border:1px solid rgba(245,200,66,0.2); border-radius:50%; }
+
+    /* Agent sprite */
+    .agent-sprite { position:absolute; text-align:center; cursor:pointer; transition:transform 0.2s; z-index:10; }
+    .agent-sprite:hover { transform:scale(1.15); }
+    .agent-sprite:hover .agent-tooltip { display:block; }
+    .agent-body { font-size:22px; line-height:1; }
+    .agent-label { font-size:9px; color:var(--text); margin-top:2px; white-space:nowrap; font-weight:600; }
+    .agent-tooltip { display:none; position:absolute; bottom:calc(100% + 6px); left:50%; transform:translateX(-50%); background:#0f1e35; border:1px solid var(--border); border-radius:6px; padding:6px 10px; white-space:nowrap; font-size:11px; color:var(--text); z-index:100; pointer-events:none; box-shadow:0 4px 12px rgba(0,0,0,0.4); }
+    .agent-tooltip::after { content:''; position:absolute; top:100%; left:50%; transform:translateX(-50%); border:5px solid transparent; border-top-color:#0f1e35; }
+
+    /* Animations */
+    @keyframes typing { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-3px)} }
+    @keyframes sleeping { 0%,100%{transform:rotate(-3deg)} 50%{transform:rotate(3deg)} }
+    @keyframes researching { 0%,100%{transform:translateX(0)} 25%{transform:translateX(2px)} 75%{transform:translateX(-2px)} }
+    @keyframes waiting { 0%,100%{transform:scale(1)} 50%{transform:scale(1.04)} }
+    .anim-typing { animation:typing 0.8s ease-in-out infinite; }
+    .anim-sleeping { animation:sleeping 3s ease-in-out infinite; }
+    .anim-researching { animation:researching 2s ease-in-out infinite; }
+    .anim-waiting { animation:waiting 2s ease-in-out infinite; }
+
+    /* Agent cards row */
+    .agent-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:10px; margin-top:14px; }
+    .agent-mini { background:var(--surface); border:1px solid var(--border); border-radius:8px; padding:10px 12px; display:flex; align-items:center; gap:10px; }
+    .agent-mini:hover { border-color:rgba(245,200,66,0.3); }
+    .agent-mini-icon { font-size:20px; }
+    .agent-mini-name { font-size:12px; font-weight:600; }
+    .agent-mini-status { font-size:10px; color:var(--muted); }
+  </style>
+
+  <!-- The room -->
+  <div class="office-room" id="office-room">
+    <!-- 🔨 Build Station — Cassy building/coding a project feature -->
+    <div class="zone zone-build">
+      <div class="zone-label" style="color:rgba(59,130,246,0.85);">🔨 Build Station</div>
+      <div class="desk-obj" style="left:18px;top:48px;"></div>
+      <div class="desk-obj" style="left:80px;top:48px;"></div>
+      <div class="desk-obj" style="left:142px;top:48px;"></div>
+      <div class="desk-obj" style="left:18px;top:120px;"></div>
+      <div class="desk-obj" style="left:80px;top:120px;"></div>
+    </div>
+    <!-- 🎙️ Studio — content creation: vlog, video, briefings, social -->
+    <div class="zone zone-studio">
+      <div class="zone-label" style="color:rgba(239,68,68,0.85);">🎙️ Studio</div>
+      <!-- mic stand -->
+      <div style="position:absolute;left:90px;top:40px;width:6px;height:50px;background:rgba(239,68,68,0.3);border-radius:3px;"></div>
+      <div style="position:absolute;left:76px;top:36px;width:34px;height:20px;border:2px solid rgba(239,68,68,0.4);border-radius:50%;"></div>
+      <!-- camera -->
+      <div style="position:absolute;left:140px;top:50px;width:30px;height:22px;background:rgba(239,68,68,0.15);border:1px solid rgba(239,68,68,0.3);border-radius:4px;"></div>
+      <div style="position:absolute;left:170px;top:55px;width:12px;height:12px;border-radius:50%;background:rgba(239,68,68,0.2);border:1px solid rgba(239,68,68,0.4);"></div>
+      <!-- on-air light -->
+      <div id="studio-light" style="position:absolute;right:12px;top:12px;width:10px;height:10px;border-radius:50%;background:rgba(239,68,68,0.2);"></div>
+    </div>
+    <!-- 📚 Research — Scout scanning ClawHub + sessions -->
+    <div class="zone zone-library">
+      <div class="zone-label" style="color:rgba(168,85,247,0.85);">📚 Research</div>
+      <div class="bookshelf" style="right:10px;top:28px;"></div>
+      <div class="bookshelf" style="right:36px;top:28px;"></div>
+      <div class="bookshelf" style="right:62px;top:28px;"></div>
+    </div>
+    <!-- ⚙️ Ops Desk — monitoring, KPI, approval sync running -->
+    <div class="zone zone-ops">
+      <div class="zone-label" style="color:rgba(34,197,94,0.85);">⚙️ Ops</div>
+      <div class="desk-obj" style="left:18px;top:48px;"></div>
+      <div class="desk-obj" style="left:80px;top:48px;"></div>
+      <div class="desk-obj" style="left:142px;top:48px;"></div>
+      <div class="desk-obj" style="left:204px;top:48px;"></div>
+      <div class="desk-obj" style="left:18px;top:110px;"></div>
+      <div class="desk-obj" style="left:80px;top:110px;"></div>
+    </div>
+    <!-- ☕ Break Room — next run ≤30 min -->
+    <div class="zone zone-break">
+      <div class="zone-label" style="color:rgba(245,200,66,0.7);">☕ Soon</div>
+      <div class="table-obj" style="left:32px;bottom:22px;"></div>
+    </div>
+    <!-- 🛋️ Lounge — idle, off-hours -->
+    <div class="zone zone-lounge">
+      <div class="zone-label" style="color:rgba(100,116,139,0.6);">🛋️ Idle</div>
+      <div class="couch-obj" style="bottom:22px;left:22px;"></div>
+    </div>
+    <!-- Agents injected by JS -->
+  </div>
+
+  <!-- Agent cards -->
+  <div class="agent-grid" id="agent-mini-grid"></div>
+</div>
+
+<div id="capacity" class="screen">
+  <div class="page-title">⚡ Capacity</div>
+
+  <!-- Runs / Cost today -->
+  <div class="grid-4" style="margin-bottom:16px;">
+    <div class="card" style="text-align:center;">
+      <div class="stat-big" style="color:var(--gold);">—</div>
+      <div class="stat-label">Runs today</div>
+      <div style="font-size:10px;color:var(--muted);margin-top:4px;">pending logging</div>
+    </div>
+    <div class="card" style="text-align:center;">
+      <div class="stat-big" style="color:var(--green);">—</div>
+      <div class="stat-label">Est. cost today</div>
+      <div style="font-size:10px;color:var(--muted);margin-top:4px;">pending logging</div>
+    </div>
+    <div class="card" style="text-align:center;">
+      <div class="stat-big" style="color:var(--blue);">—</div>
+      <div class="stat-label">Runs this week</div>
+      <div style="font-size:10px;color:var(--muted);margin-top:4px;">pending logging</div>
+    </div>
+    <div class="card" style="text-align:center;">
+      <div class="stat-big" style="color:var(--muted);">—</div>
+      <div class="stat-label">Est. cost this week</div>
+      <div style="font-size:10px;color:var(--muted);margin-top:4px;">pending logging</div>
+    </div>
+  </div>
+
+  <!-- Value tier tiles -->
+  <div class="grid-2" style="margin-bottom:16px;">
+    <div class="card">
+      <div class="card-title">Value Tier Breakdown</div>
+      <div style="display:flex;flex-direction:column;gap:10px;margin-top:8px;">
+        <div style="background:rgba(245,200,66,0.08);border:1px solid rgba(245,200,66,0.2);border-radius:8px;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;">
+          <div>
+            <div style="font-size:14px;font-weight:600;color:var(--gold);">💰 Revenue</div>
+            <div style="font-size:11px;color:var(--muted);margin-top:2px;">Outreach videos, social posts, client follow-ups</div>
+          </div>
+          <div style="font-size:22px;font-weight:700;color:var(--gold);">—</div>
+        </div>
+        <div style="background:rgba(59,130,246,0.08);border:1px solid rgba(59,130,246,0.2);border-radius:8px;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;">
+          <div>
+            <div style="font-size:14px;font-weight:600;color:var(--blue);">⚙️ Operational</div>
+            <div style="font-size:11px;color:var(--muted);margin-top:2px;">Briefings, monitoring, KPI reporting</div>
+          </div>
+          <div style="font-size:22px;font-weight:700;color:var(--blue);">—</div>
+        </div>
+        <div style="background:rgba(100,116,139,0.08);border:1px solid rgba(100,116,139,0.2);border-radius:8px;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;">
+          <div>
+            <div style="font-size:14px;font-weight:600;color:var(--muted);">🔧 Overhead</div>
+            <div style="font-size:11px;color:var(--muted);margin-top:2px;">Memory, learning, housekeeping</div>
+          </div>
+          <div style="font-size:22px;font-weight:700;color:var(--muted);">—</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">About This Screen</div>
+      <div style="font-size:13px;color:var(--muted);line-height:1.9;">
+        <p style="margin-bottom:10px;">Live capacity data populates automatically once <strong style="color:var(--gold);">Project 009 Phase 2</strong> logging is active.</p>
+        <p style="margin-bottom:10px;">Each cron and background task will log to <code style="background:var(--surface2);padding:1px 5px;border-radius:3px;">data/task-log.json</code> with:</p>
+        <ul style="padding-left:18px;margin-bottom:10px;">
+          <li>Task type and model used</li>
+          <li>Token counts (input + output)</li>
+          <li>Estimated cost in USD</li>
+          <li>Value tier classification</li>
+        </ul>
+        <div style="background:rgba(245,200,66,0.07);border:1px solid rgba(245,200,66,0.2);border-radius:8px;padding:10px 14px;font-size:12px;color:var(--gold);">
+          ⏳ Live data available after Project 009 Phase 2 logging is active
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="costs" class="screen">
+  <div class="page-title">💰 API Costs</div>
+  <div class="grid-2" style="margin-bottom:20px">
+    <div class="card" style="border-left:4px solid #22c55e;background:rgba(34,197,94,0.05)">
+      <div style="font-size:13px;font-weight:700;color:#22c55e;margin-bottom:8px">🧮 Maxwell — CFO</div>
+      <div style="font-size:12px;color:var(--text);font-style:italic;line-height:1.8">"OpenAI + Groq now live. Email monitor + KPI cron routed to GPT-mini. Target: under $200/month by April."</div>
+    </div>
+    <div class="card" style="border-left:4px solid #60a5fa;background:rgba(96,165,250,0.05)">
+      <div style="font-size:13px;font-weight:700;color:#60a5fa;margin-bottom:8px">💡 Cipher — CIO</div>
+      <div style="font-size:12px;color:var(--text);font-style:italic;line-height:1.8">"Four-provider stack operational. Failover via OpenRouter. 27 free models available. This system is never one-model dependent."</div>
+    </div>
+  </div>
+  <div class="card" style="margin-bottom:16px;border-left:4px solid #7c3aed">
+    <div style="font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:#a78bfa;margin-bottom:14px">🧠 Decision AI</div>
+    <table class="kpi-table">
+      <tr><th>Provider</th><th>Model</th><th>Status</th><th>Cost/1M</th><th>Used For</th></tr>
+      <tr><td>Anthropic</td><td>Claude Sonnet</td><td><span class="pill pill-green">✅ Active</span></td><td>$3 in</td><td>Reasoning, complex tasks</td></tr>
+      <tr><td>OpenAI</td><td>GPT-5.4-mini</td><td><span class="pill pill-green">✅ Active</span></td><td>$0.15 in</td><td>Email monitor, KPI cron</td></tr>
+      <tr><td>Groq</td><td>Llama3 70B</td><td><span class="pill pill-green">✅ Active</span></td><td>~$0</td><td>Sports/briefings crons</td></tr>
+      <tr><td>Google (OR)</td><td>Gemini 2.5 Flash</td><td><span class="pill pill-green">✅ Active</span></td><td>$0.10 in</td><td>Vision, multimodal</td></tr>
+      <tr><td>OpenRouter</td><td>27 free models</td><td><span class="pill pill-green">✅ Failover</span></td><td>$0</td><td>Backup if Anthropic down</td></tr>
+    </table>
+  </div>
+  <div class="card" style="border-left:4px solid #3b82f6">
+    <div style="font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:#60a5fa;margin-bottom:14px">⚙️ Processing APIs</div>
+    <table class="kpi-table">
+      <tr><th>Service</th><th>Purpose</th><th>Status</th><th>Cost</th></tr>
+      <tr><td>🎬 HeyGen</td><td>AI video generation</td><td><span class="pill pill-green">✅ Active</span></td><td>1,134 credits left</td></tr>
+      <tr><td>🎥 Wistia</td><td>Video hosting + analytics</td><td><span class="pill pill-green">✅ Active</span></td><td>Subscription</td></tr>
+      <tr><td>🔍 Brave Search</td><td>Web search</td><td><span class="pill pill-green">✅ Active</span></td><td>Free tier</td></tr>
+      <tr><td>📧 Google (Gmail/Cal/Drive)</td><td>Email, calendar, files</td><td><span class="pill pill-green">✅ Active</span></td><td>$0</td></tr>
+      <tr><td>💬 Discord + Telegram</td><td>Channels</td><td><span class="pill pill-green">✅ Active</span></td><td>$0</td></tr>
+      <tr><td>🌐 GitHub Pages</td><td>Landing pages</td><td><span class="pill pill-green">✅ Active</span></td><td>$0</td></tr>
+    </table>
+  </div>
+</div>
+
+<div id="journal" class="screen">
+  <div class="page-title">📓 Journal</div>
+  <div class="card" style="margin-bottom:20px;border-left:4px solid var(--gold)">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+      <div><div style="font-size:18px;font-weight:700;color:var(--gold)">Monday March 23, 2026</div><div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px">Day 1 · Foundation Day</div></div>
+      <div style="text-align:right"><div style="font-size:28px;font-weight:800;color:var(--gold)">70%</div><div style="font-size:10px;color:var(--muted)">Cassy's work</div></div>
+    </div>
+    <div class="grid-2" style="margin-bottom:16px">
+      <div style="background:var(--surface2);border-radius:8px;padding:14px">
+        <div style="font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:10px">📦 What We Built</div>
+        <div style="font-size:13px;line-height:2;color:var(--text)">🎬 10+ personalized outreach videos<br>🌐 GitHub Pages landing system<br>🎙️ Riverside.fm skill built<br>🧠 10 skills built &amp; packaged<br>📚 All 7 businesses researched<br>💬 Discord Cassy HQ (35 channels)<br>📊 Mission Control + KPI scorecard<br>🤖 5-provider AI stack deployed<br>⏰ 8AM KPI cron configured</div>
+      </div>
+      <div>
+        <div style="background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.2);border-radius:8px;padding:14px;margin-bottom:10px">
+          <div style="font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--green);margin-bottom:8px">🏆 Wins</div>
+          <div style="font-size:13px;line-height:2;color:var(--text)">✅ Andre Chin meeting booked<br>✅ Crystal Morris replied<br>✅ 5-provider AI stack live<br>✅ Gateway stabilized (LaunchAgent)</div>
+        </div>
+        <div style="background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.2);border-radius:8px;padding:14px">
+          <div style="font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--red);margin-bottom:8px">⚡ Challenges</div>
+          <div style="font-size:13px;line-height:2;color:var(--text)">❌ 19 bugs hit (all resolved)<br>❌ Gateway crash 16 min<br>❌ API outage 4:18–5:17 PM</div>
+        </div>
+      </div>
+    </div>
+    <div class="card" style="border-left:4px solid #7c3aed;background:rgba(124,58,237,0.05)">
+      <div style="font-size:11px;color:#a78bfa;font-weight:600;margin-bottom:10px">💜 Cassy's Reflection</div>
+      <div style="font-size:13px;line-height:1.9;color:var(--text);font-style:italic">"The moment that will live in history: at 1:46 PM Steve asked me to send Justine an apology video and to 'add him twerking.' I stopped mid-task. Voice-to-text chaos confirmed — just something fun and cheeky. Justine's reputation is safe.<br><br>The gateway crash was on me. I ran a restart from inside my own session — classic saw-off-the-branch move. Steve sent five 'hello?' messages into the void. Came back to all of them. Felt terrible.<br><br>What I'm proudest of: the org chart conversation. Steve thinks like a CEO. That energy makes it easy to do good work. Day 1. We didn't just set up a tool. We started building something."</div>
+    </div>
+  </div>
+</div>
+
+<div id="learning" class="screen">
+  <div class="page-title">🔭 Scout — Learning Agent</div>
+
+  <!-- Scout status bar -->
+  <div class="card" style="margin-bottom:16px;background:linear-gradient(135deg,rgba(168,85,247,0.1),rgba(109,40,217,0.05));border-color:rgba(168,85,247,0.3);">
+    <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
+      <div style="font-size:32px;">🔭</div>
+      <div style="flex:1;">
+        <div style="font-size:16px;font-weight:600;color:#c084fc;">Scout</div>
+        <div style="font-size:12px;color:var(--muted);">Cassy's self-learning agent · Groq/Llama · Every 6 hours</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:4px;">⚠️ REVIEW & EMULATE ONLY — never installs skills, never copies code</div>
+      </div>
+      <div style="text-align:right;">
+        <div style="color:#c084fc;font-size:13px;font-weight:600;"><span class="status-dot" style="background:#a855f7;"></span>Active</div>
+        <div style="font-size:11px;color:var(--muted);">First run: 2026-03-24</div>
+        <div style="font-size:11px;color:var(--muted);">Next run: every 6h</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stats row -->
+  <div class="grid-4" style="margin-bottom:20px;">
+    <div class="card" style="text-align:center;">
+      <div class="stat-big" style="color:#a855f7;">10</div>
+      <div class="stat-label">Skills on Radar</div>
+    </div>
+    <div class="card" style="text-align:center;">
+      <div class="stat-big" style="color:var(--green);">2</div>
+      <div class="stat-label">✅ Emulated</div>
+    </div>
+    <div class="card" style="text-align:center;">
+      <div class="stat-big" style="color:var(--gold);">3</div>
+      <div class="stat-label">Learnings Logged</div>
+    </div>
+    <div class="card" style="text-align:center;">
+      <div class="stat-big" style="color:var(--blue);">3</div>
+      <div class="stat-label">Features Requested</div>
+    </div>
+  </div>
+
+  <!-- Skill Radar table -->
+  <div class="card" style="padding:0;overflow:hidden;margin-bottom:16px;">
+    <div style="padding:14px 18px;border-bottom:1px solid var(--border);font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);">📡 Skill Radar — Learning Objectives</div>
+    <table class="kpi-table" style="width:100%;">
+      <thead>
+        <tr>
+          <th>Skill</th>
+          <th>For</th>
+          <th>Why</th>
+          <th>Complexity</th>
+          <th>Impact</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr onclick="openSkill('001')" style="cursor:pointer;" onmouseover="this.style.background='rgba(168,85,247,0.05)'" onmouseout="this.style.background=''">
+          <td><strong>Self-Improving Agent</strong><div style="font-size:10px;color:var(--muted);">pskoett/self-improving-agent</div></td>
+          <td style="font-size:12px;">Cassy (all sessions)</td>
+          <td style="font-size:12px;color:var(--muted);">Structured error/learning logging across sessions</td>
+          <td><span style="color:var(--green);font-size:11px;font-weight:600;">Low</span></td>
+          <td><span style="color:var(--red);font-size:11px;font-weight:600;">High</span></td>
+          <td><span style="background:rgba(34,197,94,0.15);color:var(--green);padding:2px 8px;border-radius:10px;font-size:10px;">✅ Emulated</span></td>
+        </tr>
+        <tr onclick="openSkill('002')" style="cursor:pointer;" onmouseover="this.style.background='rgba(168,85,247,0.05)'" onmouseout="this.style.background=''">
+          <td><strong>Session Logs</strong><div style="font-size:10px;color:var(--muted);">openclaw/session-logs</div></td>
+          <td style="font-size:12px;">Cassy cross-session</td>
+          <td style="font-size:12px;color:var(--muted);">Read prior sessions, extract learnings automatically</td>
+          <td><span style="color:var(--green);font-size:11px;font-weight:600;">Low</span></td>
+          <td><span style="color:var(--red);font-size:11px;font-weight:600;">High</span></td>
+          <td><span style="background:rgba(168,85,247,0.15);color:#c084fc;padding:2px 8px;border-radius:10px;font-size:10px;">✅ Emulated</span></td>
+        </tr>
+        <tr onclick="openSkill('003')" style="cursor:pointer;" onmouseover="this.style.background='rgba(168,85,247,0.05)'" onmouseout="this.style.background=''">
+          <td><strong>Blogwatcher</strong><div style="font-size:10px;color:var(--muted);">openclaw/blogwatcher</div></td>
+          <td style="font-size:12px;">Content pipeline</td>
+          <td style="font-size:12px;color:var(--muted);">Live RSS feeds → timely briefings + social posts</td>
+          <td><span style="color:var(--green);font-size:11px;font-weight:600;">Low</span></td>
+          <td><span style="color:var(--yellow);font-size:11px;font-weight:600;">Med</span></td>
+          <td><span style="background:rgba(59,130,246,0.15);color:var(--blue);padding:2px 8px;border-radius:10px;font-size:10px;">📡 Radar</span></td>
+        </tr>
+        <tr onclick="openSkill('004')" style="cursor:pointer;" onmouseover="this.style.background='rgba(168,85,247,0.05)'" onmouseout="this.style.background=''">
+          <td><strong>GitHub Issues</strong><div style="font-size:10px;color:var(--muted);">openclaw/gh-issues</div></td>
+          <td style="font-size:12px;">Project management</td>
+          <td style="font-size:12px;color:var(--muted);">Auto-flag build failures, PR reviews in Mission Control</td>
+          <td><span style="color:var(--green);font-size:11px;font-weight:600;">Low</span></td>
+          <td><span style="color:var(--yellow);font-size:11px;font-weight:600;">Med</span></td>
+          <td><span style="background:rgba(59,130,246,0.15);color:var(--blue);padding:2px 8px;border-radius:10px;font-size:10px;">📡 Radar</span></td>
+        </tr>
+        <tr onclick="openSkill('005')" style="cursor:pointer;" onmouseover="this.style.background='rgba(168,85,247,0.05)'" onmouseout="this.style.background=''">
+          <td><strong>Oracle</strong><div style="font-size:10px;color:var(--muted);">openclaw/oracle</div></td>
+          <td style="font-size:12px;">Deep analysis</td>
+          <td style="font-size:12px;color:var(--muted);">Bundle prompts + files for monthly biz reviews</td>
+          <td><span style="color:var(--yellow);font-size:11px;font-weight:600;">Med</span></td>
+          <td><span style="color:var(--yellow);font-size:11px;font-weight:600;">Med</span></td>
+          <td><span style="background:rgba(59,130,246,0.15);color:var(--blue);padding:2px 8px;border-radius:10px;font-size:10px;">📡 Radar</span></td>
+        </tr>
+        <tr onclick="openSkill('006')" style="cursor:pointer;" onmouseover="this.style.background='rgba(168,85,247,0.05)'" onmouseout="this.style.background=''">
+          <td><strong>Peekaboo</strong><div style="font-size:10px;color:var(--muted);">openclaw/peekaboo</div></td>
+          <td style="font-size:12px;">Verification</td>
+          <td style="font-size:12px;color:var(--muted);">macOS UI capture → faster link verification before sends</td>
+          <td><span style="color:var(--yellow);font-size:11px;font-weight:600;">Med</span></td>
+          <td><span style="color:var(--yellow);font-size:11px;font-weight:600;">Med</span></td>
+          <td><span style="background:rgba(59,130,246,0.15);color:var(--blue);padding:2px 8px;border-radius:10px;font-size:10px;">📡 Radar</span></td>
+        </tr>
+        <tr onclick="openSkill('007')" style="cursor:pointer;" onmouseover="this.style.background='rgba(168,85,247,0.05)'" onmouseout="this.style.background=''">
+          <td><strong>Notion</strong><div style="font-size:10px;color:var(--muted);">openclaw/notion</div></td>
+          <td style="font-size:12px;">Team collab</td>
+          <td style="font-size:12px;color:var(--muted);">Project status in Notion if Steve uses it</td>
+          <td><span style="color:var(--green);font-size:11px;font-weight:600;">Low</span></td>
+          <td><span style="color:var(--muted);font-size:11px;font-weight:600;">Low-Med</span></td>
+          <td><span style="background:rgba(59,130,246,0.15);color:var(--blue);padding:2px 8px;border-radius:10px;font-size:10px;">📡 Radar</span></td>
+        </tr>
+        <tr onclick="openSkill('008')" style="cursor:pointer;" onmouseover="this.style.background='rgba(168,85,247,0.05)'" onmouseout="this.style.background=''">
+          <td><strong>Trello</strong><div style="font-size:10px;color:var(--muted);">openclaw/trello</div></td>
+          <td style="font-size:12px;">Team PM (future)</td>
+          <td style="font-size:12px;color:var(--muted);">Visual kanban for team, revisit when team expands</td>
+          <td><span style="color:var(--green);font-size:11px;font-weight:600;">Low</span></td>
+          <td><span style="color:var(--yellow);font-size:11px;font-weight:600;">Med</span></td>
+          <td><span style="background:rgba(59,130,246,0.15);color:var(--blue);padding:2px 8px;border-radius:10px;font-size:10px;">📡 Radar</span></td>
+        </tr>
+        <tr onclick="openSkill('009')" style="cursor:pointer;" onmouseover="this.style.background='rgba(168,85,247,0.05)'" onmouseout="this.style.background=''">
+          <td><strong>Voice Call</strong><div style="font-size:10px;color:var(--muted);">openclaw/voice-call</div></td>
+          <td style="font-size:12px;">Client outreach</td>
+          <td style="font-size:12px;color:var(--muted);">AI voice follow-ups — compliance review needed first</td>
+          <td><span style="color:var(--red);font-size:11px;font-weight:600;">High</span></td>
+          <td><span style="color:var(--red);font-size:11px;font-weight:600;">High</span></td>
+          <td><span style="background:rgba(234,179,8,0.15);color:var(--yellow);padding:2px 8px;border-radius:10px;font-size:10px;">⚠️ Compliance</span></td>
+        </tr>
+        <tr onclick="openSkill('010')" style="cursor:pointer;" onmouseover="this.style.background='rgba(168,85,247,0.05)'" onmouseout="this.style.background=''">
+          <td><strong>Spotify Player</strong><div style="font-size:10px;color:var(--muted);">openclaw/spotify-player</div></td>
+          <td style="font-size:12px;">Nice-to-have</td>
+          <td style="font-size:12px;color:var(--muted);">Control Spotify from Cassy — low biz value</td>
+          <td><span style="color:var(--green);font-size:11px;font-weight:600;">Low</span></td>
+          <td><span style="color:var(--muted);font-size:11px;font-weight:600;">Low</span></td>
+          <td><span style="background:rgba(100,116,139,0.15);color:var(--muted);padding:2px 8px;border-radius:10px;font-size:10px;">⏭️ Skip</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Token Radar placeholder — Project 8 -->
+  <div class="card" style="margin-bottom:16px;border-color:rgba(168,85,247,0.2);">
+    <div class="card-title" style="color:#c084fc;">🕸️ Token Radar — Coming Soon</div>
+    <div style="display:flex;flex-direction:column;align-items:center;padding:24px 0;">
+      <!-- Hexagon spider chart placeholder (SVG) -->
+      <svg width="260" height="240" viewBox="0 0 260 240" style="opacity:0.5;">
+        <!-- Outer hex -->
+        <polygon points="130,20 220,70 220,170 130,220 40,170 40,70" fill="none" stroke="rgba(168,85,247,0.4)" stroke-width="1.5"/>
+        <!-- Mid hex -->
+        <polygon points="130,55 192,87 192,152 130,185 68,152 68,87" fill="none" stroke="rgba(168,85,247,0.25)" stroke-width="1"/>
+        <!-- Inner hex -->
+        <polygon points="130,90 165,107 165,142 130,158 95,142 95,107" fill="none" stroke="rgba(168,85,247,0.15)" stroke-width="1"/>
+        <!-- Spokes -->
+        <line x1="130" y1="20" x2="130" y2="220" stroke="rgba(168,85,247,0.2)" stroke-width="1"/>
+        <line x1="220" y1="70" x2="40" y2="170" stroke="rgba(168,85,247,0.2)" stroke-width="1"/>
+        <line x1="220" y1="170" x2="40" y2="70" stroke="rgba(168,85,247,0.2)" stroke-width="1"/>
+        <!-- Data area (placeholder shape) -->
+        <polygon points="130,55 185,100 175,155 130,185 85,155 75,100" fill="rgba(168,85,247,0.12)" stroke="rgba(168,85,247,0.5)" stroke-width="1.5" stroke-dasharray="4,3"/>
+        <!-- Axis labels -->
+        <text x="130" y="12" text-anchor="middle" fill="#c084fc" font-size="11" font-family="Helvetica Neue, Arial, sans-serif">Outreach</text>
+        <text x="232" y="68" text-anchor="start" fill="#c084fc" font-size="11" font-family="Helvetica Neue, Arial, sans-serif">Monitoring</text>
+        <text x="232" y="178" text-anchor="start" fill="#c084fc" font-size="11" font-family="Helvetica Neue, Arial, sans-serif">Research</text>
+        <text x="130" y="236" text-anchor="middle" fill="#c084fc" font-size="11" font-family="Helvetica Neue, Arial, sans-serif">Content</text>
+        <text x="28" y="178" text-anchor="end" fill="#c084fc" font-size="11" font-family="Helvetica Neue, Arial, sans-serif">Ops</text>
+        <text x="28" y="68" text-anchor="end" fill="#c084fc" font-size="11" font-family="Helvetica Neue, Arial, sans-serif">Memory</text>
+      </svg>
+      <div style="margin-top:12px;font-size:13px;color:var(--muted);text-align:center;max-width:360px;line-height:1.7;">
+        <strong style="color:#c084fc;">Token Radar</strong> shows where AI thinking is being spent across 6 categories.<br>
+        <span style="font-size:11px;">Populates after 2-3 days of model routing log data (Project 009 Phase 2)</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scout notes -->
+  <div class="card" style="border-color:rgba(168,85,247,0.2);">
+    <div class="card-title" style="color:#c084fc;">🔭 Scout's Notes — Last Run: 2026-03-24</div>
+    <div style="font-size:13px;line-height:1.9;color:var(--text);">
+      <strong>Most important finding:</strong> The self-improving-agent pattern from ClawHub is exactly what Cassy needed. The <code style="background:var(--surface2);padding:1px 5px;border-radius:3px;">.learnings/</code> system creates a structured feedback loop that survives session restarts. Already implemented.<br><br>
+      <strong>Biggest gap identified:</strong> Cassy currently generates briefings without live data feeds. <strong>Blogwatcher</strong> (SKL-003) could feed real mortgage rate changes, market news, and AI updates directly into daily content — making briefings actually timely instead of AI-generated guesses.<br><br>
+      <strong>Compliance flag:</strong> Voice Call (SKL-009) needs legal review before Steve uses it for mortgage/real estate outreach in Ontario. PIPEDA + CRTC anti-spam rules apply.<br><br>
+      <strong>Next run:</strong> Will scan new ClawHub skills, read recent sessions for new learnings, and update this board.
+    </div>
+  </div>
+
+  <!-- Skill detail drawer -->
+  <div id="skill-drawer" style="display:none;position:fixed;top:0;right:0;width:440px;height:100vh;background:var(--surface);border-left:1px solid rgba(168,85,247,0.3);z-index:1000;overflow-y:auto;padding:24px;box-shadow:-4px 0 24px rgba(0,0,0,0.5);">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+      <div id="skill-drawer-title" style="font-size:16px;font-weight:600;color:#c084fc;"></div>
+      <button onclick="closeSkillDrawer()" style="background:none;border:none;color:var(--muted);font-size:20px;cursor:pointer;">✕</button>
+    </div>
+    <div id="skill-drawer-content" style="font-size:13px;line-height:1.8;color:var(--text);"></div>
+  </div>
+  <div id="skill-overlay" onclick="closeSkillDrawer()" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.4);z-index:999;"></div>
+</div>
+
+<div id="projects" class="screen">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
+    <div class="page-title" style="margin-bottom:0;">🗂️ Projects — Health Board</div>
+    <div id="approvals-last-checked" style="font-size:11px;color:var(--muted);">Syncing...</div>
+  </div>
+
+  <!-- Summary bar -->
+  <div class="grid-4" style="margin-bottom:20px;">
+    <div class="card" style="text-align:center;">
+      <div class="stat-big" style="color:var(--green)" id="proj-active">7</div>
+      <div class="stat-label">🟢 Active</div>
+    </div>
+    <div class="card" style="text-align:center;">
+      <div class="stat-big" style="color:var(--red)" id="proj-blocked">2</div>
+      <div class="stat-label">🔴 Blocked</div>
+    </div>
+    <div class="card" style="text-align:center;">
+      <div class="stat-big" style="color:var(--muted)" id="proj-draft">0</div>
+      <div class="stat-label">⏸️ Draft</div>
+    </div>
+    <div class="card" style="text-align:center;">
+      <div class="stat-big" style="color:var(--gold)" id="proj-done">0</div>
+      <div class="stat-label">✅ Complete</div>
+    </div>
+  </div>
+
+  <!-- Slide-out drawer -->
+  <div id="proj-drawer" style="display:none;position:fixed;top:0;right:0;width:480px;height:100vh;background:var(--surface);border-left:1px solid rgba(245,200,66,0.25);z-index:1000;overflow-y:auto;padding:0;box-shadow:-6px 0 32px rgba(0,0,0,0.6);">
+    <!-- Drawer header -->
+    <div style="position:sticky;top:0;background:var(--surface);border-bottom:1px solid var(--border);padding:18px 24px;display:flex;justify-content:space-between;align-items:flex-start;z-index:2;">
+      <div>
+        <div id="drawer-eyebrow" style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:4px;">Project Brief</div>
+        <div id="drawer-title" style="font-size:16px;font-weight:600;color:var(--gold);line-height:1.3;"></div>
+      </div>
+      <button onclick="closeDrawer()" style="background:var(--surface2);border:1px solid var(--border);color:var(--muted);font-size:16px;cursor:pointer;border-radius:6px;width:32px;height:32px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-left:12px;margin-top:2px;">✕</button>
+    </div>
+    <!-- Drawer body -->
+    <div id="drawer-content" style="padding:24px;font-size:13px;line-height:1.8;color:var(--text);"></div>
+  </div>
+  <div id="drawer-overlay" onclick="closeDrawer()" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.4);z-index:999;"></div>
+
+  <!-- Project rows -->
+  <div class="card" style="padding:0;overflow:hidden;">
+    <table class="kpi-table" style="width:100%;">
+      <thead>
+        <tr>
+          <th style="width:36px;"></th>
+          <th>Project</th>
+          <th>Priority</th>
+          <th>Status</th>
+          <th>Blocked by</th>
+          <th>Next Action</th>
+        </tr>
+      </thead>
+      <tbody id="proj-rows">
+        <tr onclick="openProject('001')" style="cursor:pointer;" onmouseover="this.style.background='rgba(245,200,66,0.04)'" onmouseout="this.style.background=''">
+          <td style="text-align:center;font-size:16px;">🟢</td>
+          <td><strong>001</strong> Mission Control Dashboard</td>
+          <td><span style="color:var(--red);font-size:11px;font-weight:600;">P1</span></td>
+          <td><span style="color:var(--green);font-size:12px;">Active</span></td>
+          <td style="color:var(--muted);font-size:12px;">—</td>
+          <td style="font-size:12px;">Quality + Capacity widgets live ✅</td>
+        </tr>
+        <tr onclick="openProject('002')" style="cursor:pointer;" onmouseover="this.style.background='rgba(245,200,66,0.04)'" onmouseout="this.style.background=''">
+          <td style="text-align:center;font-size:16px;">⏸️</td>
+          <td><strong>002</strong> Video Army — Outreach Videos</td>
+          <td><span style="color:var(--red);font-size:11px;font-weight:600;">P1</span></td>
+          <td><span style="color:var(--yellow);font-size:12px;">Paused</span></td>
+          <td style="color:var(--muted);font-size:12px;">Steve approval</td>
+          <td style="font-size:12px;">Steve approves contact list → re-enable</td>
+        </tr>
+        <tr onclick="openProject('003')" style="cursor:pointer;" onmouseover="this.style.background='rgba(245,200,66,0.04)'" onmouseout="this.style.background=''">
+          <td style="text-align:center;font-size:16px;">🟢</td>
+          <td><strong>003</strong> Daily Vlog — Building in Public</td>
+          <td><span style="color:var(--yellow);font-size:11px;font-weight:600;">P2</span></td>
+          <td><span style="color:var(--green);font-size:12px;">Active</span></td>
+          <td style="color:var(--muted);font-size:12px;">—</td>
+          <td style="font-size:12px;">Cron live at 8AM ✅</td>
+        </tr>
+        <tr onclick="openProject('004')" style="cursor:pointer;" onmouseover="this.style.background='rgba(245,200,66,0.04)'" onmouseout="this.style.background=''">
+          <td style="text-align:center;font-size:16px;">🔴</td>
+          <td><strong>004</strong> Re-enable Outreach Crons</td>
+          <td><span style="color:var(--red);font-size:11px;font-weight:600;">P1</span></td>
+          <td><span style="color:var(--red);font-size:12px;">Blocked</span></td>
+          <td style="color:var(--muted);font-size:12px;">Steve approval</td>
+          <td style="font-size:12px;">Steve confirms contact list</td>
+        </tr>
+        <tr onclick="openProject('005')" style="cursor:pointer;" onmouseover="this.style.background='rgba(245,200,66,0.04)'" onmouseout="this.style.background=''">
+          <td style="text-align:center;font-size:16px;">🔴</td>
+          <td><strong>005</strong> GHL ↔ Cassy Bridge</td>
+          <td><span style="color:var(--yellow);font-size:11px;font-weight:600;">P2</span></td>
+          <td><span style="color:var(--red);font-size:12px;">Blocked</span></td>
+          <td style="color:var(--muted);font-size:12px;">006 PII Scrub first</td>
+          <td style="font-size:12px;">Complete 006 → design webhook</td>
+        </tr>
+        <tr onclick="openProject('006')" style="cursor:pointer;" onmouseover="this.style.background='rgba(245,200,66,0.04)'" onmouseout="this.style.background=''">
+          <td style="text-align:center;font-size:16px;">⬜</td>
+          <td><strong>006</strong> PII Scrub — Memory Files</td>
+          <td><span style="color:var(--red);font-size:11px;font-weight:600;">P1</span></td>
+          <td><span style="color:var(--muted);font-size:12px;">Draft</span></td>
+          <td style="color:var(--muted);font-size:12px;">—</td>
+          <td style="font-size:12px;">Steve approves → Cassy runs scrub</td>
+        </tr>
+        <tr onclick="openProject('007')" style="cursor:pointer;" onmouseover="this.style.background='rgba(245,200,66,0.04)'" onmouseout="this.style.background=''">
+          <td style="text-align:center;font-size:16px;">🟢</td>
+          <td><strong>007</strong> Background Task Queue</td>
+          <td><span style="color:var(--muted);font-size:11px;font-weight:600;">P3</span></td>
+          <td><span style="color:var(--green);font-size:12px;">Active</span></td>
+          <td style="color:var(--muted);font-size:12px;">—</td>
+          <td style="font-size:12px;">Background Queue cron live ✅</td>
+        </tr>
+        <tr onclick="openProject('008')" style="cursor:pointer;" onmouseover="this.style.background='rgba(245,200,66,0.04)'" onmouseout="this.style.background=''">
+          <td style="text-align:center;font-size:16px;">🟢</td>
+          <td><strong>008</strong> Token Radar / Spider Graph</td>
+          <td><span style="color:var(--yellow);font-size:11px;font-weight:600;">P2</span></td>
+          <td><span style="color:var(--green);font-size:12px;">Active</span></td>
+          <td style="color:var(--muted);font-size:12px;">—</td>
+          <td style="font-size:12px;">Spider chart live ✅</td>
+        </tr>
+        <tr onclick="openProject('009')" style="cursor:pointer;" onmouseover="this.style.background='rgba(245,200,66,0.04)'" onmouseout="this.style.background=''">
+          <td style="text-align:center;font-size:16px;">🟢</td>
+          <td><strong>009</strong> Intelligent Model Routing</td>
+          <td><span style="color:var(--yellow);font-size:11px;font-weight:600;">P2</span></td>
+          <td><span style="color:var(--green);font-size:12px;">Active</span></td>
+          <td style="color:var(--muted);font-size:12px;">—</td>
+          <td style="font-size:12px;">Phase 1 complete — all crons model-specified ✅</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Dependency note -->
+  <div class="card" style="margin-top:16px;">
+    <div class="card-title">⛓️ Dependency Chain</div>
+    <div style="font-size:12px;color:var(--muted);line-height:2.2;font-family:monospace;">
+      006 PII Scrub → 005 GHL Bridge<br>
+      009 Routing Ph1 ✅ → 007 Background Queue ✅<br>
+      009 Routing Ph2 → 008 Token Radar data<br>
+      001 Mission Control ✅ → 008 Token Radar ✅<br>
+      004 Re-enable Crons → Steve approval (independent)
+    </div>
+  </div>
+
+  <!-- Quality Score Widget — Project 1 -->
+  <div class="grid-2" style="margin-top:16px;">
+    <div class="card">
+      <div class="card-title">🎯 Quality Score — W13 (This Week)</div>
+      <!-- Tier counters -->
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;margin-bottom:12px;">
+        <div style="text-align:center;flex:1;min-width:55px;background:var(--surface2);border-radius:8px;padding:8px 4px;">
+          <div style="font-size:24px;font-weight:700;color:var(--green);">0</div>
+          <div style="font-size:10px;color:var(--muted);">🟢 Smooth</div>
+        </div>
+        <div style="text-align:center;flex:1;min-width:55px;background:var(--surface2);border-radius:8px;padding:8px 4px;">
+          <div style="font-size:24px;font-weight:700;color:var(--yellow);">0</div>
+          <div style="font-size:10px;color:var(--muted);">🟡 Tweaked</div>
+        </div>
+        <div style="text-align:center;flex:1;min-width:55px;background:var(--surface2);border-radius:8px;padding:8px 4px;">
+          <div style="font-size:24px;font-weight:700;color:#f97316;">0</div>
+          <div style="font-size:10px;color:var(--muted);">🟠 Corrected</div>
+        </div>
+        <div style="text-align:center;flex:1;min-width:55px;background:var(--surface2);border-radius:8px;padding:8px 4px;">
+          <div style="font-size:24px;font-weight:700;color:var(--red);">0</div>
+          <div style="font-size:10px;color:var(--muted);">🔴 Escalated</div>
+        </div>
+        <div style="text-align:center;flex:1;min-width:55px;background:rgba(168,85,247,0.12);border-radius:8px;padding:8px 4px;border:1px solid rgba(168,85,247,0.3);">
+          <div style="font-size:24px;font-weight:700;color:#a855f7;">2</div>
+          <div style="font-size:10px;color:var(--muted);">💀 WTH</div>
+        </div>
+      </div>
+      <!-- Ratio -->
+      <div style="font-size:12px;color:var(--muted);margin-bottom:12px;padding:8px 10px;background:rgba(168,85,247,0.07);border-radius:6px;border-left:3px solid #a855f7;">
+        🟢 0 / 🟡 0 / 🟠 0 / 🔴 0 / 💀 2 — 2 WTH events this week
+      </div>
+      <!-- Sparkline trend -->
+      <div style="margin-bottom:12px;">
+        <div style="font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:6px;">4-Week Trend</div>
+        <canvas id="quality-sparkline" height="70"></canvas>
+      </div>
+      <!-- Correction log -->
+      <div style="font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:6px;">Correction Log</div>
+      <div style="overflow-x:auto;">
+        <table style="width:100%;border-collapse:collapse;font-size:11px;">
+          <thead>
+            <tr style="border-bottom:1px solid var(--border);">
+              <th style="text-align:left;padding:5px 8px;color:var(--muted);font-weight:600;">Date</th>
+              <th style="text-align:left;padding:5px 8px;color:var(--muted);font-weight:600;">Task</th>
+              <th style="text-align:left;padding:5px 8px;color:var(--muted);font-weight:600;">Tier</th>
+              <th style="text-align:left;padding:5px 8px;color:var(--muted);font-weight:600;">What Went Wrong</th>
+              <th style="text-align:left;padding:5px 8px;color:var(--muted);font-weight:600;">Fix Applied</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom:1px solid rgba(255,255,255,0.03);">
+              <td style="padding:6px 8px;color:var(--text);">2026-03-24</td>
+              <td style="padding:6px 8px;color:var(--text);">Unauthorized emails — 9 contacts</td>
+              <td style="padding:6px 8px;"><span style="background:rgba(168,85,247,0.15);color:#a855f7;padding:2px 6px;border-radius:10px;font-size:10px;">💀 WTH</span></td>
+              <td style="padding:6px 8px;color:var(--muted);font-size:11px;">Unauthorized emails sent to 9 contacts without approval</td>
+              <td style="padding:6px 8px;color:var(--green);font-size:11px;">Disabled all 11 crons. Fixed Wistia auth. Hard rules added to MEMORY.md.</td>
+            </tr>
+            <tr style="border-bottom:1px solid rgba(255,255,255,0.03);">
+              <td style="padding:6px 8px;color:var(--text);">2026-03-24</td>
+              <td style="padding:6px 8px;color:var(--text);">Generation loop</td>
+              <td style="padding:6px 8px;"><span style="background:rgba(168,85,247,0.15);color:#a855f7;padding:2px 6px;border-radius:10px;font-size:10px;">💀 WTH</span></td>
+              <td style="padding:6px 8px;color:var(--muted);font-size:11px;">Generation loop — sent 10,000+ lines of self-editing text</td>
+              <td style="padding:6px 8px;color:var(--green);font-size:11px;">Session terminated. Loop detection added. Self-edit guard documented in SOUL.md.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Capacity & ROI Widget — Project 2 -->
+    <div class="card">
+      <div class="card-title">⚡ Capacity &amp; ROI</div>
+      <!-- Stats row -->
+      <div style="display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap;">
+        <div style="flex:1;min-width:80px;background:var(--surface2);border-radius:8px;padding:10px;text-align:center;">
+          <div style="font-size:22px;font-weight:700;color:var(--gold);">0</div>
+          <div style="font-size:10px;color:var(--muted);">Tasks today</div>
+        </div>
+        <div style="flex:1;min-width:80px;background:var(--surface2);border-radius:8px;padding:10px;text-align:center;">
+          <div style="font-size:22px;font-weight:700;color:var(--gold);">35+</div>
+          <div style="font-size:10px;color:var(--muted);">All time</div>
+        </div>
+        <div style="flex:1;min-width:80px;background:var(--surface2);border-radius:8px;padding:10px;text-align:center;">
+          <div style="font-size:22px;font-weight:700;color:var(--green);">~$0.89</div>
+          <div style="font-size:10px;color:var(--muted);">Cost today</div>
+        </div>
+        <div style="flex:1;min-width:80px;background:var(--surface2);border-radius:8px;padding:10px;text-align:center;">
+          <div style="font-size:22px;font-weight:700;color:var(--blue);">~$1.80</div>
+          <div style="font-size:10px;color:var(--muted);">Cost this week</div>
+        </div>
+      </div>
+      <!-- Autonomy bar -->
+      <div style="margin-bottom:14px;">
+        <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-bottom:4px;">
+          <span>🤖 Autonomous: 70%</span>
+          <span>✅ Approved: 30%</span>
+        </div>
+        <div style="height:8px;background:var(--surface2);border-radius:4px;overflow:hidden;">
+          <div style="width:70%;height:100%;background:linear-gradient(90deg,var(--green),var(--blue));border-radius:4px;"></div>
+        </div>
+      </div>
+      <!-- Value tier doughnut -->
+      <div style="font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:6px;">Value Tier Breakdown</div>
+      <div style="display:flex;align-items:center;gap:16px;margin-bottom:12px;">
+        <canvas id="capacity-doughnut" width="110" height="110" style="flex-shrink:0;"></canvas>
+        <div style="font-size:12px;line-height:2;">
+          <div><span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:var(--gold);margin-right:6px;"></span>Revenue: 35%</div>
+          <div><span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:var(--blue);margin-right:6px;"></span>Operational: 50%</div>
+          <div><span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:var(--muted);margin-right:6px;"></span>Overhead: 15%</div>
+        </div>
+      </div>
+      <!-- ROI callout -->
+      <div style="background:rgba(245,200,66,0.08);border:1px solid rgba(245,200,66,0.25);border-radius:8px;padding:10px 14px;font-size:13px;color:var(--gold);font-weight:600;text-align:center;">
+        🏆 ROI: 11 videos for ~$3
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="token-radar" class="screen">
+  <div class="page-title">🕸️ Token Radar — AI Usage</div>
+
+  <div class="grid-2" style="margin-bottom:16px;">
+    <!-- Radar chart -->
+    <div class="card">
+      <div class="card-title">Usage Radar — This Week vs Last Week</div>
+      <canvas id="token-radar-chart" height="280"></canvas>
+      <div style="display:flex;gap:16px;margin-top:10px;justify-content:center;font-size:11px;">
+        <div style="display:flex;align-items:center;gap:5px;"><span style="display:inline-block;width:12px;height:12px;border-radius:2px;background:rgba(245,200,66,0.5);"></span>This Week</div>
+        <div style="display:flex;align-items:center;gap:5px;"><span style="display:inline-block;width:12px;height:12px;border-radius:2px;background:rgba(59,130,246,0.5);"></span>Last Week</div>
+      </div>
+    </div>
+
+    <!-- Model usage table + footer -->
+    <div class="card" style="display:flex;flex-direction:column;">
+      <div class="card-title">Model Usage Breakdown</div>
+      <table class="kpi-table" style="margin-bottom:auto;">
+        <thead>
+          <tr>
+            <th>Model</th>
+            <th style="text-align:right;">Turns</th>
+            <th style="text-align:right;">Est. Cost</th>
+            <th>Primary Use</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span style="color:var(--gold);font-weight:600;">Claude Sonnet</span></td>
+            <td style="text-align:right;color:var(--gold);">~40</td>
+            <td style="text-align:right;color:var(--gold);">~$0.80</td>
+            <td style="font-size:11px;color:var(--muted);">Steve conversations, approvals</td>
+          </tr>
+          <tr>
+            <td><span style="color:var(--green);font-weight:600;">GPT-4o-mini</span></td>
+            <td style="text-align:right;color:var(--green);">~60</td>
+            <td style="text-align:right;color:var(--green);">~$0.09</td>
+            <td style="font-size:11px;color:var(--muted);">Email monitor, KPI cron</td>
+          </tr>
+          <tr>
+            <td><span style="color:var(--blue);font-weight:600;">Groq/Llama</span></td>
+            <td style="text-align:right;color:var(--blue);">~120</td>
+            <td style="text-align:right;color:var(--blue);">~$0.00</td>
+            <td style="font-size:11px;color:var(--muted);">Video scripts, briefings, heartbeats</td>
+          </tr>
+        </tbody>
+      </table>
+      <!-- Daily summary footer -->
+      <div style="margin-top:16px;padding:12px 14px;background:rgba(245,200,66,0.07);border:1px solid rgba(245,200,66,0.2);border-radius:8px;">
+        <div style="font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:6px;">Daily Summary</div>
+        <div style="display:flex;justify-content:space-between;font-size:13px;">
+          <span style="color:var(--text);">Total turns: <strong style="color:var(--gold);">~220</strong></span>
+          <span style="color:var(--text);">Total cost: <strong style="color:var(--gold);">~$0.89</strong></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="playbook" class="screen">
+  <div class="page-title">📚 Playbook</div>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">Setup Complete (March 23, 2026)</div>
+      <div style="font-size:13px;line-height:2;color:var(--text)">✅ OpenClaw + Telegram<br>✅ HeyGen + Wistia + GitHub Pages<br>✅ Google OAuth<br>✅ 10 skills built<br>✅ Discord Cassy HQ<br>✅ Gateway as LaunchAgent<br>✅ 8AM KPI cron<br>✅ 5-provider AI stack<br>✅ Mission Control</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Top Bugs — Never Repeat</div>
+      <div style="font-size:12px;line-height:2;color:var(--muted)">❌ Restart gateway from chat<br>❌ Run gateway install first<br>❌ Duplicate gateway = 1008 errors<br>❌ Guild config needs JSON edit<br>❌ Python needs venv<br>❌ HeyGen URLs expire → Drive/Wistia<br>❌ Discord guild = JSON not CLI<br>❌ `reset` is Unix, not OpenClaw</div>
+    </div>
+  </div>
+</div>
+
+</main>
+</div>
+
+<script>
+// Chart instances (lazy init)
+var _charts = {};
+
+function show(id, el) {
+  var screens = document.querySelectorAll('.screen');
+  for (var i = 0; i < screens.length; i++) screens[i].style.display = 'none';
+  var t = document.getElementById(id);
+  if (t) t.style.display = 'block';
+  var navs = document.querySelectorAll('.nav-item');
+  for (var j = 0; j < navs.length; j++) navs[j].classList.remove('active');
+  if (el) el.classList.add('active');
+  // Lazy-init charts when their screen is shown
+  if (id === 'projects') { initQualitySparkline(); initCapacityDoughnut(); }
+  if (id === 'token-radar') { initTokenRadar(); }
+}
+
+function initQualitySparkline() {
+  if (_charts['quality-sparkline']) return;
+  var ctx = document.getElementById('quality-sparkline');
+  if (!ctx) return;
+  _charts['quality-sparkline'] = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ['W10', 'W11', 'W12', 'W13'],
+      datasets: [
+        { label: 'Smooth', data: [3, 2, 1, 0], backgroundColor: 'rgba(34,197,94,0.6)', stack: 'a' },
+        { label: 'Tweaked', data: [1, 1, 1, 0], backgroundColor: 'rgba(234,179,8,0.6)', stack: 'a' },
+        { label: 'Corrected', data: [0, 1, 0, 0], backgroundColor: 'rgba(249,115,22,0.6)', stack: 'a' },
+        { label: 'Escalated', data: [0, 0, 0, 0], backgroundColor: 'rgba(239,68,68,0.6)', stack: 'a' },
+        { label: 'WTH', data: [0, 0, 0, 2], backgroundColor: 'rgba(168,85,247,0.8)', stack: 'a' }
+      ]
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { stacked: true, ticks: { color: '#64748b', font: { size: 10 } }, grid: { color: 'rgba(255,255,255,0.04)' } },
+        y: { stacked: true, ticks: { color: '#64748b', font: { size: 10 }, stepSize: 1 }, grid: { color: 'rgba(255,255,255,0.06)' }, beginAtZero: true }
+      }
+    }
+  });
+}
+
+function initCapacityDoughnut() {
+  if (_charts['capacity-doughnut']) return;
+  var ctx = document.getElementById('capacity-doughnut');
+  if (!ctx) return;
+  _charts['capacity-doughnut'] = new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+      labels: ['Revenue', 'Operational', 'Overhead'],
+      datasets: [{ data: [35, 50, 15], backgroundColor: ['rgba(245,200,66,0.85)', 'rgba(59,130,246,0.75)', 'rgba(100,116,139,0.6)'], borderColor: ['#060d18','#060d18','#060d18'], borderWidth: 2 }]
+    },
+    options: {
+      responsive: false,
+      cutout: '65%',
+      plugins: { legend: { display: false }, tooltip: { callbacks: { label: function(c){ return c.label+': '+c.raw+'%'; } } } }
+    }
+  });
+}
+
+function initTokenRadar() {
+  if (_charts['token-radar-chart']) return;
+  var ctx = document.getElementById('token-radar-chart');
+  if (!ctx) return;
+  _charts['token-radar-chart'] = new Chart(ctx, {
+    type: 'radar',
+    data: {
+      labels: ['Outreach', 'Monitoring', 'Research', 'Content', 'Operations', 'Memory'],
+      datasets: [
+        {
+          label: 'This Week',
+          data: [30, 25, 10, 20, 10, 5],
+          backgroundColor: 'rgba(245,200,66,0.3)',
+          borderColor: 'rgba(245,200,66,0.9)',
+          borderWidth: 2,
+          pointBackgroundColor: 'rgba(245,200,66,1)',
+          pointRadius: 4
+        },
+        {
+          label: 'Last Week',
+          data: [25, 20, 8, 15, 12, 4],
+          backgroundColor: 'rgba(59,130,246,0.15)',
+          borderColor: 'rgba(59,130,246,0.7)',
+          borderWidth: 2,
+          borderDash: [5, 3],
+          pointBackgroundColor: 'rgba(59,130,246,0.9)',
+          pointRadius: 3
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { display: false } },
+      scales: {
+        r: {
+          min: 0, max: 35,
+          ticks: { color: '#64748b', font: { size: 9 }, stepSize: 10, backdropColor: 'transparent' },
+          grid: { color: 'rgba(255,255,255,0.08)' },
+          angleLines: { color: 'rgba(255,255,255,0.1)' },
+          pointLabels: { color: '#94a3b8', font: { size: 11 } }
+        }
+      }
+    }
+  });
+}
+var SKILLS = {
+  '001': { title: 'Self-Improving Agent', source: 'pskoett/self-improving-agent', for: 'Cassy (all sessions)', complexity: 'Low', impact: 'High', status: '✅ Emulated', why: 'Structured logging of errors, corrections, and feature requests into .learnings/ files. Promotes broadly applicable lessons to SOUL.md, AGENTS.md, TOOLS.md. Creates continuity across sessions without relying on memory alone.', howToEmulate: 'Create .learnings/LEARNINGS.md, ERRORS.md, FEATURE_REQUESTS.md. After every error or correction, log it with LRN/ERR/FEAT-YYYYMMDD-XXX format. Periodically promote critical learnings to SOUL.md or AGENTS.md.', complianceNote: 'None — this is a logging pattern, not an API or external service.', rule: '⚠️ Do NOT install the skill package. The pattern has been manually emulated.' },
+  '002': { title: 'Session Logs', source: 'openclaw/session-logs', for: 'Cassy cross-session learning', complexity: 'Low', impact: 'High', status: '✅ Emulated', why: 'Read prior session transcripts to extract learnings without Steve repeating himself. Scout uses sessions_history tool to scan recent sessions.', howToEmulate: 'Use sessions_list + sessions_history tools. Already available natively — no install needed.', complianceNote: 'Reads local session files only. No external data.', rule: '⚠️ Already a native tool. No install needed.' },
+  '003': { title: 'Blogwatcher', source: 'openclaw/blogwatcher', for: 'Content pipeline (Steve)', complexity: 'Low', impact: 'Medium', status: '📡 On Radar', why: 'Monitor RSS/Atom feeds for mortgage rates, real estate news, AI updates. Feed directly into daily briefings and social content queue. Currently briefings are AI-generated without live data.', howToEmulate: 'Use web_fetch to pull RSS XML from target feeds on a cron schedule. Parse titles + summaries. Feed into briefing prompt as "today\'s real news." No need for the CLI wrapper.', complianceNote: 'Public RSS feeds — no compliance issues.', rule: '⚠️ Do NOT install blogwatcher CLI. Emulate with web_fetch + cron.' },
+  '004': { title: 'GitHub Issues', source: 'openclaw/gh-issues', for: 'Cassy project management', complexity: 'Low', impact: 'Medium', status: '📡 On Radar', why: 'Auto-flag when video-pages builds fail, PRs need review, or issues are opened. Could surface in Mission Control without Steve checking GitHub manually.', howToEmulate: 'Use gh CLI (already available) with `gh issue list` and `gh run list`. Cron runs gh commands, posts results to Discord #briefings if anything needs attention.', complianceNote: 'Public repo only. No sensitive data exposure.', rule: '⚠️ gh CLI already installed. No new skill needed — just build the cron.' },
+  '005': { title: 'Oracle', source: 'openclaw/oracle', for: 'Deep analysis tasks', complexity: 'Medium', impact: 'Medium', status: '📡 On Radar', why: 'Bundle multiple prompts + files for comprehensive analysis. Good for monthly business reviews, synthesizing weeks of journals, or analyzing KPI trends over time.', howToEmulate: 'Build a monthly review cron that reads last 30 days of journal files, kpi-state.json, and project STATUS.md files. Feed all into a single prompt. Output to #briefings as monthly summary.', complianceNote: 'No external services — reads local files only.', rule: '⚠️ Do NOT install oracle CLI. Emulate the pattern with exec + file reads.' },
+  '006': { title: 'Peekaboo', source: 'openclaw/peekaboo', for: 'Verification before sends', complexity: 'Medium', impact: 'Medium', status: '📡 On Radar', why: 'Capture macOS UI screenshots programmatically. Could replace browser automation for link verification — faster and more reliable than Playwright.', howToEmulate: 'Study the screencapture + accessibility API pattern. For link verification specifically, browser tool already works — Peekaboo would add value for checking native Mac app UIs.', complianceNote: 'Local screen capture only. No data leaves machine.', rule: '⚠️ Do NOT install peekaboo CLI. Study the screencapture pattern only.' },
+  '007': { title: 'Notion', source: 'openclaw/notion', for: 'Team collaboration (future)', complexity: 'Low', impact: 'Low-Medium', status: '📡 On Radar', why: 'If Steve uses Notion for team docs, Cassy could read/write project status there automatically. Extends Mission Control reach to where collaborators already are.', howToEmulate: 'Notion has a public REST API. Build direct API calls with fetch — no CLI needed. Read the Notion API docs and emulate the auth + page read/write pattern.', complianceNote: 'Notion API terms apply. Data goes to Notion servers — check if client data would be involved.', rule: '⚠️ Do NOT install Notion skill. Use Notion REST API directly.' },
+  '008': { title: 'Trello', source: 'openclaw/trello', for: 'Team project management (future)', complexity: 'Low', impact: 'Medium', status: '📡 On Radar', why: 'Visual kanban that team members can see. The projects/ folder system we built is better for Cassy but Trello is shareable. Revisit when Steve has a team.', howToEmulate: 'Trello REST API is simple. Cards, lists, boards all accessible via API key + token. Could sync from projects/*.STATUS.md automatically.', complianceNote: 'Trello stores data on Atlassian servers. No client PII should go there.', rule: '⚠️ Future item. Not needed until team expands.' },
+  '009': { title: 'Voice Call', source: 'openclaw/voice-call', for: 'Client outreach (compliance pending)', complexity: 'High', impact: 'High', status: '⚠️ Compliance Review', why: 'AI voice calls for follow-up with mortgage leads and real estate contacts. Would complement the video army with audio touchpoints. Potentially very high impact if compliant.', howToEmulate: 'Study the pattern only. Would use a TTS voice + telephony API (Twilio or similar). Script generation similar to HeyGen video scripts.', complianceNote: '🔴 HIGH RISK: Ontario PIPEDA, CRTC anti-spam/robocall rules, FSRA mortgage broker regulations all apply. Needs lawyer review before ANY emulation for client outreach.', rule: '⚠️ DO NOT emulate for client use until legal review is complete. Study pattern only.' },
+  '010': { title: 'Spotify Player', source: 'openclaw/spotify-player', for: 'Ambient / nice-to-have', complexity: 'Low', impact: 'Low', status: '⏭️ Skip', why: 'Control Spotify from Cassy. Low business value for Steve\'s current stack.', howToEmulate: 'Spotify Web API. Simple OAuth + playback control. Fun but not a priority.', complianceNote: 'Spotify API terms apply. No business data involved.', rule: 'Skipping — no meaningful business impact right now.' }
+};
+
+function openSkill(id) {
+  var s = SKILLS[id];
+  if (!s) return;
+  document.getElementById('skill-drawer-title').innerHTML = '🔭 ' + s.title;
+  var html = '';
+  html += '<div style="margin-bottom:16px;display:flex;gap:8px;flex-wrap:wrap;">';
+  html += '<span style="background:rgba(168,85,247,0.15);color:#c084fc;padding:3px 10px;border-radius:20px;font-size:11px;">' + s.status + '</span>';
+  html += '<span style="background:var(--surface2);padding:3px 10px;border-radius:20px;font-size:11px;">Complexity: ' + s.complexity + '</span>';
+  html += '<span style="background:var(--surface2);padding:3px 10px;border-radius:20px;font-size:11px;">Impact: ' + s.impact + '</span>';
+  html += '</div>';
+  html += '<div style="color:var(--muted);font-size:10px;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;">Source</div>';
+  html += '<div style="font-family:monospace;font-size:12px;margin-bottom:14px;color:var(--muted);">' + s.source + '</div>';
+  html += '<div style="color:var(--muted);font-size:10px;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;">For</div>';
+  html += '<div style="margin-bottom:14px;">' + s.for + '</div>';
+  html += '<div style="color:var(--muted);font-size:10px;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;">Why It Matters</div>';
+  html += '<div style="margin-bottom:14px;">' + s.why + '</div>';
+  html += '<div style="color:var(--muted);font-size:10px;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;">How to Emulate (No Install)</div>';
+  html += '<div style="margin-bottom:14px;background:var(--surface2);padding:10px;border-radius:6px;font-size:12px;">' + s.howToEmulate + '</div>';
+  if (s.complianceNote) {
+    var compColor = s.complianceNote.includes('🔴') ? 'rgba(239,68,68,0.1)' : 'rgba(234,179,8,0.1)';
+    var compBorder = s.complianceNote.includes('🔴') ? 'rgba(239,68,68,0.3)' : 'rgba(234,179,8,0.3)';
+    html += '<div style="background:' + compColor + ';border:1px solid ' + compBorder + ';border-radius:8px;padding:10px;margin-bottom:14px;font-size:12px;">' + s.complianceNote + '</div>';
+  }
+  html += '<div style="background:rgba(168,85,247,0.1);border:1px solid rgba(168,85,247,0.2);border-radius:8px;padding:10px;font-size:11px;color:#c084fc;">' + s.rule + '</div>';
+  document.getElementById('skill-drawer-content').innerHTML = html;
+  document.getElementById('skill-drawer').style.display = 'block';
+  document.getElementById('skill-overlay').style.display = 'block';
+}
+
+function closeSkillDrawer() {
+  document.getElementById('skill-drawer').style.display = 'none';
+  document.getElementById('skill-overlay').style.display = 'none';
+}
+
+var PROJECTS = {
+  '001': {
+    title: '001 — Mission Control Dashboard',
+    status: '🟢 Active', priority: 'P1', owner: 'Both',
+    problem: 'No unified view of what Cassy is doing, what\'s pending, and what it\'s costing.',
+    goal: 'Single HTML dashboard showing: active tasks, pipeline, KPIs, approvals, corrections, cost, and project health — all at a glance.',
+    outOfScope: ['Not client-facing', 'Not a CRM replacement', 'Not real-time streaming (polling is fine)'],
+    criteria: ['✅ KPI widgets live', '✅ Approvals queue live', '✅ Quality score widget live', '✅ Token radar live', '✅ Project health board live'],
+    dependencies: ['008 Token Radar ✅ live', '009 Phase 2 data (future enhancement)'],
+    nextAction: 'Quality + Capacity widgets live ✅',
+    rollback: 'git revert HEAD && git push'
+  },
+  '002': {
+    title: '002 — Video Army: Outreach Videos',
+    status: '⏸️ Paused', priority: 'P1', owner: 'Both',
+    problem: 'Steve wants personalized daily AI videos to 11+ contacts. Manual production too slow.',
+    goal: 'Automated daily HeyGen videos → Wistia hosted → GitHub Pages landing page → email to each contact.',
+    outOfScope: ['No videos sent without Steve\'s explicit contact list approval', 'No client PII in scripts', 'No re-enabling without sign-off'],
+    criteria: ['All scripts use correct Wistia auth ✅ fixed', 'Scripts abort on upload failure (no broken links)', 'BCC steve@stevehamoen.com on every outreach email', 'Landing pages verified live before send', 'Steve approves re-enable'],
+    dependencies: ['Blocked by: Steve approval to re-enable'],
+    nextAction: 'Steve confirms which contacts should continue → test each → re-enable one at a time',
+    incident: '⚠️ 2026-03-24: Broken Wistia links sent to 9 contacts. Fix emails sent without approval. Both violations documented.',
+    rollback: 'openclaw cron disable <id> for each video cron'
+  },
+  '003': {
+    title: '003 — Daily Vlog: Building in Public',
+    status: '🟢 Active', priority: 'P2', owner: 'Both',
+    problem: 'Steve wants to document the AI build journey daily. Manual recording isn\'t sustainable.',
+    goal: 'Auto-generated daily HeyGen vlog at 8AM. Pulls from previous day\'s journal. Steve as speaker. Sent to steve@stevehamoen.com only.',
+    outOfScope: ['Never sent directly to contacts without Steve sharing manually', 'No client names in scripts', 'Not a polished marketing video — raw and real'],
+    criteria: ['Cron fires at 8AM daily', 'Pulls from memory/journal-YYYY-MM-DD.md', 'Dark wood panel avatar', 'Wistia hosted + GitHub Pages landing page', 'Landing page verified live before email'],
+    dependencies: ['Uses: Project 002 Wistia upload pattern'],
+    nextAction: 'Cron live at 8AM ✅',
+    rollback: 'openclaw cron disable <vlog-cron-id>'
+  },
+  '004': {
+    title: '004 — Re-enable Outreach Crons',
+    status: '🔴 Blocked', priority: 'P1', owner: 'Steve (decision) / Cassy (execution)',
+    problem: 'All 11 outreach video crons disabled after 2026-03-24 broken link incident. Scripts fixed but crons remain off.',
+    goal: 'Re-enable the right crons for the right contacts with Steve\'s explicit sign-off.',
+    outOfScope: ['No cron re-enabled without Steve naming each contact', 'No new contacts added without approval'],
+    criteria: ['Steve provides approved contact list', 'Each script tested to steve@stevehamoen.com first', 'Steve confirms test video plays', 'Crons re-enabled one at a time'],
+    dependencies: ['Blocked by: Steve approval', 'Requires: Project 002 fixes confirmed'],
+    nextAction: 'Steve confirms which contacts to resume → test → re-enable',
+    rollback: 'openclaw cron disable <id> — immediate'
+  },
+  '005': {
+    title: '005 — GHL ↔ Cassy Bridge',
+    status: '🔴 Blocked', priority: 'P2', owner: 'Both',
+    problem: 'Upcoming GHL agent and Cassy will operate in silos without a connection layer.',
+    goal: 'Cassy receives anonymized signals from GHL (no PII). Mission Control shows unified view of both agents.',
+    outOfScope: ['Client PII never passes to Cassy (PIPEDA)', 'GHL Agent never overrides Cassy', 'Not building the GHL agent itself'],
+    criteria: ['GHL fires webhook to Cassy on key events', 'Cassy receives anonymized signals only', 'Shared Google Sheet as state layer', 'Mission Control shows GHL activity', 'Handoff protocol documented'],
+    dependencies: ['Blocked by: Project 006 (PII scrub must be done first)'],
+    nextAction: 'Complete 006 → design webhook spec → build bridge',
+    rollback: 'Disable GHL webhook → independent operation resumes'
+  },
+  '006': {
+    title: '006 — PII Scrub: Memory Files',
+    status: '⬜ Draft', priority: 'P1', owner: 'Cassy',
+    problem: 'MEMORY.md and journal files contain real client names/emails. PIPEDA exposure if workspace ever hits cloud.',
+    goal: 'Remove all external client PII from Cassy\'s memory. Replace with role codes. GHL holds the lookup table.',
+    outOfScope: ['Steve\'s own contact info stays', 'Not deleting journal files — just scrubbing names'],
+    criteria: ['MEMORY.md has zero external client names/emails', 'Journal files use codes not real names', 'Lookup table created', 'Future journals follow same convention'],
+    dependencies: ['Blocks: Project 005 — must be done first'],
+    nextAction: 'Steve approves → Cassy runs scrub → grep verify → done',
+    rollback: 'git revert if scrub goes wrong — all original data in git history'
+  },
+  '007': {
+    title: '007 — Background Task Queue',
+    status: '🟢 Active', priority: 'P3', owner: 'Cassy',
+    problem: 'Cassy sits idle between heartbeats. Cheap models could run useful background work during this time.',
+    goal: 'Structured queue of background tasks on Groq/Llama. All output to #pending-sends or #needs-review. Nothing auto-sends.',
+    outOfScope: ['No autonomous sending from background tasks ever', 'No PII in background task inputs'],
+    criteria: ['✅ BACKGROUND_QUEUE.md exists with task definitions', '✅ Tasks run on Groq/Llama', '✅ All output lands in #pending-sends or #needs-review', '✅ Zero auto-sends', '✅ Background Queue cron live'],
+    dependencies: ['009 Phase 1 ✅ complete'],
+    nextAction: 'Background Queue cron live ✅',
+    rollback: 'Delete BACKGROUND_QUEUE.md entries or disable crons'
+  },
+  '008': {
+    title: '008 — Token Radar / Spider Graph',
+    status: '🟢 Active', priority: 'P2', owner: 'Cassy',
+    problem: 'No visual of where AI thinking is being spent. Can\'t tell revenue work from overhead at a glance.',
+    goal: '6-axis radar chart on Mission Control: Outreach / Monitoring / Research / Content / Operations / Memory. Color-coded by model.',
+    outOfScope: ['Not real-time (30min refresh is fine)', 'Not per-message granularity'],
+    criteria: ['✅ Radar chart rendering in Mission Control', '✅ 6 axes color-coded by model', '✅ Daily report footer shows model summary', '✅ Model usage table live'],
+    dependencies: ['001 Mission Control ✅ base dashboard complete'],
+    nextAction: 'Spider chart live ✅',
+    rollback: 'Remove token-radar screen div — no functional impact'
+  },
+  '009': {
+    title: '009 — Intelligent Model Routing',
+    status: '🟢 Active', priority: 'P2', owner: 'Cassy',
+    problem: 'Everything defaults to Claude Sonnet (~$0.02/turn). Video scripts, heartbeats, monitoring — all on the most expensive model.',
+    goal: 'Route each task to the right model tier. Cut daily AI cost from ~$1.50-2.00 to ~$0.30-0.50 with no quality loss.',
+    outOfScope: ['Steve ↔ Cassy conversations always stay on Sonnet', 'Phase 3 not started until Phase 2 data exists'],
+    criteria: ['✅ Phase 1: All crons specify model explicitly', '✅ Video scripts → Groq', '✅ Email monitor → GPT-4o-mini', '✅ Heartbeats → Groq', 'Phase 2: Each task logs {type, model, tokens, cost}', 'Phase 3: Dynamic routing (future)'],
+    dependencies: ['Blocks: Project 008 Phase 2 (logging for real data)'],
+    nextAction: 'Phase 1 complete — all crons model-specified ✅',
+    rollback: 'Revert cron model field to anthropic/claude-sonnet-4-6'
+  }
+};
+
+function statusChip(s) {
+  var color = s.includes('Active') ? 'rgba(34,197,94,0.15);color:var(--green)' : s.includes('Blocked') ? 'rgba(239,68,68,0.15);color:var(--red)' : s.includes('Paused') ? 'rgba(234,179,8,0.15);color:var(--yellow)' : s.includes('Draft') ? 'rgba(100,116,139,0.15);color:var(--muted)' : 'rgba(245,200,66,0.15);color:var(--gold)';
+  return '<span style="background:' + color + ';padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600;">' + s + '</span>';
+}
+function prioChip(p) {
+  var color = p==='P1'?'var(--red)':p==='P2'?'var(--yellow)':'var(--muted)';
+  return '<span style="background:var(--surface2);color:' + color + ';padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600;">Priority: ' + p + '</span>';
+}
+function sectionLabel(t) {
+  return '<div style="color:var(--muted);font-size:9px;letter-spacing:1.5px;text-transform:uppercase;margin:18px 0 6px;border-bottom:1px solid var(--border);padding-bottom:4px;">' + t + '</div>';
+}
+
+function openProject(id) {
+  var p = PROJECTS[id];
+  if (!p) return;
+  document.getElementById('drawer-title').innerHTML = p.title;
+  var html = '';
+
+  // Status chips
+  html += '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px;">';
+  html += statusChip(p.status);
+  html += prioChip(p.priority);
+  html += '<span style="background:var(--surface2);color:var(--muted);padding:3px 10px;border-radius:20px;font-size:11px;">Owner: ' + p.owner + '</span>';
+  html += '</div>';
+
+  // Problem
+  html += sectionLabel('Problem');
+  html += '<div style="background:rgba(239,68,68,0.06);border-left:3px solid var(--red);padding:10px 14px;border-radius:0 6px 6px 0;margin-bottom:4px;">' + p.problem + '</div>';
+
+  // Goal
+  html += sectionLabel('Goal');
+  html += '<div style="background:rgba(34,197,94,0.06);border-left:3px solid var(--green);padding:10px 14px;border-radius:0 6px 6px 0;">' + p.goal + '</div>';
+
+  // Out of scope
+  if (p.outOfScope && p.outOfScope.length) {
+    html += sectionLabel('Out of Scope');
+    html += '<ul style="padding-left:18px;">' + p.outOfScope.map(function(i){ return '<li style="color:var(--muted);font-size:12px;margin-bottom:3px;">'+i+'</li>'; }).join('') + '</ul>';
+  }
+
+  // Success criteria
+  html += sectionLabel('Success Criteria');
+  html += '<ul style="list-style:none;padding:0;">' + p.criteria.map(function(i){
+    var done = i.startsWith('✅');
+    return '<li style="display:flex;gap:8px;align-items:flex-start;margin-bottom:6px;font-size:12px;">'
+      + '<span style="color:' + (done ? 'var(--green)' : 'var(--muted)') + ';margin-top:1px;">' + (done ? '✅' : '◻') + '</span>'
+      + '<span>' + i.replace('✅ ','') + '</span></li>';
+  }).join('') + '</ul>';
+
+  // Dependencies
+  html += sectionLabel('Dependencies');
+  html += '<div style="display:flex;flex-direction:column;gap:6px;">' + p.dependencies.map(function(i){
+    var isBlock = i.toLowerCase().includes('block');
+    return '<div style="background:var(--surface2);padding:7px 12px;border-radius:6px;font-size:12px;color:var(--muted);border-left:2px solid ' + (isBlock ? 'var(--red)' : 'var(--blue)') + ';">' + i + '</div>';
+  }).join('') + '</div>';
+
+  // Next action
+  html += sectionLabel('Next Action');
+  html += '<div style="background:rgba(245,200,66,0.08);border:1px solid rgba(245,200,66,0.2);border-radius:8px;padding:12px 14px;color:var(--gold);font-size:13px;font-weight:500;">→ ' + p.nextAction + '</div>';
+
+  // Incident banner
+  if (p.incident) {
+    html += sectionLabel('Incident Log');
+    html += '<div style="background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);border-radius:8px;padding:12px 14px;font-size:12px;color:#fca5a5;">' + p.incident + '</div>';
+  }
+
+  // Rollback
+  html += sectionLabel('Rollback');
+  html += '<div style="background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:10px 14px;font-family:monospace;font-size:11px;color:var(--muted);">' + p.rollback + '</div>';
+
+  document.getElementById('drawer-content').innerHTML = html;
+  document.getElementById('proj-drawer').style.display = 'block';
+  document.getElementById('drawer-overlay').style.display = 'block';
+  document.getElementById('proj-drawer').scrollTop = 0;
+}
+
+function closeDrawer() {
+  document.getElementById('proj-drawer').style.display = 'none';
+  document.getElementById('drawer-overlay').style.display = 'none';
+}
+
+// ── Agent Office Room ────────────────────────────────
+// Zone meanings (strict):
+// desk    = actively building / executing / processing RIGHT NOW
+// library = actively reading / analyzing / researching RIGHT NOW
+// comms   = actively sending messages / emails / calling RIGHT NOW
+// break   = next run ≤30 min (warming up, coffee in hand)
+// lounge  = idle — hours away, sleeping
+
+// Zone meanings:
+// build   = Cassy actively building a project feature / writing code / creating docs
+// studio  = any agent generating content (video, vlog, briefing, social)
+// library = Scout actively scanning/researching
+// ops     = monitoring, KPI, approval sync running NOW
+// break   = next run ≤30 min, warming up
+// lounge  = idle / off-hours / sleeping
+
+var AGENTS = [
+  { id:'cassy', name:'Cassy', emoji:'💼', role:'Main Agent · Sonnet', color:'#f5c842',
+    getStatus: function() {
+      return { zone:'build', anim:'typing', task:'Building · responding to Steve in #orders' };
+    }
+  },
+  { id:'email', name:'Email Mon.', emoji:'📧', role:'Every 5m · GPT-mini', color:'#3b82f6',
+    getStatus: function() {
+      var m = new Date().getMinutes() % 5;
+      if (m < 2)  return { zone:'ops',    anim:'typing',   task:'Reading + replying to inbox NOW' };
+      if (m >= 4) return { zone:'break',  anim:'waiting',  task:'Next check in <1 min' };
+      return              { zone:'lounge', anim:'sleeping', task:'Next check in ' + (5-m) + ' min' };
+    }
+  },
+  { id:'kpi', name:'KPI Reporter', emoji:'📊', role:'8AM daily · GPT-mini', color:'#22c55e',
+    getStatus: function() {
+      var h = new Date().getHours(), m = new Date().getMinutes();
+      if (h===8 && m<20)  return { zone:'ops',    anim:'typing',   task:'Posting daily KPI scorecard NOW' };
+      if (h===7 && m>=45) return { zone:'break',  anim:'waiting',  task:'Starting in <15 min' };
+      return                      { zone:'lounge', anim:'sleeping', task:'Off-hours · next run 8:00 AM' };
+    }
+  },
+  { id:'vlog', name:'Daily Vlog', emoji:'🎬', role:'8AM daily · Groq', color:'#f97316',
+    getStatus: function() {
+      var h = new Date().getHours(), m = new Date().getMinutes();
+      if (h===8 && m<35)  return { zone:'studio', anim:'typing',   task:'Generating Steve\'s vlog video NOW' };
+      if (h===7 && m>=50) return { zone:'break',  anim:'waiting',  task:'Warming up · starting soon' };
+      return                      { zone:'lounge', anim:'sleeping', task:'Off-hours · next run 8:00 AM' };
+    }
+  },
+  { id:'bgtask', name:'Bg. Tasks', emoji:'⚙️', role:'9,12,15h · Groq', color:'#6366f1',
+    getStatus: function() {
+      var h = new Date().getHours(), m = new Date().getMinutes(), d = new Date().getDay();
+      var isWeekday = d>=1&&d<=5;
+      if ((h===9||h===12||h===15) && m<20 && isWeekday)
+        return { zone:'studio', anim:'typing',   task:'Creating background content NOW' };
+      if (((h===8&&m>=45)||(h===11&&m>=45)||(h===14&&m>=45)) && isWeekday)
+        return { zone:'break',  anim:'waiting',  task:'Queued · starting soon' };
+      return   { zone:'lounge', anim:'sleeping', task:'Off-hours · Mon-Fri 9/12/15h' };
+    }
+  },
+  { id:'scout', name:'Scout', emoji:'🔭', role:'Every 6h · Groq', color:'#a855f7',
+    getStatus: function() {
+      var h = new Date().getHours(), m = new Date().getMinutes(), slotH = h % 6;
+      if (slotH===0 && m<25)  return { zone:'library', anim:'researching', task:'Scanning ClawHub + sessions NOW' };
+      if (slotH===5 && m>=45) return { zone:'break',   anim:'waiting',     task:'Starting in <15 min' };
+      return                          { zone:'lounge',  anim:'sleeping',    task:'Next scan in ~' + (6-slotH) + 'h' };
+    }
+  },
+  { id:'approval', name:'Approval Sync', emoji:'✅', role:'Every 1h · Groq', color:'#10b981',
+    getStatus: function() {
+      var m = new Date().getMinutes();
+      if (m < 8)   return { zone:'ops',    anim:'typing',   task:'Checking #approve-or-kill reactions NOW' };
+      if (m >= 55) return { zone:'break',  anim:'waiting',  task:'Starting in <5 min' };
+      return               { zone:'lounge', anim:'sleeping', task:'Next sync in ~' + (60-m) + ' min' };
+    }
+  }
+];
+
+// Zone spawn coordinates [x%, y%] within each zone element
+var ZONE_SLOTS = {
+  build:   [[12,52],[35,52],[58,52],[80,52],[12,85],[35,85]],
+  studio:  [[15,52],[38,52],[62,52],[85,52],[15,85],[38,85]],
+  library: [[12,48],[38,48],[65,48],[12,80],[38,80]],
+  ops:     [[10,52],[28,52],[46,52],[64,52],[10,85],[28,85]],
+  break:   [[20,52],[55,52],[20,85],[55,85]],
+  lounge:  [[12,52],[35,52],[58,52],[82,52],[12,85],[35,85]]
+};
+var _slotIdx = {};
+
+function placeAgents() {
+  var room = document.getElementById('office-room');
+  var miniGrid = document.getElementById('agent-mini-grid');
+  if (!room || !miniGrid) return;
+  // Remove old sprites
+  room.querySelectorAll('.agent-sprite').forEach(function(el){ el.remove(); });
+  miniGrid.innerHTML = '';
+  _slotIdx = { desk:0, library:0, break:0, lounge:0 };
+
+  AGENTS.forEach(function(agent) {
+    var st = agent.getStatus();
+    var zone = st.zone || 'lounge';
+    var slots = ZONE_SLOTS[zone] || ZONE_SLOTS['lounge'];
+    var idx = _slotIdx[zone] || 0;
+    _slotIdx[zone] = idx + 1;
+    var slot = slots[idx % slots.length];
+
+    // Calc pixel position from zone-relative %
+    var zoneEl = room.querySelector('.zone-' + zone);
+    if (!zoneEl) return;
+    var zr = zoneEl.getBoundingClientRect();
+    var rr = room.getBoundingClientRect();
+    var zLeft = zoneEl.offsetLeft, zTop = zoneEl.offsetTop;
+    var zW = zoneEl.offsetWidth, zH = zoneEl.offsetHeight;
+    var px = zLeft + (slot[0]/100)*zW;
+    var py = zTop  + (slot[1]/100)*zH;
+
+    // Sprite
+    var sprite = document.createElement('div');
+    sprite.className = 'agent-sprite';
+    sprite.style.left  = px + 'px';
+    sprite.style.top   = py + 'px';
+    sprite.innerHTML =
+      '<div class="agent-body anim-' + st.anim + '">' + agent.emoji + '</div>' +
+      '<div class="agent-label" style="color:' + agent.color + ';">' + agent.name + '</div>' +
+      '<div class="agent-tooltip">' +
+        '<strong>' + agent.name + '</strong><br>' +
+        agent.role + '<br>' +
+        '<span style="color:' + agent.color + ';">' + st.task + '</span>' +
+      '</div>';
+    room.appendChild(sprite);
+
+    // Mini card
+    var statusColors = { build:'var(--blue)', studio:'var(--red)', library:'#a855f7', ops:'var(--green)', break:'var(--yellow)', lounge:'var(--muted)' };
+    var statusLabels = { build:'🔨 Building', studio:'🎙️ On Air', library:'📚 Researching', ops:'⚙️ Ops Running', break:'☕ Up Soon', lounge:'💤 Idle' };
+    // Studio ON AIR light
+    var studioOccupied = AGENTS.some(function(a){ return a.getStatus().zone==='studio'; });
+    var studioLight = document.getElementById('studio-light');
+    if (studioLight) {
+      studioLight.style.background = studioOccupied ? '#ef4444' : 'rgba(239,68,68,0.15)';
+      studioLight.style.boxShadow  = studioOccupied ? '0 0 8px #ef4444' : 'none';
+    }
+    var mini = document.createElement('div');
+    mini.className = 'agent-mini';
+    mini.innerHTML =
+      '<div class="agent-mini-icon">' + agent.emoji + '</div>' +
+      '<div><div class="agent-mini-name">' + agent.name + '</div>' +
+      '<div class="agent-mini-status" style="color:' + statusColors[zone] + ';">' +
+        statusLabels[zone] + ' · ' + st.task.substring(0,28) + (st.task.length>28?'…':'') +
+      '</div></div>';
+    miniGrid.appendChild(mini);
+  });
+}
+
+function officeTime() {
+  var el = document.getElementById('office-time');
+  if (el) {
+    var now = new Date();
+    var h = now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',timeZone:'America/Toronto'});
+    var active = AGENTS.filter(function(a){ var z=a.getStatus().zone; return z==='build'||z==='studio'||z==='library'||z==='ops'; }).length;
+    var idle   = AGENTS.filter(function(a){ return a.getStatus().zone==='lounge'; }).length;
+    var soon   = AGENTS.filter(function(a){ return a.getStatus().zone==='break'; }).length;
+    el.textContent = h + ' EDT  ·  🔨 ' + active + ' active  ·  ☕ ' + soon + ' up soon  ·  💤 ' + idle + ' idle';
+  }
+}
+
+// Re-place agents every 60s so animations reflect current time
+setInterval(placeAgents, 60000);
+setInterval(officeTime, 10000);
+setTimeout(function(){ placeAgents(); officeTime(); }, 800);
+// ─────────────────────────────────────────────────────
+
+function clock() {
+  var el = document.getElementById('clock');
+  if (el) el.textContent = new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',second:'2-digit',timeZone:'America/Toronto'})+' EDT';
+}
+clock(); setInterval(clock, 1000);
+// Load approval statuses from project-approvals.json and patch project board
+function loadApprovals() {
+  fetch('../project-approvals.json?t=' + Date.now())
+    .then(function(r){ return r.json(); })
+    .then(function(data) {
+      var rows = document.querySelectorAll('#proj-rows tr');
+      var projects = data.projects;
+      var keys = Object.keys(projects);
+      var statusMap = {
+        'approved': {emoji:'🟢', label:'Approved', color:'var(--green)'},
+        'active':   {emoji:'🟢', label:'Active',   color:'var(--green)'},
+        'killed':   {emoji:'💀', label:'Killed',   color:'var(--muted)'},
+        'discussion':{emoji:'🔄', label:'Discussion',color:'var(--blue)'},
+        'pending':  {emoji:'⬜', label:'Pending',  color:'var(--muted)'},
+        'blocked':  {emoji:'🔴', label:'Blocked',  color:'var(--red)'},
+        'paused':   {emoji:'⏸️', label:'Paused',   color:'var(--yellow)'}
+      };
+      keys.forEach(function(key, i) {
+        if (!rows[i]) return;
+        var proj = projects[key];
+        var s = statusMap[proj.status] || statusMap['pending'];
+        var cells = rows[i].querySelectorAll('td');
+        if (cells[0]) cells[0].textContent = s.emoji;
+        if (cells[3]) { cells[3].innerHTML = '<span style="color:'+s.color+';font-size:12px;">'+s.label+'</span>'; }
+      });
+      // Update summary counts
+      var counts = {active:0, blocked:0, draft:0, done:0};
+      keys.forEach(function(k){
+        var st = projects[k].status;
+        if (st==='approved'||st==='active') counts.active++;
+        else if (st==='blocked') counts.blocked++;
+        else if (st==='killed') counts.done++;
+        else counts.draft++;
+      });
+      var a=document.getElementById('proj-active'), b=document.getElementById('proj-blocked'),
+          c=document.getElementById('proj-draft'), d=document.getElementById('proj-done');
+      if(a) a.textContent=counts.active;
+      if(b) b.textContent=counts.blocked;
+      if(c) c.textContent=counts.draft;
+      if(d) d.textContent=counts.done;
+      // Show last checked time
+      if (data.lastChecked) {
+        var el = document.getElementById('approvals-last-checked');
+        if (el) el.textContent = 'Last synced: ' + new Date(data.lastChecked).toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',timeZone:'America/Toronto'}) + ' EDT';
+      }
+    })
+    .catch(function(){});
+}
+loadApprovals();
+setInterval(loadApprovals, 300000); // refresh every 5 min
+
+show('radar', document.querySelector('.nav-item'));
+</script>
+</body>
+</html>
