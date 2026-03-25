@@ -319,6 +319,7 @@ main{flex:1;overflow:auto;padding:24px;}
     <div class="agent-card"><div class="agent-avatar">🏡</div><div class="agent-name">Brandi Briefing</div><div class="agent-role">8AM daily · Groq</div><div style="color:var(--muted);font-size:12px;">😴 Sleeping</div><div class="agent-task">Next run: 8:00 AM EDT</div></div>
     <div class="agent-card"><div class="agent-avatar">🧠</div><div class="agent-name">Memory Keeper</div><div class="agent-role">Skills · MEMORY.md</div><div style="color:var(--green);font-size:12px;">Up to date</div><div class="agent-task">10 skills · Memory current</div></div>
     <div class="agent-card" onclick="show('learning',document.querySelector('[onclick*=learning]'))" style="cursor:pointer;border-color:rgba(168,85,247,0.4);"><div class="agent-avatar">🔭</div><div class="agent-name">Scout</div><div class="agent-role">Every 6h · Groq/Llama</div><div style="color:var(--green);font-size:12px;"><span class="status-dot" style="background:#a855f7;"></span>Active</div><div class="agent-task">Learning agent · ClawHub watcher</div></div>
+    <div class="agent-card" style="border-color:rgba(244,114,182,0.4);"><div class="agent-avatar">📊</div><div class="agent-name">Remi</div><div class="agent-role">Marketing Coordinator · Sonnet</div><div style="color:#f472b6;font-size:12px;"><span class="status-dot" style="background:#f472b6;"></span>Researching</div><div class="agent-task">Hook research · Breakout analysis</div></div>
   </div>
 </div>
 
@@ -329,16 +330,17 @@ main{flex:1;overflow:auto;padding:24px;}
   </div>
 
   <style>
-    .office-room { position:relative; width:100%; height:420px; background:#0a1628; border:1px solid var(--border); border-radius:12px; overflow:hidden; }
-    /* Zone backgrounds */
+    .office-room { position:relative; width:100%; height:520px; background:#060f1e; border:1px solid var(--border); border-radius:12px; overflow:hidden; }
+    /* Zone backgrounds — CSS grid approach for clean layout */
     .zone { position:absolute; border-radius:8px; }
-    /* 5-zone layout: top row 3 | bottom row 2 */
-    .zone-build   { left:20px;   top:20px;    width:210px; height:175px; background:rgba(59,130,246,0.07);  border:1px solid rgba(59,130,246,0.2); }
-    .zone-studio  { left:245px;  top:20px;    width:210px; height:175px; background:rgba(239,68,68,0.06);   border:1px solid rgba(239,68,68,0.2); }
-    .zone-library { right:20px;  top:20px;    width:165px; height:175px; background:rgba(168,85,247,0.06);  border:1px solid rgba(168,85,247,0.2); }
-    .zone-ops     { left:20px;   top:215px;   width:250px; height:155px; background:rgba(34,197,94,0.05);   border:1px solid rgba(34,197,94,0.15); }
-    .zone-break   { left:285px;  top:215px;   width:130px; height:155px; background:rgba(245,200,66,0.05);  border:1px solid rgba(245,200,66,0.12); }
-    .zone-lounge  { right:20px;  top:215px;   width:175px; height:155px; background:rgba(100,116,139,0.05); border:1px solid rgba(100,116,139,0.12); }
+    /* TOP ROW — 3 equal zones */
+    .zone-build   { left:1%;   top:16px;  width:32%; height:210px; background:rgba(59,130,246,0.07);  border:1px solid rgba(59,130,246,0.25); }
+    .zone-studio  { left:34%;  top:16px;  width:32%; height:210px; background:rgba(239,68,68,0.06);   border:1px solid rgba(239,68,68,0.25); }
+    .zone-library { left:67%;  top:16px;  width:32%; height:210px; background:rgba(168,85,247,0.06);  border:1px solid rgba(168,85,247,0.25); }
+    /* BOTTOM ROW — 3 equal zones */
+    .zone-ops     { left:1%;   top:242px; width:40%; height:255px; background:rgba(34,197,94,0.05);   border:1px solid rgba(34,197,94,0.2); }
+    .zone-break   { left:42%;  top:242px; width:22%; height:255px; background:rgba(245,200,66,0.05);  border:1px solid rgba(245,200,66,0.18); }
+    .zone-lounge  { left:65%;  top:242px; width:34%; height:255px; background:rgba(100,116,139,0.05); border:1px solid rgba(100,116,139,0.18); }
     .zone-label   { position:absolute; top:8px; left:10px; font-size:9px; letter-spacing:1.5px; text-transform:uppercase; opacity:0.5; }
 
     /* Desks */
@@ -377,53 +379,54 @@ main{flex:1;overflow:auto;padding:24px;}
 
   <!-- The room -->
   <div class="office-room" id="office-room">
-    <!-- 🔨 Build Station — Cassy building/coding a project feature -->
+    <!-- 🔨 Build Station -->
     <div class="zone zone-build">
-      <div class="zone-label" style="color:rgba(59,130,246,0.85);">🔨 Build Station</div>
-      <div class="desk-obj" style="left:18px;top:48px;"></div>
-      <div class="desk-obj" style="left:80px;top:48px;"></div>
-      <div class="desk-obj" style="left:142px;top:48px;"></div>
-      <div class="desk-obj" style="left:18px;top:120px;"></div>
-      <div class="desk-obj" style="left:80px;top:120px;"></div>
+      <div class="zone-label" style="color:rgba(59,130,246,0.9);">🔨 Build Station</div>
+      <div class="desk-obj" style="left:12px;top:52px;"></div>
+      <div class="desk-obj" style="left:68px;top:52px;"></div>
+      <div class="desk-obj" style="left:124px;top:52px;"></div>
+      <div class="desk-obj" style="left:12px;top:130px;"></div>
+      <div class="desk-obj" style="left:68px;top:130px;"></div>
+      <div class="desk-obj" style="left:124px;top:130px;"></div>
     </div>
-    <!-- 🎙️ Studio — content creation: vlog, video, briefings, social -->
+    <!-- 🎙️ Studio -->
     <div class="zone zone-studio">
-      <div class="zone-label" style="color:rgba(239,68,68,0.85);">🎙️ Studio</div>
-      <!-- mic stand -->
-      <div style="position:absolute;left:90px;top:40px;width:6px;height:50px;background:rgba(239,68,68,0.3);border-radius:3px;"></div>
-      <div style="position:absolute;left:76px;top:36px;width:34px;height:20px;border:2px solid rgba(239,68,68,0.4);border-radius:50%;"></div>
-      <!-- camera -->
-      <div style="position:absolute;left:140px;top:50px;width:30px;height:22px;background:rgba(239,68,68,0.15);border:1px solid rgba(239,68,68,0.3);border-radius:4px;"></div>
-      <div style="position:absolute;left:170px;top:55px;width:12px;height:12px;border-radius:50%;background:rgba(239,68,68,0.2);border:1px solid rgba(239,68,68,0.4);"></div>
-      <!-- on-air light -->
+      <div class="zone-label" style="color:rgba(239,68,68,0.9);">🎙️ Studio</div>
+      <div style="position:absolute;left:50%;top:55px;transform:translateX(-50%);width:6px;height:55px;background:rgba(239,68,68,0.35);border-radius:3px;"></div>
+      <div style="position:absolute;left:50%;top:50px;transform:translateX(-50%);width:36px;height:22px;border:2px solid rgba(239,68,68,0.5);border-radius:50%;margin-left:-18px;"></div>
+      <div style="position:absolute;right:18px;top:60px;width:28px;height:20px;background:rgba(239,68,68,0.15);border:1px solid rgba(239,68,68,0.4);border-radius:4px;"></div>
       <div id="studio-light" style="position:absolute;right:12px;top:12px;width:10px;height:10px;border-radius:50%;background:rgba(239,68,68,0.2);"></div>
     </div>
-    <!-- 📚 Research — Scout scanning ClawHub + sessions -->
+    <!-- 📚 Research Library -->
     <div class="zone zone-library">
-      <div class="zone-label" style="color:rgba(168,85,247,0.85);">📚 Research</div>
-      <div class="bookshelf" style="right:10px;top:28px;"></div>
-      <div class="bookshelf" style="right:36px;top:28px;"></div>
-      <div class="bookshelf" style="right:62px;top:28px;"></div>
+      <div class="zone-label" style="color:rgba(168,85,247,0.9);">📚 Research</div>
+      <div class="bookshelf" style="right:8px;top:30px;"></div>
+      <div class="bookshelf" style="right:34px;top:30px;"></div>
+      <div class="bookshelf" style="right:60px;top:30px;"></div>
+      <div class="desk-obj" style="left:10px;top:55px;width:38px;height:24px;"></div>
+      <div class="desk-obj" style="left:10px;top:130px;width:38px;height:24px;"></div>
     </div>
-    <!-- ⚙️ Ops Desk — monitoring, KPI, approval sync running -->
+    <!-- ⚙️ Ops Desk -->
     <div class="zone zone-ops">
-      <div class="zone-label" style="color:rgba(34,197,94,0.85);">⚙️ Ops</div>
-      <div class="desk-obj" style="left:18px;top:48px;"></div>
-      <div class="desk-obj" style="left:80px;top:48px;"></div>
-      <div class="desk-obj" style="left:142px;top:48px;"></div>
-      <div class="desk-obj" style="left:204px;top:48px;"></div>
-      <div class="desk-obj" style="left:18px;top:110px;"></div>
-      <div class="desk-obj" style="left:80px;top:110px;"></div>
+      <div class="zone-label" style="color:rgba(34,197,94,0.9);">⚙️ Ops</div>
+      <div class="desk-obj" style="left:12px;top:48px;"></div>
+      <div class="desk-obj" style="left:72px;top:48px;"></div>
+      <div class="desk-obj" style="left:132px;top:48px;"></div>
+      <div class="desk-obj" style="left:192px;top:48px;"></div>
+      <div class="desk-obj" style="left:12px;top:130px;"></div>
+      <div class="desk-obj" style="left:72px;top:130px;"></div>
+      <div class="desk-obj" style="left:132px;top:130px;"></div>
+      <div class="desk-obj" style="left:192px;top:130px;"></div>
     </div>
-    <!-- ☕ Break Room — next run ≤30 min -->
+    <!-- ☕ Break Room -->
     <div class="zone zone-break">
-      <div class="zone-label" style="color:rgba(245,200,66,0.7);">☕ Soon</div>
-      <div class="table-obj" style="left:32px;bottom:22px;"></div>
+      <div class="zone-label" style="color:rgba(245,200,66,0.8);">☕ Break</div>
+      <div class="table-obj" style="left:50%;top:90px;transform:translateX(-50%);"></div>
     </div>
-    <!-- 🛋️ Lounge — idle, off-hours -->
+    <!-- 🛋️ Lounge -->
     <div class="zone zone-lounge">
-      <div class="zone-label" style="color:rgba(100,116,139,0.6);">🛋️ Idle</div>
-      <div class="couch-obj" style="bottom:22px;left:22px;"></div>
+      <div class="zone-label" style="color:rgba(100,116,139,0.7);">🛋️ Lounge</div>
+      <div class="couch-obj" style="bottom:30px;left:50%;transform:translateX(-50%);width:140px;"></div>
     </div>
     <!-- Agents injected by JS -->
   </div>
@@ -1515,17 +1518,26 @@ var AGENTS = [
       if (m >= 55) return { zone:'break',  anim:'waiting',  task:'Starting in <5 min' };
       return               { zone:'lounge', anim:'sleeping', task:'Next sync in ~' + (60-m) + ' min' };
     }
+  },
+  { id:'remi', name:'Remi', emoji:'📊', role:'Marketing Coordinator · Sonnet', color:'#f472b6',
+    getStatus: function() {
+      // Remi is actively researching hooks right now — runs as needed
+      var h = new Date().getHours();
+      // Active during business hours when spawned
+      if (h >= 8 && h <= 18) return { zone:'library', anim:'researching', task:'Researching hooks + breakout video patterns NOW' };
+      return { zone:'lounge', anim:'sleeping', task:'Off-hours · runs when assigned' };
+    }
   }
 ];
 
 // Zone spawn coordinates [x%, y%] within each zone element
 var ZONE_SLOTS = {
-  build:   [[12,52],[35,52],[58,52],[80,52],[12,85],[35,85]],
-  studio:  [[15,52],[38,52],[62,52],[85,52],[15,85],[38,85]],
-  library: [[12,48],[38,48],[65,48],[12,80],[38,80]],
-  ops:     [[10,52],[28,52],[46,52],[64,52],[10,85],[28,85]],
-  break:   [[20,52],[55,52],[20,85],[55,85]],
-  lounge:  [[12,52],[35,52],[58,52],[82,52],[12,85],[35,85]]
+  build:   [[15,45],[45,45],[75,45],[15,78],[45,78],[75,78]],
+  studio:  [[15,45],[45,45],[75,45],[15,78],[45,78],[75,78]],
+  library: [[15,40],[48,40],[80,40],[15,72],[48,72],[80,72]],
+  ops:     [[10,38],[27,38],[44,38],[61,38],[78,38],[10,72],[27,72],[44,72]],
+  break:   [[25,42],[65,42],[25,72],[65,72]],
+  lounge:  [[12,38],[35,38],[60,38],[82,38],[12,70],[35,70],[60,70],[82,70]]
 };
 var _slotIdx = {};
 
