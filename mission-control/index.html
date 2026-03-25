@@ -2057,7 +2057,7 @@ function placeAgents() {
   if (!room) return;
   // Remove old sprites
   room.querySelectorAll('.agent-sprite').forEach(function(el){ el.remove(); });
-  _slotIdx = { build:0, studio:0, library:0, management:0, ops:0, boardroom:0, break:0, lounge:0 };
+  _slotIdx = { build:0, studio:0, library:0, management:0, comms:0, ops:0, boardroom:0, break:0, lounge:0 };
 
   AGENTS.forEach(function(agent) {
     var st = agent.getStatus();
@@ -2105,6 +2105,35 @@ function placeAgents() {
       studioLight.style.boxShadow  = studioOccupied ? '0 0 8px #ef4444' : 'none';
     }
   });
+
+  // Place active humans in board room
+  if (typeof HUMANS !== 'undefined') {
+    HUMANS.forEach(function(human) {
+      if (!isHumanActive(human)) return;
+      var boardSlots = ZONE_SLOTS['boardroom'] || [[20,55],[50,55],[80,55]];
+      var bIdx = _slotIdx['boardroom'] || 0;
+      _slotIdx['boardroom'] = bIdx + 1;
+      var slot = boardSlots[bIdx % boardSlots.length];
+      var zoneEl = room.querySelector('.zone-boardroom');
+      if (!zoneEl) return;
+      var zW = zoneEl.offsetWidth, zH = zoneEl.offsetHeight;
+      var px = zoneEl.offsetLeft + (slot[0]/100)*zW;
+      var py = zoneEl.offsetTop  + (slot[1]/100)*zH;
+
+      var sprite = document.createElement('div');
+      sprite.className = 'agent-sprite';
+      sprite.style.left = px + 'px';
+      sprite.style.top  = py + 'px';
+      sprite.innerHTML =
+        '<div class="agent-body">' +
+          '<div class="agent-avatar-circle" style="color:' + human.color + ';border-color:' + human.color + ';background:' + human.color + '22;width:30px;height:30px;font-size:11px;">' + human.initials + '</div>' +
+        '</div>' +
+        '<div class="agent-label" style="color:' + human.color + ';">' + human.name + '</div>' +
+        '<div class="agent-tooltip"><strong>' + human.name + '</strong><br>' + human.role + '<br><span style="color:' + human.color + ';">Active in board room</span></div>';
+      room.appendChild(sprite);
+    });
+  }
+
   renderActiveAgents();
 }
 
