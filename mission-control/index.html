@@ -426,7 +426,8 @@ main{flex:1;overflow:auto;padding:24px;}
     .zone-build      { left:1%;   top:16px;  width:23%; height:210px; background:rgba(59,130,246,0.07);  border:1px solid rgba(59,130,246,0.25); }
     .zone-studio     { left:25%;  top:16px;  width:23%; height:210px; background:rgba(239,68,68,0.06);   border:1px solid rgba(239,68,68,0.25); }
     .zone-library    { left:49%;  top:16px;  width:23%; height:210px; background:rgba(168,85,247,0.06);  border:1px solid rgba(168,85,247,0.25); }
-    .zone-management { left:73%;  top:16px;  width:26%; height:210px; background:rgba(245,200,66,0.07);  border:1px solid rgba(245,200,66,0.3); }
+    .zone-management { left:73%;  top:16px;  width:13%; height:210px; background:rgba(245,200,66,0.07);  border:1px solid rgba(245,200,66,0.3); }
+    .zone-comms      { left:87%;  top:16px;  width:12%; height:210px; background:rgba(34,197,94,0.06);   border:1px solid rgba(34,197,94,0.25); }
     /* BOTTOM ROW — ops 35%, boardroom 23%, break 17%, lounge 21% */
     .zone-ops        { left:1%;   top:242px; width:35%; height:255px; background:rgba(34,197,94,0.05);   border:1px solid rgba(34,197,94,0.2); }
     .zone-boardroom  { left:37%;  top:242px; width:23%; height:255px; background:rgba(20,184,166,0.06);  border:1px solid rgba(20,184,166,0.25); }
@@ -522,9 +523,14 @@ main{flex:1;overflow:auto;padding:24px;}
     </div>
     <!-- 💼 Management Suite -->
     <div class="zone zone-management">
-      <div class="zone-label" style="color:rgba(245,200,66,0.9);">💼 Management</div>
-      <div class="desk-obj" style="left:50%;top:70px;transform:translateX(-50%);width:70px;height:40px;border-color:rgba(245,200,66,0.4);"></div>
-      <div style="position:absolute;left:50%;top:130px;transform:translateX(-50%);width:50px;height:30px;border:1px solid rgba(245,200,66,0.3);border-radius:3px;background:rgba(245,200,66,0.05);"></div>
+      <div class="zone-label" style="color:rgba(245,200,66,0.9);">💼 Mgmt</div>
+      <div class="desk-obj" style="left:50%;top:70px;transform:translateX(-50%);width:50px;height:32px;border-color:rgba(245,200,66,0.4);"></div>
+      <div style="position:absolute;left:50%;top:130px;transform:translateX(-50%);width:40px;height:24px;border:1px solid rgba(245,200,66,0.3);border-radius:3px;background:rgba(245,200,66,0.05);"></div>
+    </div>
+    <!-- 📧 Comms Station -->
+    <div class="zone zone-comms">
+      <div class="zone-label" style="color:rgba(34,197,94,0.9);">📧 Comms</div>
+      <div class="desk-obj" style="left:50%;top:70px;transform:translateX(-50%);width:36px;height:24px;border-color:rgba(34,197,94,0.4);"></div>
     </div>
     <!-- 🪑 Board Room -->
     <div class="zone zone-boardroom">
@@ -1922,75 +1928,46 @@ function closeDrawer() {
 // lounge  = idle / off-hours / sleeping
 
 var AGENTS = [
-  { id:'cassy', name:'Cassy', emoji:'💼', initials:'CA', role:'Main Agent · Sonnet', color:'#f5c842',
-    getStatus: function() {
-      // If 3+ other agents are in active zones, Cassy moves to boardroom for team briefing
-      var activeOthers = AGENTS.slice(1).filter(function(a){
-        var z = a.getStatus().zone;
-        return z==='build'||z==='studio'||z==='library'||z==='ops';
-      }).length;
-      if (activeOthers >= 3) return { zone:'boardroom', anim:'typing', task:'Team briefing in progress' };
-      return { zone:'management', anim:'typing', task:'Planning + executive oversight' };
-    }
-  },
-  { id:'email', name:'Email Mon.', emoji:'📧', initials:'EM', role:'Every 5m · GPT-mini', color:'#3b82f6',
+  { id:'cassy', name:'Cassy', initials:'CA', color:'#f5c842', role:'CEO + COO · Sonnet',
+    // Cassy handles email monitor too — when email check fires she moves to comms
     getStatus: function() {
       var m = new Date().getMinutes() % 5;
-      if (m < 2)  return { zone:'ops',    anim:'typing',   task:'Reading + replying to inbox NOW' };
-      if (m >= 4) return { zone:'break',  anim:'waiting',  task:'Next check in <1 min' };
-      return              { zone:'lounge', anim:'sleeping', task:'Next check in ' + (5-m) + ' min' };
+      if (m < 2) return { zone:'comms', anim:'typing', task:'Checking cassy@smarthub247.com inbox' };
+      return { zone:'management', anim:'typing', task:'Active · responding to Steve' };
     }
   },
-  { id:'kpi', name:'KPI Reporter', emoji:'📊', initials:'KP', role:'8AM daily · GPT-mini', color:'#22c55e',
+  { id:'maxwell', name:'Maxwell', initials:'MA', color:'#22c55e', role:'CFO · GPT-mini · 8AM daily',
     getStatus: function() {
       var h = new Date().getHours(), m = new Date().getMinutes();
-      if (h===8 && m<20)  return { zone:'ops',    anim:'typing',   task:'Posting daily KPI scorecard NOW' };
-      if (h===7 && m>=45) return { zone:'break',  anim:'waiting',  task:'Starting in <15 min' };
-      return                      { zone:'lounge', anim:'sleeping', task:'Off-hours · next run 8:00 AM' };
+      if (h===8 && m<20) return { zone:'ops', anim:'typing', task:'Posting daily KPI scorecard NOW' };
+      if (h===7 && m>=45) return { zone:'break', anim:'waiting', task:'Starting in <15 min' };
+      return { zone:'lounge', anim:'sleeping', task:'Off-hours · next run 8:00 AM' };
     }
   },
-  { id:'vlog', name:'Daily Vlog', emoji:'🎬', initials:'DV', role:'8AM daily · Groq', color:'#f97316',
+  { id:'remi', name:'Remi', initials:'RE', color:'#f472b6', role:'CMO · Groq · 8AM + content',
     getStatus: function() {
       var h = new Date().getHours(), m = new Date().getMinutes();
-      if (h===8 && m<35)  return { zone:'studio', anim:'typing',   task:'Generating Steve\'s vlog video NOW' };
-      if (h===7 && m>=50) return { zone:'break',  anim:'waiting',  task:'Warming up · starting soon' };
-      return                      { zone:'lounge', anim:'sleeping', task:'Off-hours · next run 8:00 AM' };
+      if (h===8 && m<35) return { zone:'studio', anim:'typing', task:'Generating Steve\'s vlog video NOW' };
+      if (h===7 && m>=50) return { zone:'break', anim:'waiting', task:'Warming up · starting soon' };
+      var activeHour = h===9||h===12||h===15, d = new Date().getDay(), isWeekday = d>=1&&d<=5;
+      if (activeHour && m<20 && isWeekday) return { zone:'studio', anim:'typing', task:'Creating background content NOW' };
+      return { zone:'lounge', anim:'sleeping', task:'Off-hours · vlog 8AM · content 9/12/15h' };
     }
   },
-  { id:'bgtask', name:'Bg. Tasks', emoji:'⚙️', initials:'BG', role:'9,12,15h · Groq', color:'#6366f1',
-    getStatus: function() {
-      var h = new Date().getHours(), m = new Date().getMinutes(), d = new Date().getDay();
-      var isWeekday = d>=1&&d<=5;
-      if ((h===9||h===12||h===15) && m<20 && isWeekday)
-        return { zone:'studio', anim:'typing',   task:'Creating background content NOW' };
-      if (((h===8&&m>=45)||(h===11&&m>=45)||(h===14&&m>=45)) && isWeekday)
-        return { zone:'break',  anim:'waiting',  task:'Queued · starting soon' };
-      return   { zone:'lounge', anim:'sleeping', task:'Off-hours · Mon-Fri 9/12/15h' };
-    }
-  },
-  { id:'scout', name:'Scout', emoji:'🔭', initials:'SC', role:'Every 6h · Groq', color:'#a855f7',
-    getStatus: function() {
-      var h = new Date().getHours(), m = new Date().getMinutes(), slotH = h % 6;
-      if (slotH===0 && m<25)  return { zone:'library', anim:'researching', task:'Scanning ClawHub + sessions NOW' };
-      if (slotH===5 && m>=45) return { zone:'break',   anim:'waiting',     task:'Starting in <15 min' };
-      return                          { zone:'lounge',  anim:'sleeping',    task:'Next scan in ~' + (6-slotH) + 'h' };
-    }
-  },
-  { id:'approval', name:'Approval Sync', emoji:'✅', initials:'AP', role:'Every 1h · Groq', color:'#10b981',
+  { id:'axel', name:'Axel', initials:'AX', color:'#6366f1', role:'CIO · Groq · Every 1h',
     getStatus: function() {
       var m = new Date().getMinutes();
-      if (m < 8)   return { zone:'ops',    anim:'typing',   task:'Checking #approve-or-kill reactions NOW' };
-      if (m >= 55) return { zone:'break',  anim:'waiting',  task:'Starting in <5 min' };
-      return               { zone:'lounge', anim:'sleeping', task:'Next sync in ~' + (60-m) + ' min' };
+      if (m < 8) return { zone:'ops', anim:'typing', task:'Checking #approve-or-kill reactions NOW' };
+      if (m >= 55) return { zone:'break', anim:'waiting', task:'Starting in <5 min' };
+      return { zone:'lounge', anim:'sleeping', task:'Next approval sync in ~' + (60-m) + ' min' };
     }
   },
-  { id:'remi', name:'Remi', emoji:'📊', initials:'RE', role:'Marketing Coordinator · Sonnet', color:'#f472b6',
+  { id:'scout', name:'Scout', initials:'SC', color:'#a855f7', role:'CHRO · Groq · Every 6h',
     getStatus: function() {
-      // Remi is actively researching hooks right now — runs as needed
-      var h = new Date().getHours();
-      // Active during business hours when spawned
-      if (h >= 8 && h <= 18) return { zone:'library', anim:'researching', task:'Researching hooks + breakout video patterns NOW' };
-      return { zone:'lounge', anim:'sleeping', task:'Off-hours · runs when assigned' };
+      var h = new Date().getHours(), m = new Date().getMinutes(), slotH = h % 6;
+      if (slotH===0 && m<25) return { zone:'library', anim:'researching', task:'Scanning ClawHub + sessions NOW' };
+      if (slotH===5 && m>=45) return { zone:'break', anim:'waiting', task:'Starting in <15 min' };
+      return { zone:'lounge', anim:'sleeping', task:'Next scan in ~' + (6-slotH) + 'h' };
     }
   }
 ];
@@ -1999,12 +1976,13 @@ var AGENTS = [
 var ZONE_SLOTS = {
   build:      [[15,45],[45,45],[75,45],[15,78],[45,78],[75,78]],
   studio:     [[15,45],[45,45],[75,45],[15,78],[45,78],[75,78]],
-  management: [[25,45],[55,45],[80,45],[25,75],[55,75]],
+  management: [[25,45],[65,45],[25,72],[65,72]],
+  comms:      [[30,45],[70,45],[30,72],[70,72]],
   boardroom:  [[20,45],[50,45],[80,45],[20,75],[50,75],[80,75]],
-  library: [[15,40],[48,40],[80,40],[15,72],[48,72],[80,72]],
-  ops:     [[10,38],[27,38],[44,38],[61,38],[78,38],[10,72],[27,72],[44,72]],
-  break:   [[25,42],[65,42],[25,72],[65,72]],
-  lounge:  [[12,38],[35,38],[60,38],[82,38],[12,70],[35,70],[60,70],[82,70]]
+  library:    [[15,40],[48,40],[80,40],[15,72],[48,72],[80,72]],
+  ops:        [[10,38],[27,38],[44,38],[61,38],[78,38],[10,72],[27,72],[44,72]],
+  break:      [[25,42],[65,42],[25,72],[65,72]],
+  lounge:     [[12,38],[35,38],[60,38],[82,38],[12,70],[35,70],[60,70],[82,70]]
 };
 var _slotIdx = {};
 
@@ -2051,8 +2029,8 @@ function placeAgents() {
     room.appendChild(sprite);
 
     // Mini card
-    var statusColors = { build:'var(--blue)', studio:'var(--red)', library:'#a855f7', ops:'var(--green)', break:'var(--yellow)', lounge:'var(--muted)', management:'#f5c842', boardroom:'#14b8a6' };
-    var statusLabels = { build:'🔨 Building', studio:'🎙️ On Air', library:'📚 Researching', ops:'⚙️ Ops Running', break:'☕ Up Soon', lounge:'💤 Idle', management:'💼 Planning', boardroom:'🪑 In Meeting' };
+    var statusColors = { build:'var(--blue)', studio:'var(--red)', library:'#a855f7', ops:'var(--green)', comms:'var(--green)', management:'var(--gold)', boardroom:'#14b8a6', break:'var(--yellow)', lounge:'var(--muted)' };
+    var statusLabels = { build:'🔨 Building', studio:'🎙️ On Air', library:'📚 Researching', ops:'⚙️ Ops Running', comms:'📧 Comms', management:'💼 Planning', boardroom:'🪑 In Meeting', break:'☕ Up Soon', lounge:'💤 Idle' };
     // Studio ON AIR light
     var studioOccupied = AGENTS.some(function(a){ return a.getStatus().zone==='studio'; });
     var studioLight = document.getElementById('studio-light');
@@ -2074,7 +2052,7 @@ function renderActiveAgents() {
     grid.innerHTML = '<div style="color:var(--muted);font-size:13px;padding:20px;">All agents idle right now.</div>';
     return;
   }
-  var zoneLabels = { build:'🔨 Building', studio:'🎙️ On Air', library:'📚 Researching', ops:'⚙️ Ops Running', break:'☕ Up Soon', management:'💼 Planning', boardroom:'🪑 In Meeting' };
+  var zoneLabels = { build:'🔨 Building', studio:'🎙️ On Air', library:'📚 Researching', ops:'⚙️ Ops Running', comms:'📧 Comms', management:'💼 Planning', boardroom:'🪑 In Meeting', break:'☕ Up Soon', lounge:'💤 Idle' };
   grid.innerHTML = active.map(function(a) {
     var st = a.getStatus();
     return '<div class="agent-mini" style="border-left:3px solid ' + a.color + ';">' +
