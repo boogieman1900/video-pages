@@ -1969,6 +1969,31 @@ var AGENTS = [
       if (slotH===5 && m>=45) return { zone:'break', anim:'waiting', task:'Starting in <15 min' };
       return { zone:'lounge', anim:'sleeping', task:'Next scan in ~' + (6-slotH) + 'h' };
     }
+  },
+  { id:'forge', name:'Forge', initials:'FO', color:'#3b82f6', role:'CTO · On call',
+    getStatus: function() {
+      return { zone:'lounge', anim:'sleeping', task:'On call · builds on demand' };
+    }
+  },
+  { id:'june', name:'June', initials:'JU', color:'#60a5fa', role:'Head of Comms · On call',
+    getStatus: function() {
+      return { zone:'lounge', anim:'sleeping', task:'On call · email + outreach' };
+    }
+  },
+  { id:'rex', name:'Rex', initials:'RX', color:'#f59e0b', role:'CRO · On call',
+    getStatus: function() {
+      return { zone:'lounge', anim:'sleeping', task:'On call · revenue pipeline' };
+    }
+  },
+  { id:'atlas', name:'Atlas', initials:'AT', color:'#06b6d4', role:'CAO · On call',
+    getStatus: function() {
+      return { zone:'lounge', anim:'sleeping', task:'On call · deal flow research' };
+    }
+  },
+  { id:'harper', name:'Harper', initials:'HA', color:'#84cc16', role:'Property Mgr · On call',
+    getStatus: function() {
+      return { zone:'lounge', anim:'sleeping', task:'On call · 3 Kitchener properties' };
+    }
   }
 ];
 
