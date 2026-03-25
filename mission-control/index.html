@@ -333,15 +333,134 @@ main{flex:1;overflow:auto;padding:24px;}
 
 <div id="office" class="screen">
   <div class="page-title">🏢 The Office</div>
+
+  <!-- C-Suite Section -->
+  <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin:20px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--border);">💼 C-Suite — 10 Agents</div>
   <div class="office-grid">
-    <div class="agent-card active"><div class="agent-avatar">💼</div><div class="agent-name">Cassy</div><div class="agent-role">CEO · Main Agent</div><div style="color:var(--green);font-size:12px;"><span class="status-dot"></span>Active</div><div class="agent-task">Mission Control build</div></div>
-    <div class="agent-card"><div class="agent-avatar">📧</div><div class="agent-name">Email Monitor</div><div class="agent-role">Every 5 min · GPT-mini</div><div style="color:var(--green);font-size:12px;">Watching inbox</div><div class="agent-task">Next check: &lt;5 min</div></div>
-    <div class="agent-card"><div class="agent-avatar">📊</div><div class="agent-name">KPI Reporter</div><div class="agent-role">8AM daily · GPT-mini</div><div style="color:var(--muted);font-size:12px;">😴 Sleeping</div><div class="agent-task">Next run: 8:00 AM EDT</div></div>
-    <div class="agent-card"><div class="agent-avatar">🏒</div><div class="agent-name">Jeff Hockey</div><div class="agent-role">9AM daily · Groq</div><div style="color:var(--muted);font-size:12px;">😴 Sleeping</div><div class="agent-task">Next run: 9:00 AM EDT</div></div>
-    <div class="agent-card"><div class="agent-avatar">🏡</div><div class="agent-name">Brandi Briefing</div><div class="agent-role">8AM daily · Groq</div><div style="color:var(--muted);font-size:12px;">😴 Sleeping</div><div class="agent-task">Next run: 8:00 AM EDT</div></div>
-    <div class="agent-card"><div class="agent-avatar">🧠</div><div class="agent-name">Memory Keeper</div><div class="agent-role">Skills · MEMORY.md</div><div style="color:var(--green);font-size:12px;">Up to date</div><div class="agent-task">10 skills · Memory current</div></div>
-    <div class="agent-card" onclick="show('learning',document.querySelector('[onclick*=learning]'))" style="cursor:pointer;border-color:rgba(168,85,247,0.4);"><div class="agent-avatar">🔭</div><div class="agent-name">Scout</div><div class="agent-role">Every 6h · Groq/Llama</div><div style="color:var(--green);font-size:12px;"><span class="status-dot" style="background:#a855f7;"></span>Active</div><div class="agent-task">Learning agent · ClawHub watcher</div></div>
-    <div class="agent-card" style="border-color:rgba(244,114,182,0.4);"><div class="agent-avatar">📊</div><div class="agent-name">Remi</div><div class="agent-role">Marketing Coordinator · Sonnet</div><div style="color:#f472b6;font-size:12px;"><span class="status-dot" style="background:#f472b6;"></span>Researching</div><div class="agent-task">Hook research · Breakout analysis</div></div>
+    <div class="agent-card active">
+      <div class="agent-avatar">💼</div>
+      <div class="agent-name" style="color:var(--gold);">Cassy</div>
+      <div class="agent-role">CEO + COO · Reports to: Steve</div>
+      <div style="color:var(--green);font-size:12px;"><span class="status-dot" style="background:var(--green);"></span>Active</div>
+      <div class="agent-task">Talking to Steve · #orders</div>
+    </div>
+    <div class="agent-card">
+      <div class="agent-avatar">🔧</div>
+      <div class="agent-name">Forge</div>
+      <div class="agent-role">CTO · Reports to: Cassy</div>
+      <div style="color:var(--muted);font-size:12px;"><span class="status-dot" style="background:var(--muted);"></span>On call</div>
+      <div class="agent-task">Builds on demand</div>
+    </div>
+    <div class="agent-card">
+      <div class="agent-avatar">📊</div>
+      <div class="agent-name">Remi</div>
+      <div class="agent-role">CMO · Reports to: Cassy</div>
+      <div style="color:var(--muted);font-size:12px;"><span class="status-dot" style="background:var(--muted);"></span>On call</div>
+      <div class="agent-task">Hook research complete</div>
+    </div>
+    <div class="agent-card">
+      <div class="agent-avatar">🧮</div>
+      <div class="agent-name">Maxwell</div>
+      <div class="agent-role">CFO · Reports to: Cassy</div>
+      <div style="color:var(--blue);font-size:12px;"><span class="status-dot" style="background:var(--blue);"></span>Next run: 8:00 AM</div>
+      <div class="agent-task">Daily KPI scorecard</div>
+    </div>
+    <div class="agent-card">
+      <div class="agent-avatar">🖥️</div>
+      <div class="agent-name">Axel</div>
+      <div class="agent-role">CIO · Reports to: Cassy</div>
+      <div style="color:var(--blue);font-size:12px;"><span class="status-dot" style="background:var(--blue);"></span>Every 1h</div>
+      <div class="agent-task">Approval sync · next in ~Xmin</div>
+    </div>
+    <div class="agent-card">
+      <div class="agent-avatar">📧</div>
+      <div class="agent-name">June</div>
+      <div class="agent-role">Head of Comms · Reports to: Cassy</div>
+      <div style="color:var(--blue);font-size:12px;"><span class="status-dot" style="background:var(--blue);"></span>Every 5min</div>
+      <div class="agent-task">Email monitor</div>
+    </div>
+    <div class="agent-card">
+      <div class="agent-avatar">🔭</div>
+      <div class="agent-name">Scout</div>
+      <div class="agent-role">CHRO · Reports to: Cassy</div>
+      <div style="color:var(--blue);font-size:12px;"><span class="status-dot" style="background:var(--blue);"></span>Every 6h</div>
+      <div class="agent-task">ClawHub + session review</div>
+    </div>
+    <div class="agent-card">
+      <div class="agent-avatar">💰</div>
+      <div class="agent-name">Rex</div>
+      <div class="agent-role">CRO · Reports to: Cassy</div>
+      <div style="color:var(--muted);font-size:12px;"><span class="status-dot" style="background:var(--muted);"></span>On call</div>
+      <div class="agent-task">Manages sales team</div>
+    </div>
+    <div class="agent-card">
+      <div class="agent-avatar">🗺️</div>
+      <div class="agent-name">Atlas</div>
+      <div class="agent-role">CAO · Reports to: Cassy</div>
+      <div style="color:var(--muted);font-size:12px;"><span class="status-dot" style="background:var(--muted);"></span>On call</div>
+      <div class="agent-task">Deal flow research</div>
+    </div>
+    <div class="agent-card">
+      <div class="agent-avatar">🏘️</div>
+      <div class="agent-name">Harper</div>
+      <div class="agent-role">Property Manager · Reports to: Steve</div>
+      <div style="color:var(--muted);font-size:12px;"><span class="status-dot" style="background:var(--muted);"></span>On call</div>
+      <div class="agent-task">3 Kitchener properties</div>
+    </div>
+  </div>
+
+  <!-- Sales Team Section -->
+  <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin:20px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--border);">💰 Sales Team — Reports to Rex — 7 Agents</div>
+  <div class="office-grid">
+    <div class="agent-card">
+      <div class="agent-avatar">🏦</div>
+      <div class="agent-name">Morgan</div>
+      <div class="agent-role">Mortgage Rep · Reports to: Rex</div>
+      <div style="color:var(--muted);font-size:12px;"><span class="status-dot" style="background:var(--muted);"></span>On call</div>
+      <div class="agent-task">Real Approved leads</div>
+    </div>
+    <div class="agent-card">
+      <div class="agent-avatar">🏡</div>
+      <div class="agent-name">Blake</div>
+      <div class="agent-role">Residential Rep · Reports to: Rex</div>
+      <div style="color:var(--muted);font-size:12px;"><span class="status-dot" style="background:var(--muted);"></span>On call</div>
+      <div class="agent-task">KW Realtor outreach</div>
+    </div>
+    <div class="agent-card">
+      <div class="agent-avatar">🏢</div>
+      <div class="agent-name">Sterling</div>
+      <div class="agent-role">Commercial Rep · Reports to: Rex</div>
+      <div style="color:var(--muted);font-size:12px;"><span class="status-dot" style="background:var(--muted);"></span>On call</div>
+      <div class="agent-task">KW Commercial deals</div>
+    </div>
+    <div class="agent-card">
+      <div class="agent-avatar">🔥</div>
+      <div class="agent-name">Phoenix</div>
+      <div class="agent-role">Coaching Rep · Reports to: Rex</div>
+      <div style="color:var(--muted);font-size:12px;"><span class="status-dot" style="background:var(--muted);"></span>On call</div>
+      <div class="agent-task">Scale program outreach</div>
+    </div>
+    <div class="agent-card">
+      <div class="agent-avatar">🎙️</div>
+      <div class="agent-name">Echo</div>
+      <div class="agent-role">Podcast Rep · Reports to: Rex</div>
+      <div style="color:var(--muted);font-size:12px;"><span class="status-dot" style="background:var(--muted);"></span>On call</div>
+      <div class="agent-task">PodcastLaunch.ai pipeline</div>
+    </div>
+    <div class="agent-card">
+      <div class="agent-avatar">🤖</div>
+      <div class="agent-name">Nova</div>
+      <div class="agent-role">GHL Rep · Reports to: Rex</div>
+      <div style="color:var(--muted);font-size:12px;"><span class="status-dot" style="background:var(--muted);"></span>On call</div>
+      <div class="agent-task">SmartHub247 prospects</div>
+    </div>
+    <div class="agent-card">
+      <div class="agent-avatar">📒</div>
+      <div class="agent-name">Claire</div>
+      <div class="agent-role">Bookkeeping Rep · Reports to: Rex</div>
+      <div style="color:var(--muted);font-size:12px;"><span class="status-dot" style="background:var(--muted);"></span>On call</div>
+      <div class="agent-task">Ledgers client outreach</div>
+    </div>
   </div>
 </div>
 
