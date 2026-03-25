@@ -1607,8 +1607,8 @@ function show(id, el) {
   for (var j = 0; j < navs.length; j++) navs[j].classList.remove('active');
   if (el) el.classList.add('active');
   // Lazy-init charts when their screen is shown
-  if (id === 'projects') { initQualitySparkline(); initCapacityDoughnut(); }
-  if (id === 'token-radar') { initTokenRadar(); }
+  try { if (id === 'projects') { initQualitySparkline(); initCapacityDoughnut(); } } catch(e) {}
+  try { if (id === 'token-radar') { initTokenRadar(); } } catch(e) {}
 }
 
 function initQualitySparkline() {
