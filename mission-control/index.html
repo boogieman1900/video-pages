@@ -429,11 +429,12 @@ main{flex:1;overflow:auto;padding:24px;}
     .zone-management { left:72%;  top:16px;  width:27%; height:210px; background:rgba(245,200,66,0.07);  border:1px solid rgba(245,200,66,0.3); }
     .zone-comms      { left:87%;  top:16px;  width:12%; height:210px; background:rgba(34,197,94,0.06);   border:1px solid rgba(34,197,94,0.25); }
     /* BOTTOM ROW — ops 35%, boardroom 23%, break 17%, lounge 21% */
-    .zone-ops        { left:1%;   top:242px; width:22%; height:240px; background:rgba(34,197,94,0.05);   border:1px solid rgba(34,197,94,0.2); }
-    .zone-bullpen    { left:24%;  top:242px; width:38%; height:240px; background:rgba(251,146,60,0.05);  border:1px solid rgba(251,146,60,0.2); }
-    .zone-boardroom  { left:63%;  top:242px; width:20%; height:240px; background:rgba(20,184,166,0.06);  border:1px solid rgba(20,184,166,0.25); }
-    .zone-break      { left:84%;  top:242px; width:8%;  height:115px; background:rgba(245,200,66,0.05);  border:1px solid rgba(245,200,66,0.12); }
-    .zone-lounge     { left:84%;  top:369px; width:8%;  height:113px; background:rgba(100,116,139,0.05); border:1px solid rgba(100,116,139,0.12); }
+    /* BOTTOM ROW: Ops | Bullpen | Boardroom | Break+Lounge side by side */
+    .zone-ops        { left:1%;   top:242px; width:18%; height:240px; background:rgba(34,197,94,0.05);   border:1px solid rgba(34,197,94,0.2); }
+    .zone-bullpen    { left:20%;  top:242px; width:34%; height:240px; background:rgba(251,146,60,0.05);  border:1px solid rgba(251,146,60,0.2); }
+    .zone-boardroom  { left:55%;  top:242px; width:20%; height:240px; background:rgba(20,184,166,0.06);  border:1px solid rgba(20,184,166,0.25); }
+    .zone-break      { left:76%;  top:242px; width:11%; height:240px; background:rgba(245,200,66,0.05);  border:1px solid rgba(245,200,66,0.12); }
+    .zone-lounge     { left:88%;  top:242px; width:11%; height:240px; background:rgba(100,116,139,0.05); border:1px solid rgba(100,116,139,0.12); }
     .zone-label   { position:absolute; top:8px; left:10px; font-size:9px; letter-spacing:1.5px; text-transform:uppercase; opacity:0.5; }
 
     /* Desks */
@@ -494,10 +495,9 @@ main{flex:1;overflow:auto;padding:24px;}
     <!-- 🎙️ Studio -->
     <div class="zone zone-studio">
       <div class="zone-label" style="color:rgba(239,68,68,0.9);">🎙️ Studio</div>
-      <div style="position:absolute;left:50%;top:55px;transform:translateX(-50%);width:6px;height:55px;background:rgba(239,68,68,0.35);border-radius:3px;"></div>
-      <div style="position:absolute;left:50%;top:50px;transform:translateX(-50%);width:36px;height:22px;border:2px solid rgba(239,68,68,0.5);border-radius:50%;margin-left:-18px;"></div>
-      <div style="position:absolute;right:18px;top:60px;width:28px;height:20px;background:rgba(239,68,68,0.15);border:1px solid rgba(239,68,68,0.4);border-radius:4px;"></div>
       <div id="studio-light" style="position:absolute;right:12px;top:12px;width:10px;height:10px;border-radius:50%;background:rgba(239,68,68,0.2);"></div>
+      <div class="desk-obj" style="left:12px;top:55px;"></div>
+      <div class="desk-obj" style="left:12px;top:130px;"></div>
     </div>
     <!-- 📚 Research Library -->
     <div class="zone zone-library">
@@ -2062,7 +2062,7 @@ var ZONE_SLOTS = {
   ops:        [[10,52],[27,52],[44,52],[61,52],[78,52],[10,80],[27,80],[44,80]],
   bullpen:    [[10,50],[23,50],[36,50],[50,50],[63,50],[76,50],[89,50],[10,82],[23,82],[36,82]],
   break:      [[25,55],[65,55],[25,82],[65,82]],
-  lounge:     [[12,52],[35,52],[60,52],[82,52],[12,80],[35,80],[60,80],[82,80]]
+  lounge:     [[15,40],[50,40],[85,40],[15,65],[50,65],[85,65],[15,88],[50,88],[85,88]]
 };
 var _slotIdx = {};
 
