@@ -1,0 +1,21 @@
+{
+  "lastUpdated": "2026-03-25T17:58:00-04:00",
+  "humans": {
+    "steve": {
+      "name": "Steve",
+      "initials": "SH",
+      "color": "#f5c842",
+      "lastActiveMs": 0,
+      "lastMessage": "Building the agency",
+      "channel": "#orders"
+    },
+    "jeff": {
+      "name": "Jeff",
+      "initials": "JV",
+      "color": "#60a5fa",
+      "lastActiveMs": 0,
+      "lastMessage": "Joined the team",
+      "channel": "#jeff-orders"
+    }
+  }
+}

@@ -470,6 +470,14 @@ main{flex:1;overflow:auto;padding:24px;}
     .agent-avatar-circle { width:36px; height:36px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:700; margin:0 auto; border:2px solid currentColor; }
   </style>
 
+  <!-- 👤 Leadership row -->
+  <div style="margin-bottom:16px;">
+    <div style="font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:10px;">👤 Leadership — Online</div>
+    <div style="display:flex;gap:10px;" id="humans-row">
+      <!-- populated by JS -->
+    </div>
+  </div>
+
   <!-- The room -->
   <div class="office-room" id="office-room">
     <!-- 🔨 Build Station -->
@@ -1927,13 +1935,39 @@ function closeDrawer() {
 // break   = next run ≤30 min, warming up
 // lounge  = idle / off-hours / sleeping
 
+var HUMANS = [
+  { id:'steve', name:'Steve', initials:'SH', color:'#f5c842', role:'Chairman · #orders', lastActiveMs: Date.now() - 60000, lastMessage:'Building the agency' },
+  { id:'jeff',  name:'Jeff',  initials:'JV', color:'#60a5fa', role:'Partner · #jeff-orders', lastActiveMs: Date.now() - 300000, lastMessage:'Joined the team' }
+];
+
+function isHumanActive(h) {
+  return (Date.now() - h.lastActiveMs) < 1800000; // active within 30 min
+}
+
+function renderHumans() {
+  var row = document.getElementById('humans-row');
+  if (!row) return;
+  row.innerHTML = HUMANS.map(function(h) {
+    var active = isHumanActive(h);
+    return '<div style="display:flex;align-items:center;gap:10px;background:var(--surface);border:1px solid ' + (active ? h.color : 'var(--border)') + ';border-radius:8px;padding:10px 14px;min-width:180px;">' +
+      '<div style="width:36px;height:36px;border-radius:50%;background:' + h.color + '22;border:2px solid ' + h.color + ';display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:' + h.color + ';flex-shrink:0;">' + h.initials + '</div>' +
+      '<div><div style="font-size:13px;font-weight:600;color:' + (active ? 'var(--text)' : 'var(--muted)') + ';">' + h.name + '</div>' +
+      '<div style="font-size:10px;color:var(--muted);">' + h.role + '</div>' +
+      '<div style="font-size:10px;color:' + h.color + ';margin-top:2px;">' + (active ? '🟢 Active' : '⚫ Away') + ' · ' + h.lastMessage + '</div></div>' +
+      '</div>';
+  }).join('');
+}
+
 var AGENTS = [
   { id:'cassy', name:'Cassy', initials:'CA', color:'#f5c842', role:'CEO + COO · Sonnet',
     // Cassy handles email monitor too — when email check fires she moves to comms
     getStatus: function() {
+      // Check if any human active in last 30 min
+      var anyHumanActive = HUMANS && HUMANS.some(function(h) { return isHumanActive(h); });
+      if (anyHumanActive) return { zone:'boardroom', anim:'typing', task:'In session with ' + (HUMANS.filter(function(h){return isHumanActive(h);}).map(function(h){return h.name;}).join(' + ')) };
       var m = new Date().getMinutes() % 5;
       if (m < 2) return { zone:'comms', anim:'typing', task:'Checking cassy@smarthub247.com inbox' };
-      return { zone:'management', anim:'typing', task:'Active · responding to Steve' };
+      return { zone:'management', anim:'typing', task:'Planning · no active sessions' };
     }
   },
   { id:'maxwell', name:'Maxwell', initials:'MA', color:'#22c55e', role:'CFO · GPT-mini · 8AM daily',
@@ -2102,9 +2136,9 @@ function officeTime() {
 }
 
 // Re-place agents every 60s so animations reflect current time
-setInterval(function(){ placeAgents(); renderActiveAgents(); }, 60000);
+setInterval(function(){ placeAgents(); renderActiveAgents(); renderHumans(); }, 60000);
 setInterval(officeTime, 10000);
-setTimeout(function(){ placeAgents(); officeTime(); renderActiveAgents(); }, 800);
+setTimeout(function(){ placeAgents(); officeTime(); renderActiveAgents(); renderHumans(); }, 800);
 // ─────────────────────────────────────────────────────
 
 function clock() {
