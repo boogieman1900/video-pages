@@ -154,6 +154,7 @@ main{flex:1;overflow:auto;padding:24px;}
 .docs-preview-meta { font-size:11px; color:var(--muted); margin-bottom:20px; }
 .docs-preview-body { font-size:13px; line-height:1.8; color:var(--text); white-space:pre-wrap; font-family:monospace; }
 .docs-chip { display:inline-block; padding:1px 7px; border-radius:10px; font-size:10px; font-weight:600; margin-left:6px; }
+@keyframes conveyor { from { transform:translateX(0); } to { transform:translateX(-50%); } }
 
 </style>
 </head>
@@ -183,6 +184,7 @@ main{flex:1;overflow:auto;padding:24px;}
   <div class="nav-item" onclick="show('orgchart',this)"><span class="icon">🏛️</span>Org Chart</div>
   <div class="nav-section">Content</div>
   <div class="nav-item" onclick="show('factory',this)"><span class="icon">🏢</span>The Agency</div>
+  <div class="nav-item" onclick="show('factory-floor',this)"><span class="icon">🏭</span>Factory</div>
   <div class="nav-section">Learning</div>
   <div class="nav-item" onclick="show('learning',this)"><span class="icon">🔭</span>Scout<span class="nav-badge" style="background:#a855f7;">NEW</span></div>
   <div class="nav-section">Analytics</div>
@@ -1523,10 +1525,23 @@ main{flex:1;overflow:auto;padding:24px;}
     <!-- Axel -->
     <div class="org-branch-col">
       <div class="org-connector"></div>
-      <div class="org-node">
-        <div class="on-emoji">🖥️</div>
-        <div class="on-name">Axel</div>
-        <div class="on-title">CIO</div>
+      <div style="display:flex;flex-direction:column;align-items:center;">
+        <div class="org-node">
+          <div class="on-emoji">🖥️</div>
+          <div class="on-name">Axel</div>
+          <div class="on-title">CIO</div>
+        </div>
+        <!-- Quinn under Axel -->
+        <div style="display:flex;justify-content:center;margin-top:8px;">
+          <div style="display:flex;flex-direction:column;align-items:center;">
+            <div style="width:2px;height:16px;background:var(--border);"></div>
+            <div class="org-node" style="border-color:rgba(232,121,249,0.4);">
+              <div class="on-emoji">🔍</div>
+              <div class="on-name">Quinn</div>
+              <div class="on-title" style="color:#e879f9;">QC Agent</div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
     <!-- June -->
@@ -1589,6 +1604,103 @@ main{flex:1;overflow:auto;padding:24px;}
     </div>
   </div>
 </div>
+</div>
+
+<div id="factory-floor" class="screen">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+    <div class="page-title" style="margin-bottom:0;">🏭 Factory Floor</div>
+    <div id="qc-fail-timer" style="font-size:12px;color:var(--muted);"></div>
+  </div>
+
+  <!-- Pipeline stations -->
+  <div style="background:#060f1e;border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:16px;overflow:hidden;">
+    <!-- Station row -->
+    <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:0;position:relative;margin-bottom:20px;">
+      
+      <!-- BREAK ROOM station -->
+      <div style="text-align:center;padding:0 8px;">
+        <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:8px;">☕ Break</div>
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:12px 8px;min-height:80px;display:flex;flex-direction:column;align-items:center;justify-content:center;">
+          <div style="font-size:9px;color:var(--muted);" id="station-break">Idle agents</div>
+        </div>
+      </div>
+
+      <!-- BUILD station -->
+      <div style="text-align:center;padding:0 8px;">
+        <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#3b82f6;margin-bottom:8px;">🔨 Build</div>
+        <div style="background:rgba(59,130,246,0.06);border:1px solid rgba(59,130,246,0.3);border-radius:8px;padding:12px 8px;min-height:80px;display:flex;flex-direction:column;align-items:center;justify-content:center;" id="station-build">
+          <div style="width:32px;height:32px;border-radius:50%;background:#3b82f622;border:2px solid #3b82f6;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#3b82f6;margin-bottom:6px;">FO</div>
+          <div style="font-size:10px;color:var(--muted);">Forge</div>
+          <div style="font-size:9px;color:#3b82f6;margin-top:4px;" id="build-task">On call</div>
+        </div>
+      </div>
+
+      <!-- QA station -->
+      <div style="text-align:center;padding:0 8px;">
+        <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#e879f9;margin-bottom:8px;">🔍 QA</div>
+        <div style="background:rgba(232,121,249,0.06);border:1px solid rgba(232,121,249,0.3);border-radius:8px;padding:12px 8px;min-height:80px;display:flex;flex-direction:column;align-items:center;justify-content:center;" id="station-qa">
+          <div style="width:32px;height:32px;border-radius:50%;background:#e879f922;border:2px solid #e879f9;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#e879f9;margin-bottom:6px;">QU</div>
+          <div style="font-size:10px;color:var(--muted);">Quinn</div>
+          <div style="font-size:9px;color:#e879f9;margin-top:4px;" id="qa-task">Waiting for build</div>
+        </div>
+      </div>
+
+      <!-- REVIEW station -->
+      <div style="text-align:center;padding:0 8px;">
+        <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">✅ Review</div>
+        <div style="background:rgba(245,200,66,0.05);border:1px solid rgba(245,200,66,0.25);border-radius:8px;padding:12px 8px;min-height:80px;display:flex;flex-direction:column;align-items:center;justify-content:center;" id="station-review">
+          <div style="width:32px;height:32px;border-radius:50%;background:#f5c84222;border:2px solid #f5c842;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#f5c842;margin-bottom:6px;">CA</div>
+          <div style="font-size:10px;color:var(--muted);">Cassy</div>
+          <div style="font-size:9px;color:var(--gold);margin-top:4px;" id="review-task">Awaiting QC</div>
+        </div>
+      </div>
+
+      <!-- SHIP station -->
+      <div style="text-align:center;padding:0 8px;">
+        <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--green);margin-bottom:8px;">🚀 Ship</div>
+        <div style="background:rgba(34,197,94,0.05);border:1px solid rgba(34,197,94,0.2);border-radius:8px;padding:12px 8px;min-height:80px;display:flex;flex-direction:column;align-items:center;justify-content:center;" id="station-ship">
+          <div style="font-size:22px;margin-bottom:4px;">📦</div>
+          <div style="font-size:9px;color:var(--muted);" id="ship-count">0 today</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Conveyor belt -->
+    <div style="position:relative;height:16px;background:rgba(255,255,255,0.03);border-radius:4px;overflow:hidden;margin:0 -20px;">
+      <div id="conveyor-belt" style="position:absolute;top:0;left:0;width:200%;height:100%;background:repeating-linear-gradient(90deg,transparent,transparent 20px,rgba(255,255,255,0.05) 20px,rgba(255,255,255,0.05) 40px);animation:conveyor 2s linear infinite;"></div>
+    </div>
+  </div>
+
+  <!-- Backlog -->
+  <div class="card" style="margin-bottom:16px;">
+    <div style="font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:12px;">📋 Backlog</div>
+    <div id="factory-backlog" style="color:var(--muted);font-size:12px;">Queue empty — all caught up.</div>
+  </div>
+
+  <!-- Stats bar -->
+  <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:12px;">
+    <div class="card" style="text-align:center;padding:12px 8px;">
+      <div style="font-size:22px;font-weight:700;color:var(--green);" id="factory-shipped">12</div>
+      <div style="font-size:10px;color:var(--muted);">Shipped Today</div>
+    </div>
+    <div class="card" style="text-align:center;padding:12px 8px;">
+      <div style="font-size:22px;font-weight:700;color:var(--blue);" id="factory-inprogress">0</div>
+      <div style="font-size:10px;color:var(--muted);">In Progress</div>
+    </div>
+    <div class="card" style="text-align:center;padding:12px 8px;">
+      <div style="font-size:22px;font-weight:700;color:var(--muted);" id="factory-backlog-count">0</div>
+      <div style="font-size:10px;color:var(--muted);">Backlog</div>
+    </div>
+    <div class="card" style="text-align:center;padding:12px 8px;">
+      <div style="font-size:22px;font-weight:700;color:var(--red);" id="factory-blocked">0</div>
+      <div style="font-size:10px;color:var(--muted);">Blocked</div>
+    </div>
+    <div class="card" style="text-align:center;padding:12px 8px;border-color:rgba(232,121,249,0.3);">
+      <div style="font-size:22px;font-weight:700;color:#e879f9;" id="qc-hours">0h</div>
+      <div style="font-size:10px;color:var(--muted);">⏱️ Since QC Fail</div>
+      <div style="font-size:9px;color:var(--muted);margin-top:2px;">Goal: 24h</div>
+    </div>
+  </div>
 </div>
 
 </main>
@@ -2041,6 +2153,14 @@ var AGENTS = [
       return { zone:'lounge', anim:'sleeping', task:'On call · 3 Kitchener properties' };
     }
   }
+  ,
+  { id:'quinn', name:'Quinn', initials:'QU', color:'#e879f9', role:'QC Agent · Reports to Axel',
+    getStatus: function() {
+      // Quinn is active when there's something in QC review (check pipeline-state.json via fetch)
+      // For now: Quinn is in lounge (no active builds in QC right now)
+      return { zone:'lounge', anim:'sleeping', task:'On call · waiting for builds to review' };
+    }
+  }
 ];
 
 // Zone spawn coordinates [x%, y%] within each zone element
@@ -2063,7 +2183,7 @@ function placeAgents() {
   if (!room) return;
   // Remove old sprites
   room.querySelectorAll('.agent-sprite').forEach(function(el){ el.remove(); });
-  _slotIdx = { build:0, studio:0, library:0, management:0, comms:0, ops:0, boardroom:0, bullpen:0, break:0, lounge:0 };
+  _slotIdx = { build:0, studio:0, library:0, management:0, comms:0, ops:0, boardroom:0, bullpen:0, break:0, lounge:0, quinn:0 };
 
   AGENTS.forEach(function(agent) {
     var st = agent.getStatus();
@@ -2828,12 +2948,40 @@ function docsInit() {
   if (defaultIdx >= 0) docsSelectFile(defaultIdx);
 }
 
+function updateQCTimer() {
+  fetch('../qc-state.json?t=' + Date.now())
+    .then(function(r){ return r.json(); })
+    .then(function(d) {
+      var lastFail = d.lastFailMs || 0;
+      var hours = Math.floor((Date.now() - lastFail) / 3600000);
+      var el = document.getElementById('qc-hours');
+      var timerEl = document.getElementById('qc-fail-timer');
+      if (el) {
+        el.textContent = hours + 'h';
+        el.style.color = hours >= 24 ? '#22c55e' : (hours >= 12 ? '#eab308' : '#e879f9');
+      }
+      if (timerEl) {
+        timerEl.textContent = '⏱️ ' + hours + 'h since last QC fail · goal: 24h';
+        timerEl.style.color = hours >= 24 ? 'var(--green)' : 'var(--muted)';
+      }
+      var shipEl = document.getElementById('factory-shipped');
+      if (shipEl && d.history) {
+        // count today's shipped from pipeline-state
+      }
+    }).catch(function(){});
+}
+setInterval(updateQCTimer, 60000);
+setTimeout(updateQCTimer, 1000);
+
 // Patch show() to init docs on first load
 var _origShow = show;
 show = function(id, el) {
   _origShow(id, el);
   if (id === 'factory') {
     setTimeout(function(){ placeAgents(); renderActiveAgents(); renderHumans(); officeTime(); }, 100);
+  }
+  if (id === 'factory-floor') {
+    setTimeout(updateQCTimer, 100);
   }
   if (id === 'docs') {
     setTimeout(docsInit, 50);
