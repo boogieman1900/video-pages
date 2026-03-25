@@ -156,6 +156,7 @@ main{flex:1;overflow:auto;padding:24px;}
   <div class="nav-item" onclick="show('tasks',this)"><span class="icon">📋</span>Tasks<span class="nav-badge">3</span></div>
   <div class="nav-item" onclick="show('approvals',this)"><span class="icon">✅</span>Approvals<span class="nav-badge">2</span></div>
   <div class="nav-item" onclick="show('pipeline',this)"><span class="icon">💼</span>Pipeline</div>
+  <div class="nav-item" onclick="show('schedule',this)"><span class="icon">📅</span>Schedule</div>
   <div class="nav-section">Intelligence</div>
   <div class="nav-item" onclick="show('kpis',this)"><span class="icon">📊</span>KPIs</div>
   <div class="nav-item" onclick="show('office',this)"><span class="icon">🏢</span>Office</div>
@@ -1126,6 +1127,126 @@ main{flex:1;overflow:auto;padding:24px;}
     </div>
   </div>
 </div>
+
+<!-- ══════════════════════════════════════════════ SCHEDULE SCREEN -->
+<div id="screen-schedule" class="screen">
+  <div class="page-title">📅 Schedule</div>
+
+  <!-- Always Running Section -->
+  <div style="background:var(--surface2);padding:14px 18px;border-radius:10px;margin-bottom:20px;border:1px solid var(--border);">
+    <div style="font-size:10px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:12px;">⚡ Always Running</div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;">
+      <div style="display:flex;align-items:center;gap:7px;background:rgba(59,130,246,0.12);border:1px solid rgba(59,130,246,0.3);border-radius:20px;padding:5px 12px;">
+        <span style="width:7px;height:7px;border-radius:50%;background:#3b82f6;display:inline-block;animation:pulse 2s infinite;"></span>
+        <span style="font-size:12px;color:#3b82f6;font-weight:600;">Email Monitor</span>
+        <span style="font-size:10px;color:var(--muted);">· every 5 min</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:7px;background:rgba(16,185,129,0.12);border:1px solid rgba(16,185,129,0.3);border-radius:20px;padding:5px 12px;">
+        <span style="width:7px;height:7px;border-radius:50%;background:#10b981;display:inline-block;animation:pulse 2s infinite;"></span>
+        <span style="font-size:12px;color:#10b981;font-weight:600;">Approval Sync</span>
+        <span style="font-size:10px;color:var(--muted);">· every 1h</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:7px;background:rgba(168,85,247,0.12);border:1px solid rgba(168,85,247,0.3);border-radius:20px;padding:5px 12px;">
+        <span style="width:7px;height:7px;border-radius:50%;background:#a855f7;display:inline-block;animation:pulse 2s infinite;"></span>
+        <span style="font-size:12px;color:#a855f7;font-weight:600;">Scout</span>
+        <span style="font-size:10px;color:var(--muted);">· every 6h</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Weekly Calendar Grid -->
+  <div style="font-size:10px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:12px;">📆 This Week</div>
+  <div id="cal-grid" style="display:grid;grid-template-columns:repeat(7,1fr);gap:8px;"></div>
+
+  <style>
+    .cal-col { background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:10px; min-height:160px; }
+    .cal-col.today { border-color:rgba(245,200,66,0.6); background:rgba(245,200,66,0.04); }
+    .cal-col-header { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:1px; color:var(--muted); margin-bottom:8px; padding-bottom:6px; border-bottom:1px solid var(--border); text-align:center; }
+    .cal-col.today .cal-col-header { color:var(--gold); }
+    .cal-col.today .cal-col-day { color:var(--gold); }
+    .cal-col-day { font-size:18px; font-weight:700; text-align:center; margin-bottom:6px; color:var(--text); }
+    .cal-card { border-radius:6px; padding:6px 8px; margin-bottom:5px; font-size:11px; }
+    .cal-card .task-name { font-weight:600; color:var(--text); line-height:1.3; }
+    .cal-card .task-time { color:var(--muted); font-size:10px; margin-top:2px; }
+    .cal-card .task-tag { font-size:9px; color:var(--muted); letter-spacing:1px; text-transform:uppercase; margin-top:3px; }
+  </style>
+</div>
+
+<script>
+(function buildCalendar() {
+  var days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  var today = new Date().getDay(); // 0=Sun
+  var date = new Date();
+  // Find start of this week (Sunday)
+  var startOfWeek = new Date(date);
+  startOfWeek.setDate(date.getDate() - today);
+
+  // Task definitions
+  var dailyTasks = [
+    { emoji:'🔭', name:'Scout Run', time:'6:00 AM', agent:'Scout', color:'#a855f7', rgb:'168,85,247' },
+    { emoji:'🧮', name:'KPI Scorecard', time:'8:00 AM', agent:'Maxwell', color:'#22c55e', rgb:'34,197,94' },
+    { emoji:'🎬', name:'Daily Vlog', time:'8:00 AM', agent:'Remi', color:'#f97316', rgb:'249,115,22' },
+    { emoji:'🔭', name:'Scout Run', time:'12:00 PM', agent:'Scout', color:'#a855f7', rgb:'168,85,247' },
+    { emoji:'🔭', name:'Scout Run', time:'6:00 PM', agent:'Scout', color:'#a855f7', rgb:'168,85,247' },
+  ];
+  var weekdayTasks = [
+    { emoji:'⚙️', name:'Background Tasks', time:'9:00 AM', agent:'BG Queue', color:'#6366f1', rgb:'99,102,241' },
+    { emoji:'⚙️', name:'Background Tasks', time:'12:00 PM', agent:'BG Queue', color:'#6366f1', rgb:'99,102,241' },
+    { emoji:'⚙️', name:'Background Tasks', time:'3:00 PM', agent:'BG Queue', color:'#6366f1', rgb:'99,102,241' },
+  ];
+
+  var grid = document.getElementById('cal-grid');
+  if (!grid) return;
+  grid.innerHTML = '';
+
+  for (var d = 0; d < 7; d++) {
+    var colDate = new Date(startOfWeek);
+    colDate.setDate(startOfWeek.getDate() + d);
+    var isToday = (d === today);
+    var isWeekday = (d >= 1 && d <= 5);
+
+    var col = document.createElement('div');
+    col.className = 'cal-col' + (isToday ? ' today' : '');
+
+    var dayNum = colDate.getDate();
+    col.innerHTML = '<div class="cal-col-header">' + days[d] + '</div>'
+      + '<div class="cal-col-day">' + dayNum + '</div>';
+
+    // Render tasks
+    var tasks = dailyTasks.slice();
+    if (isWeekday) tasks = tasks.concat(weekdayTasks);
+    // Sort by time
+    tasks.sort(function(a, b) {
+      return parseTime(a.time) - parseTime(b.time);
+    });
+
+    for (var t = 0; t < tasks.length; t++) {
+      var task = tasks[t];
+      var card = document.createElement('div');
+      card.className = 'cal-card';
+      card.style.borderLeft = '3px solid ' + task.color;
+      card.style.background = 'rgba(' + task.rgb + ',0.09)';
+      card.innerHTML = '<div class="task-name">' + task.emoji + ' ' + task.name + '</div>'
+        + '<div class="task-time">' + task.time + ' · ' + task.agent + '</div>'
+        + '<div class="task-tag">Recurring</div>';
+      col.appendChild(card);
+    }
+
+    grid.appendChild(col);
+  }
+
+  function parseTime(t) {
+    var parts = t.match(/(\d+):(\d+)\s*(AM|PM)/i);
+    if (!parts) return 0;
+    var h = parseInt(parts[1]);
+    var m = parseInt(parts[2]);
+    var ampm = parts[3].toUpperCase();
+    if (ampm === 'PM' && h !== 12) h += 12;
+    if (ampm === 'AM' && h === 12) h = 0;
+    return h * 60 + m;
+  }
+})();
+</script>
 
 </main>
 </div>
