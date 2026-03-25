@@ -423,16 +423,17 @@ main{flex:1;overflow:auto;padding:24px;}
     /* Zone backgrounds — CSS grid approach for clean layout */
     .zone { position:absolute; border-radius:8px; }
     /* TOP ROW — 4 zones ~24% each */
-    .zone-build      { left:1%;   top:16px;  width:23%; height:210px; background:rgba(59,130,246,0.07);  border:1px solid rgba(59,130,246,0.25); }
-    .zone-studio     { left:25%;  top:16px;  width:23%; height:210px; background:rgba(239,68,68,0.06);   border:1px solid rgba(239,68,68,0.25); }
-    .zone-library    { left:49%;  top:16px;  width:23%; height:210px; background:rgba(168,85,247,0.06);  border:1px solid rgba(168,85,247,0.25); }
-    .zone-management { left:73%;  top:16px;  width:13%; height:210px; background:rgba(245,200,66,0.07);  border:1px solid rgba(245,200,66,0.3); }
+    .zone-build      { left:1%;   top:16px;  width:28%; height:210px; background:rgba(59,130,246,0.07);  border:1px solid rgba(59,130,246,0.25); }
+    .zone-studio     { left:30%;  top:16px;  width:20%; height:210px; background:rgba(239,68,68,0.06);   border:1px solid rgba(239,68,68,0.25); }
+    .zone-library    { left:51%;  top:16px;  width:20%; height:210px; background:rgba(168,85,247,0.06);  border:1px solid rgba(168,85,247,0.25); }
+    .zone-management { left:72%;  top:16px;  width:27%; height:210px; background:rgba(245,200,66,0.07);  border:1px solid rgba(245,200,66,0.3); }
     .zone-comms      { left:87%;  top:16px;  width:12%; height:210px; background:rgba(34,197,94,0.06);   border:1px solid rgba(34,197,94,0.25); }
     /* BOTTOM ROW — ops 35%, boardroom 23%, break 17%, lounge 21% */
-    .zone-ops        { left:1%;   top:242px; width:35%; height:255px; background:rgba(34,197,94,0.05);   border:1px solid rgba(34,197,94,0.2); }
-    .zone-boardroom  { left:37%;  top:242px; width:23%; height:255px; background:rgba(20,184,166,0.06);  border:1px solid rgba(20,184,166,0.25); }
-    .zone-break      { left:61%;  top:242px; width:17%; height:255px; background:rgba(245,200,66,0.05);  border:1px solid rgba(245,200,66,0.18); }
-    .zone-lounge     { left:79%;  top:242px; width:20%; height:255px; background:rgba(100,116,139,0.05); border:1px solid rgba(100,116,139,0.18); }
+    .zone-ops        { left:1%;   top:242px; width:22%; height:240px; background:rgba(34,197,94,0.05);   border:1px solid rgba(34,197,94,0.2); }
+    .zone-bullpen    { left:24%;  top:242px; width:38%; height:240px; background:rgba(251,146,60,0.05);  border:1px solid rgba(251,146,60,0.2); }
+    .zone-boardroom  { left:63%;  top:242px; width:20%; height:240px; background:rgba(20,184,166,0.06);  border:1px solid rgba(20,184,166,0.25); }
+    .zone-break      { left:84%;  top:242px; width:8%;  height:115px; background:rgba(245,200,66,0.05);  border:1px solid rgba(245,200,66,0.12); }
+    .zone-lounge     { left:84%;  top:369px; width:8%;  height:113px; background:rgba(100,116,139,0.05); border:1px solid rgba(100,116,139,0.12); }
     .zone-label   { position:absolute; top:8px; left:10px; font-size:9px; letter-spacing:1.5px; text-transform:uppercase; opacity:0.5; }
 
     /* Desks */
@@ -552,6 +553,18 @@ main{flex:1;overflow:auto;padding:24px;}
       <div style="position:absolute;left:50%;top:130px;transform:translateX(-50%);width:10px;height:10px;border-radius:50%;background:rgba(20,184,166,0.3);margin-left:-40px;"></div>
       <div style="position:absolute;left:50%;top:130px;transform:translateX(-50%);width:10px;height:10px;border-radius:50%;background:rgba(20,184,166,0.3);margin-left:-5px;"></div>
       <div style="position:absolute;left:50%;top:130px;transform:translateX(-50%);width:10px;height:10px;border-radius:50%;background:rgba(20,184,166,0.3);margin-left:30px;"></div>
+    </div>
+    <!-- 💼 Sales Bullpen — 8 desks for sales reps -->
+    <div class="zone zone-bullpen">
+      <div class="zone-label" style="color:rgba(251,146,60,0.9);">💼 Sales Bullpen</div>
+      <div class="desk-obj" style="left:8px;top:52px;"></div>
+      <div class="desk-obj" style="left:62px;top:52px;"></div>
+      <div class="desk-obj" style="left:116px;top:52px;"></div>
+      <div class="desk-obj" style="left:170px;top:52px;"></div>
+      <div class="desk-obj" style="left:8px;top:130px;"></div>
+      <div class="desk-obj" style="left:62px;top:130px;"></div>
+      <div class="desk-obj" style="left:116px;top:130px;"></div>
+      <div class="desk-obj" style="left:170px;top:130px;"></div>
     </div>
     <!-- Agents injected by JS -->
   </div>
@@ -2047,6 +2060,7 @@ var ZONE_SLOTS = {
   boardroom:  [[20,55],[50,55],[80,55],[20,80],[50,80],[80,80]],
   library:    [[15,55],[48,55],[80,55],[15,82],[48,82],[80,82]],
   ops:        [[10,52],[27,52],[44,52],[61,52],[78,52],[10,80],[27,80],[44,80]],
+  bullpen:    [[10,50],[23,50],[36,50],[50,50],[63,50],[76,50],[89,50],[10,82],[23,82],[36,82]],
   break:      [[25,55],[65,55],[25,82],[65,82]],
   lounge:     [[12,52],[35,52],[60,52],[82,52],[12,80],[35,80],[60,80],[82,80]]
 };
@@ -2057,7 +2071,7 @@ function placeAgents() {
   if (!room) return;
   // Remove old sprites
   room.querySelectorAll('.agent-sprite').forEach(function(el){ el.remove(); });
-  _slotIdx = { build:0, studio:0, library:0, management:0, comms:0, ops:0, boardroom:0, break:0, lounge:0 };
+  _slotIdx = { build:0, studio:0, library:0, management:0, comms:0, ops:0, boardroom:0, bullpen:0, break:0, lounge:0 };
 
   AGENTS.forEach(function(agent) {
     var st = agent.getStatus();
@@ -2095,8 +2109,8 @@ function placeAgents() {
     room.appendChild(sprite);
 
     // Mini card
-    var statusColors = { build:'var(--blue)', studio:'var(--red)', library:'#a855f7', ops:'var(--green)', comms:'var(--green)', management:'var(--gold)', boardroom:'#14b8a6', break:'var(--yellow)', lounge:'var(--muted)' };
-    var statusLabels = { build:'🔨 Building', studio:'🎙️ On Air', library:'📚 Researching', ops:'⚙️ Ops Running', comms:'📧 Comms', management:'💼 Planning', boardroom:'🪑 In Meeting', break:'☕ Up Soon', lounge:'💤 Idle' };
+    var statusColors = { build:'var(--blue)', studio:'var(--red)', library:'#a855f7', ops:'var(--green)', comms:'var(--green)', management:'var(--gold)', boardroom:'#14b8a6', bullpen:'#fb923c', break:'var(--yellow)', lounge:'var(--muted)' };
+    var statusLabels = { build:'🔨 Building', studio:'🎙️ On Air', library:'📚 Researching', ops:'⚙️ Ops Running', comms:'📧 Comms', management:'💼 Planning', boardroom:'🪑 In Meeting', bullpen:'💼 Selling', break:'☕ Up Soon', lounge:'💤 Idle' };
     // Studio ON AIR light
     var studioOccupied = AGENTS.some(function(a){ return a.getStatus().zone==='studio'; });
     var studioLight = document.getElementById('studio-light');
@@ -2147,7 +2161,7 @@ function renderActiveAgents() {
     grid.innerHTML = '<div style="color:var(--muted);font-size:13px;padding:20px;">All agents idle right now.</div>';
     return;
   }
-  var zoneLabels = { build:'🔨 Building', studio:'🎙️ On Air', library:'📚 Researching', ops:'⚙️ Ops Running', comms:'📧 Comms', management:'💼 Planning', boardroom:'🪑 In Meeting', break:'☕ Up Soon', lounge:'💤 Idle' };
+  var zoneLabels = { build:'🔨 Building', studio:'🎙️ On Air', library:'📚 Researching', ops:'⚙️ Ops Running', comms:'📧 Comms', management:'💼 Planning', boardroom:'🪑 In Meeting', bullpen:'💼 Selling', break:'☕ Up Soon', lounge:'💤 Idle' };
   grid.innerHTML = active.map(function(a) {
     var st = a.getStatus();
     return '<div class="agent-mini" style="border-left:3px solid ' + a.color + ';">' +
@@ -2164,7 +2178,7 @@ function officeTime() {
   if (el) {
     var now = new Date();
     var h = now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',timeZone:'America/Toronto'});
-    var active = AGENTS.filter(function(a){ var z=a.getStatus().zone; return z==='build'||z==='studio'||z==='library'||z==='ops'||z==='management'||z==='boardroom'; }).length;
+    var active = AGENTS.filter(function(a){ var z=a.getStatus().zone; return z==='build'||z==='studio'||z==='library'||z==='ops'||z==='management'||z==='boardroom'||z==='bullpen'; }).length;
     var idle   = AGENTS.filter(function(a){ return a.getStatus().zone==='lounge'; }).length;
     var soon   = AGENTS.filter(function(a){ return a.getStatus().zone==='break'; }).length;
     el.textContent = h + ' EDT  ·  🔨 ' + active + ' active  ·  ☕ ' + soon + ' up soon  ·  💤 ' + idle + ' idle';
