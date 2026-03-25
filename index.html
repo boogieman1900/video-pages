@@ -182,7 +182,7 @@ main{flex:1;overflow:auto;padding:24px;}
   <div class="nav-item" onclick="show('office',this)"><span class="icon">🏢</span>Office</div>
   <div class="nav-item" onclick="show('orgchart',this)"><span class="icon">🏛️</span>Org Chart</div>
   <div class="nav-section">Content</div>
-  <div class="nav-item" onclick="show('factory',this)"><span class="icon">🎬</span>Factory</div>
+  <div class="nav-item" onclick="show('factory',this)"><span class="icon">🏢</span>The Agency</div>
   <div class="nav-section">Learning</div>
   <div class="nav-item" onclick="show('learning',this)"><span class="icon">🔭</span>Scout<span class="nav-badge" style="background:#a855f7;">NEW</span></div>
   <div class="nav-section">Analytics</div>
@@ -466,6 +466,7 @@ main{flex:1;overflow:auto;padding:24px;}
     .agent-mini-icon { font-size:20px; }
     .agent-mini-name { font-size:12px; font-weight:600; }
     .agent-mini-status { font-size:10px; color:var(--muted); }
+    .agent-avatar-circle { width:36px; height:36px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:700; margin:0 auto; border:2px solid currentColor; }
   </style>
 
   <!-- The room -->
@@ -541,8 +542,11 @@ main{flex:1;overflow:auto;padding:24px;}
     <!-- Agents injected by JS -->
   </div>
 
-  <!-- Agent cards -->
-  <div class="agent-grid" id="agent-mini-grid"></div>
+  <!-- Currently Working -->
+  <div style="margin-top:14px;">
+    <div style="font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:10px;">⚡ Currently Working</div>
+    <div class="agent-grid" id="active-agents-grid"></div>
+  </div>
 </div>
 
 <div id="capacity" class="screen">
@@ -1918,7 +1922,7 @@ function closeDrawer() {
 // lounge  = idle / off-hours / sleeping
 
 var AGENTS = [
-  { id:'cassy', name:'Cassy', emoji:'💼', role:'Main Agent · Sonnet', color:'#f5c842',
+  { id:'cassy', name:'Cassy', emoji:'💼', initials:'CA', role:'Main Agent · Sonnet', color:'#f5c842',
     getStatus: function() {
       // If 3+ other agents are in active zones, Cassy moves to boardroom for team briefing
       var activeOthers = AGENTS.slice(1).filter(function(a){
@@ -1929,7 +1933,7 @@ var AGENTS = [
       return { zone:'management', anim:'typing', task:'Planning + executive oversight' };
     }
   },
-  { id:'email', name:'Email Mon.', emoji:'📧', role:'Every 5m · GPT-mini', color:'#3b82f6',
+  { id:'email', name:'Email Mon.', emoji:'📧', initials:'EM', role:'Every 5m · GPT-mini', color:'#3b82f6',
     getStatus: function() {
       var m = new Date().getMinutes() % 5;
       if (m < 2)  return { zone:'ops',    anim:'typing',   task:'Reading + replying to inbox NOW' };
@@ -1937,7 +1941,7 @@ var AGENTS = [
       return              { zone:'lounge', anim:'sleeping', task:'Next check in ' + (5-m) + ' min' };
     }
   },
-  { id:'kpi', name:'KPI Reporter', emoji:'📊', role:'8AM daily · GPT-mini', color:'#22c55e',
+  { id:'kpi', name:'KPI Reporter', emoji:'📊', initials:'KP', role:'8AM daily · GPT-mini', color:'#22c55e',
     getStatus: function() {
       var h = new Date().getHours(), m = new Date().getMinutes();
       if (h===8 && m<20)  return { zone:'ops',    anim:'typing',   task:'Posting daily KPI scorecard NOW' };
@@ -1945,7 +1949,7 @@ var AGENTS = [
       return                      { zone:'lounge', anim:'sleeping', task:'Off-hours · next run 8:00 AM' };
     }
   },
-  { id:'vlog', name:'Daily Vlog', emoji:'🎬', role:'8AM daily · Groq', color:'#f97316',
+  { id:'vlog', name:'Daily Vlog', emoji:'🎬', initials:'DV', role:'8AM daily · Groq', color:'#f97316',
     getStatus: function() {
       var h = new Date().getHours(), m = new Date().getMinutes();
       if (h===8 && m<35)  return { zone:'studio', anim:'typing',   task:'Generating Steve\'s vlog video NOW' };
@@ -1953,7 +1957,7 @@ var AGENTS = [
       return                      { zone:'lounge', anim:'sleeping', task:'Off-hours · next run 8:00 AM' };
     }
   },
-  { id:'bgtask', name:'Bg. Tasks', emoji:'⚙️', role:'9,12,15h · Groq', color:'#6366f1',
+  { id:'bgtask', name:'Bg. Tasks', emoji:'⚙️', initials:'BG', role:'9,12,15h · Groq', color:'#6366f1',
     getStatus: function() {
       var h = new Date().getHours(), m = new Date().getMinutes(), d = new Date().getDay();
       var isWeekday = d>=1&&d<=5;
@@ -1964,7 +1968,7 @@ var AGENTS = [
       return   { zone:'lounge', anim:'sleeping', task:'Off-hours · Mon-Fri 9/12/15h' };
     }
   },
-  { id:'scout', name:'Scout', emoji:'🔭', role:'Every 6h · Groq', color:'#a855f7',
+  { id:'scout', name:'Scout', emoji:'🔭', initials:'SC', role:'Every 6h · Groq', color:'#a855f7',
     getStatus: function() {
       var h = new Date().getHours(), m = new Date().getMinutes(), slotH = h % 6;
       if (slotH===0 && m<25)  return { zone:'library', anim:'researching', task:'Scanning ClawHub + sessions NOW' };
@@ -1972,7 +1976,7 @@ var AGENTS = [
       return                          { zone:'lounge',  anim:'sleeping',    task:'Next scan in ~' + (6-slotH) + 'h' };
     }
   },
-  { id:'approval', name:'Approval Sync', emoji:'✅', role:'Every 1h · Groq', color:'#10b981',
+  { id:'approval', name:'Approval Sync', emoji:'✅', initials:'AP', role:'Every 1h · Groq', color:'#10b981',
     getStatus: function() {
       var m = new Date().getMinutes();
       if (m < 8)   return { zone:'ops',    anim:'typing',   task:'Checking #approve-or-kill reactions NOW' };
@@ -1980,7 +1984,7 @@ var AGENTS = [
       return               { zone:'lounge', anim:'sleeping', task:'Next sync in ~' + (60-m) + ' min' };
     }
   },
-  { id:'remi', name:'Remi', emoji:'📊', role:'Marketing Coordinator · Sonnet', color:'#f472b6',
+  { id:'remi', name:'Remi', emoji:'📊', initials:'RE', role:'Marketing Coordinator · Sonnet', color:'#f472b6',
     getStatus: function() {
       // Remi is actively researching hooks right now — runs as needed
       var h = new Date().getHours();
@@ -2006,11 +2010,9 @@ var _slotIdx = {};
 
 function placeAgents() {
   var room = document.getElementById('office-room');
-  var miniGrid = document.getElementById('agent-mini-grid');
-  if (!room || !miniGrid) return;
+  if (!room) return;
   // Remove old sprites
   room.querySelectorAll('.agent-sprite').forEach(function(el){ el.remove(); });
-  miniGrid.innerHTML = '';
   _slotIdx = { build:0, studio:0, library:0, management:0, ops:0, boardroom:0, break:0, lounge:0 };
 
   AGENTS.forEach(function(agent) {
@@ -2037,7 +2039,9 @@ function placeAgents() {
     sprite.style.left  = px + 'px';
     sprite.style.top   = py + 'px';
     sprite.innerHTML =
-      '<div class="agent-body anim-' + st.anim + '">' + agent.emoji + '</div>' +
+      '<div class="agent-body anim-' + st.anim + '">' +
+        '<div class="agent-avatar-circle" style="color:' + agent.color + ';border-color:' + agent.color + ';background:' + agent.color + '22;">' + agent.initials + '</div>' +
+      '</div>' +
       '<div class="agent-label" style="color:' + agent.color + ';">' + agent.name + '</div>' +
       '<div class="agent-tooltip">' +
         '<strong>' + agent.name + '</strong><br>' +
@@ -2056,16 +2060,30 @@ function placeAgents() {
       studioLight.style.background = studioOccupied ? '#ef4444' : 'rgba(239,68,68,0.15)';
       studioLight.style.boxShadow  = studioOccupied ? '0 0 8px #ef4444' : 'none';
     }
-    var mini = document.createElement('div');
-    mini.className = 'agent-mini';
-    mini.innerHTML =
-      '<div class="agent-mini-icon">' + agent.emoji + '</div>' +
-      '<div><div class="agent-mini-name">' + agent.name + '</div>' +
-      '<div class="agent-mini-status" style="color:' + statusColors[zone] + ';">' +
-        statusLabels[zone] + ' · ' + st.task.substring(0,28) + (st.task.length>28?'…':'') +
-      '</div></div>';
-    miniGrid.appendChild(mini);
   });
+  renderActiveAgents();
+}
+
+function renderActiveAgents() {
+  var grid = document.getElementById('active-agents-grid');
+  if (!grid) return;
+  var active = AGENTS.filter(function(a) {
+    return a.getStatus().zone !== 'lounge';
+  });
+  if (active.length === 0) {
+    grid.innerHTML = '<div style="color:var(--muted);font-size:13px;padding:20px;">All agents idle right now.</div>';
+    return;
+  }
+  var zoneLabels = { build:'🔨 Building', studio:'🎙️ On Air', library:'📚 Researching', ops:'⚙️ Ops Running', break:'☕ Up Soon', management:'💼 Planning', boardroom:'🪑 In Meeting' };
+  grid.innerHTML = active.map(function(a) {
+    var st = a.getStatus();
+    return '<div class="agent-mini" style="border-left:3px solid ' + a.color + ';">' +
+      '<div class="agent-avatar-circle" style="color:' + a.color + ';border-color:' + a.color + ';background:' + a.color + '22;width:32px;height:32px;font-size:11px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0;">' + a.initials + '</div>' +
+      '<div><div class="agent-mini-name">' + a.name + '</div>' +
+      '<div class="agent-mini-status" style="color:' + a.color + ';">' + (zoneLabels[st.zone] || st.zone) + '</div>' +
+      '<div style="font-size:10px;color:var(--muted);">' + st.task + '</div></div>' +
+      '</div>';
+  }).join('');
 }
 
 function officeTime() {
@@ -2081,9 +2099,9 @@ function officeTime() {
 }
 
 // Re-place agents every 60s so animations reflect current time
-setInterval(placeAgents, 60000);
+setInterval(function(){ placeAgents(); renderActiveAgents(); }, 60000);
 setInterval(officeTime, 10000);
-setTimeout(function(){ placeAgents(); officeTime(); }, 800);
+setTimeout(function(){ placeAgents(); officeTime(); renderActiveAgents(); }, 800);
 // ─────────────────────────────────────────────────────
 
 function clock() {
