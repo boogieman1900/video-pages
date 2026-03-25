@@ -180,6 +180,7 @@ main{flex:1;overflow:auto;padding:24px;}
   <div class="nav-section">Intelligence</div>
   <div class="nav-item" onclick="show('kpis',this)"><span class="icon">📊</span>KPIs</div>
   <div class="nav-item" onclick="show('office',this)"><span class="icon">🏢</span>Office</div>
+  <div class="nav-item" onclick="show('orgchart',this)"><span class="icon">🏛️</span>Org Chart</div>
   <div class="nav-section">Content</div>
   <div class="nav-item" onclick="show('factory',this)"><span class="icon">🎬</span>Factory</div>
   <div class="nav-section">Learning</div>
@@ -1404,6 +1405,161 @@ main{flex:1;overflow:auto;padding:24px;}
   }
 })();
 </script>
+
+<!-- ORG CHART SCREEN -->
+<div id="orgchart" class="screen">
+<div class="page-title">🏛️ Org Chart</div>
+<style>
+.org-node { background:var(--surface); border:1px solid var(--border); border-radius:8px; padding:10px 14px; text-align:center; min-width:90px; cursor:default; transition:border-color 0.15s; }
+.org-node:hover { border-color:rgba(245,200,66,0.4); }
+.org-node .on-emoji { font-size:20px; }
+.org-node .on-name { font-size:12px; font-weight:600; color:var(--text); margin-top:4px; }
+.org-node .on-title { font-size:9px; color:var(--muted); letter-spacing:0.5px; text-transform:uppercase; }
+.org-row { display:flex; justify-content:center; gap:8px; flex-wrap:wrap; }
+.org-connector { display:flex; justify-content:center; }
+.org-connector::before { content:''; display:block; width:2px; height:20px; background:var(--border); }
+.org-node-steve { border-color:rgba(245,200,66,0.5); }
+.org-node-cassy { border-color:rgba(245,200,66,0.5); padding:12px 18px; }
+.org-node-cassy .on-emoji { font-size:24px; }
+.org-node-cassy .on-name { font-size:14px; }
+.org-sales-rep { background:var(--surface2); border:1px solid rgba(59,130,246,0.3); border-radius:20px; padding:5px 12px; font-size:11px; display:flex; align-items:center; gap:5px; cursor:default; transition:border-color 0.15s; }
+.org-sales-rep:hover { border-color:rgba(59,130,246,0.6); }
+.org-sales-rep .sr-emoji { font-size:14px; }
+.org-sales-rep .sr-name { color:var(--text); font-weight:600; }
+.org-sales-rep .sr-role { font-size:9px; color:var(--muted); }
+.org-tree { max-width:1100px; margin:0 auto; padding:20px 0; }
+.org-h-line { display:flex; justify-content:center; }
+.org-h-line::before { content:''; display:block; height:2px; width:80%; background:var(--border); margin:0 auto; }
+.org-branch-row { display:flex; justify-content:center; gap:8px; flex-wrap:wrap; position:relative; }
+.org-branch-col { display:flex; flex-direction:column; align-items:center; }
+.org-branch-col .org-connector::before { height:20px; }
+</style>
+
+<div class="org-tree">
+  <!-- Steve -->
+  <div class="org-row">
+    <div class="org-node org-node-steve">
+      <div class="on-emoji">👑</div>
+      <div class="on-name">Steve Hamoen</div>
+      <div class="on-title">Chairman</div>
+    </div>
+  </div>
+
+  <!-- Connector -->
+  <div class="org-connector"></div>
+
+  <!-- Cassy -->
+  <div class="org-row">
+    <div class="org-node org-node-cassy">
+      <div class="on-emoji">💼</div>
+      <div class="on-name">Cassy</div>
+      <div class="on-title">CEO + COO</div>
+    </div>
+  </div>
+
+  <!-- Connector + H-line -->
+  <div class="org-connector"></div>
+  <div class="org-h-line"></div>
+
+  <!-- C-Suite Row -->
+  <div class="org-branch-row">
+    <!-- Forge -->
+    <div class="org-branch-col">
+      <div class="org-connector"></div>
+      <div class="org-node">
+        <div class="on-emoji">🔧</div>
+        <div class="on-name">Forge</div>
+        <div class="on-title">CTO</div>
+      </div>
+    </div>
+    <!-- Remi -->
+    <div class="org-branch-col">
+      <div class="org-connector"></div>
+      <div class="org-node">
+        <div class="on-emoji">📊</div>
+        <div class="on-name">Remi</div>
+        <div class="on-title">CMO</div>
+      </div>
+    </div>
+    <!-- Maxwell -->
+    <div class="org-branch-col">
+      <div class="org-connector"></div>
+      <div class="org-node">
+        <div class="on-emoji">🧮</div>
+        <div class="on-name">Maxwell</div>
+        <div class="on-title">CFO</div>
+      </div>
+    </div>
+    <!-- Axel -->
+    <div class="org-branch-col">
+      <div class="org-connector"></div>
+      <div class="org-node">
+        <div class="on-emoji">🖥️</div>
+        <div class="on-name">Axel</div>
+        <div class="on-title">CIO</div>
+      </div>
+    </div>
+    <!-- June -->
+    <div class="org-branch-col">
+      <div class="org-connector"></div>
+      <div class="org-node">
+        <div class="on-emoji">📧</div>
+        <div class="on-name">June</div>
+        <div class="on-title">Comms</div>
+      </div>
+    </div>
+    <!-- Scout -->
+    <div class="org-branch-col">
+      <div class="org-connector"></div>
+      <div class="org-node">
+        <div class="on-emoji">🔭</div>
+        <div class="on-name">Scout</div>
+        <div class="on-title">CHRO</div>
+      </div>
+    </div>
+    <!-- Rex -->
+    <div class="org-branch-col">
+      <div class="org-connector"></div>
+      <div class="org-node" style="position:relative;">
+        <div class="on-emoji">💰</div>
+        <div class="on-name">Rex</div>
+        <div class="on-title">CRO</div>
+        <!-- Sales Team Sub-section -->
+        <div style="margin-top:16px;padding-top:12px;border-top:1px solid var(--border);">
+          <div style="font-size:9px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;text-align:center;">Sales Team — Reports to Rex</div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:center;">
+            <div class="org-sales-rep"><span class="sr-emoji">🏦</span><div><div class="sr-name">Morgan</div></div></div>
+            <div class="org-sales-rep"><span class="sr-emoji">🏡</span><div><div class="sr-name">Blake</div></div></div>
+            <div class="org-sales-rep"><span class="sr-emoji">🏢</span><div><div class="sr-name">Sterling</div></div></div>
+            <div class="org-sales-rep"><span class="sr-emoji">🔥</span><div><div class="sr-name">Phoenix</div></div></div>
+            <div class="org-sales-rep"><span class="sr-emoji">🎙️</span><div><div class="sr-name">Echo</div></div></div>
+            <div class="org-sales-rep"><span class="sr-emoji">🤖</span><div><div class="sr-name">Nova</div></div></div>
+            <div class="org-sales-rep"><span class="sr-emoji">📒</span><div><div class="sr-name">Claire</div></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Atlas -->
+    <div class="org-branch-col">
+      <div class="org-connector"></div>
+      <div class="org-node">
+        <div class="on-emoji">🗺️</div>
+        <div class="on-name">Atlas</div>
+        <div class="on-title">CAO</div>
+      </div>
+    </div>
+    <!-- Harper -->
+    <div class="org-branch-col">
+      <div class="org-connector"></div>
+      <div class="org-node">
+        <div class="on-emoji">🏘️</div>
+        <div class="on-name">Harper</div>
+        <div class="on-title">PropMgr</div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
 
 </main>
 </div>
