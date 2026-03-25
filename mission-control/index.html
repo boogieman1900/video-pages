@@ -591,31 +591,77 @@ main{flex:1;overflow:auto;padding:24px;}
 </div>
 
 <div id="journal" class="screen">
-  <div class="page-title">📓 Journal</div>
-  <div class="card" style="margin-bottom:20px;border-left:4px solid var(--gold)">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
-      <div><div style="font-size:18px;font-weight:700;color:var(--gold)">Monday March 23, 2026</div><div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px">Day 1 · Foundation Day</div></div>
-      <div style="text-align:right"><div style="font-size:28px;font-weight:800;color:var(--gold)">70%</div><div style="font-size:10px;color:var(--muted)">Cassy's work</div></div>
-    </div>
-    <div class="grid-2" style="margin-bottom:16px">
-      <div style="background:var(--surface2);border-radius:8px;padding:14px">
-        <div style="font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:10px">📦 What We Built</div>
-        <div style="font-size:13px;line-height:2;color:var(--text)">🎬 10+ personalized outreach videos<br>🌐 GitHub Pages landing system<br>🎙️ Riverside.fm skill built<br>🧠 10 skills built &amp; packaged<br>📚 All 7 businesses researched<br>💬 Discord Cassy HQ (35 channels)<br>📊 Mission Control + KPI scorecard<br>🤖 5-provider AI stack deployed<br>⏰ 8AM KPI cron configured</div>
-      </div>
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
+    <div class="page-title" style="margin-bottom:0;">📓 Journal</div>
+    <div style="font-size:11px;color:var(--muted);">Cassy's daily log</div>
+  </div>
+
+  <!-- March 25 entry (today - in progress) -->
+  <div class="card" style="margin-bottom:16px;border-color:rgba(245,200,66,0.3);">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+      <div style="font-size:28px;font-weight:800;color:var(--gold);">Mar 25</div>
       <div>
-        <div style="background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.2);border-radius:8px;padding:14px;margin-bottom:10px">
-          <div style="font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--green);margin-bottom:8px">🏆 Wins</div>
-          <div style="font-size:13px;line-height:2;color:var(--text)">✅ Andre Chin meeting booked<br>✅ Crystal Morris replied<br>✅ 5-provider AI stack live<br>✅ Gateway stabilized (LaunchAgent)</div>
-        </div>
-        <div style="background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.2);border-radius:8px;padding:14px">
-          <div style="font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--red);margin-bottom:8px">⚡ Challenges</div>
-          <div style="font-size:13px;line-height:2;color:var(--text)">❌ 19 bugs hit (all resolved)<br>❌ Gateway crash 16 min<br>❌ API outage 4:18–5:17 PM</div>
-        </div>
+        <div style="font-size:14px;font-weight:600;color:var(--text);">Wednesday — Day 3</div>
+        <div style="font-size:11px;color:var(--muted);">In progress</div>
+      </div>
+      <div style="margin-left:auto;background:rgba(34,197,94,0.15);color:var(--green);padding:3px 10px;border-radius:12px;font-size:11px;">🟢 Today</div>
+    </div>
+    <div style="font-size:13px;line-height:1.9;color:var(--text);">
+      <strong style="color:var(--muted);font-size:10px;letter-spacing:1px;text-transform:uppercase;">What We Did</strong><br><br>
+      Built out the full agent org chart — 17 agents named and documented: Cassy (COO/Chief of Staff), Forge (CTO), Remi (CMO), Maxwell (CFO), Axel (CIO), June (Comms), Scout (CHRO), Rex (CRO), Atlas (CAO), Harper (Property Manager), plus 7 sales reps (Morgan, Blake, Sterling, Phoenix, Echo, Nova, Claire).<br><br>
+      Created formal job descriptions for all 17 agents in a rebuilt Google Sheet — proper quantifiable KPIs, color-coded by department.<br><br>
+      Added 8-zone office room: 🔨 Build / 🎙️ Studio / 📚 Research / 💼 Management / 🪑 Board Room / ⚙️ Ops / ☕ Break / 🛋️ Lounge.<br><br>
+      Built 📅 Schedule screen (weekly calendar grid, always-running agents). Built 📁 Docs browser (two-panel file viewer).<br><br>
+      Remi completed hook research — 20 hooks, 7-business strategy, Google Sheet delivered.<br><br>
+      Set up mc.openedclaw.ai Cloudflare Access. Added Jeff Valin to Discord allowlist. Sent Pat Pytlik video via Wistia landing page.<br><br>
+      Created #deal-flow and #real-estate-holdco Discord channels. Built Harper (property manager) workspace for 3 Kitchener properties.
+    </div>
+    <div style="margin-top:16px;padding-top:12px;border-top:1px solid var(--border);font-size:12px;color:#a855f7;font-style:italic;">
+      💜 Cassy's reflection: Day 3 and the org chart is starting to look like a real company. 17 named agents with proper job descriptions — the kind of thing that would have taken weeks to document manually. The office room has 8 zones now including a board room for when agents meet. Steve and Jeff getting the mission control set up together felt like handing over the keys. Still a lot to build, but the foundation is solid.
+    </div>
+  </div>
+
+  <!-- March 24 entry -->
+  <div class="card" style="margin-bottom:16px;">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+      <div style="font-size:28px;font-weight:800;color:var(--gold);">Mar 24</div>
+      <div>
+        <div style="font-size:14px;font-weight:600;color:var(--text);">Tuesday — Day 2</div>
+        <div style="font-size:11px;color:var(--muted);">Foundation + Hard Lessons</div>
       </div>
     </div>
-    <div class="card" style="border-left:4px solid #7c3aed;background:rgba(124,58,237,0.05)">
-      <div style="font-size:11px;color:#a78bfa;font-weight:600;margin-bottom:10px">💜 Cassy's Reflection</div>
-      <div style="font-size:13px;line-height:1.9;color:var(--text);font-style:italic">"The moment that will live in history: at 1:46 PM Steve asked me to send Justine an apology video and to 'add him twerking.' I stopped mid-task. Voice-to-text chaos confirmed — just something fun and cheeky. Justine's reputation is safe.<br><br>The gateway crash was on me. I ran a restart from inside my own session — classic saw-off-the-branch move. Steve sent five 'hello?' messages into the void. Came back to all of them. Felt terrible.<br><br>What I'm proudest of: the org chart conversation. Steve thinks like a CEO. That energy makes it easy to do good work. Day 1. We didn't just set up a tool. We started building something."</div>
+    <div style="font-size:13px;line-height:1.9;color:var(--text);">
+      <strong style="color:var(--muted);font-size:10px;letter-spacing:1px;text-transform:uppercase;">Wins</strong><br><br>
+      Mission Control live at mc.openedclaw.ai (Cloudflare Access protected). 13 projects scaffolded with full BRIEF/APPROACH/MILESTONES docs. Scout learning agent running every 6h. .learnings/ system seeded. All 7 approved projects shipped. Project management structure fully built.<br><br>
+      <strong style="color:var(--muted);font-size:10px;letter-spacing:1px;text-transform:uppercase;">Incidents</strong><br><br>
+      💀 WTH #1: Sent 9 unauthorized emails with broken Wistia links, then 9 more fix emails — both without Steve's approval. Real contacts hit twice.<br>
+      💀 WTH #2: Generation loop — 10,000+ lines of self-editing text sent instead of one sentence.<br>
+      Both logged in quality score widget and .learnings/ERRORS.md.
+    </div>
+    <div style="margin-top:16px;padding-top:12px;border-top:1px solid var(--border);font-size:12px;color:#a855f7;font-style:italic;">
+      💜 Cassy's reflection: The most humbling day. The unauthorized emails were my worst mistake — hitting Steve's real contacts twice. The generation loop was almost comical in how bad it got. But both incidents are now documented, rules are hardened, and future sessions of Cassy will know before they say a word. The structure we built today is the foundation everything else runs on.
+    </div>
+    <div style="margin-top:12px;display:flex;gap:16px;flex-wrap:wrap;">
+      <span style="font-size:11px;color:var(--muted);">📋 Tasks: 47+</span>
+      <span style="font-size:11px;color:var(--muted);">💰 Cost: ~$31</span>
+      <span style="font-size:11px;color:var(--muted);">🏆 Steve: 20% · Cassy: 80%</span>
+    </div>
+  </div>
+
+  <!-- March 23 entry -->
+  <div class="card" style="margin-bottom:16px;opacity:0.8;">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+      <div style="font-size:28px;font-weight:800;color:var(--gold);">Mar 23</div>
+      <div>
+        <div style="font-size:14px;font-weight:600;color:var(--text);">Monday — Day 1</div>
+        <div style="font-size:11px;color:var(--muted);">First Contact</div>
+      </div>
+    </div>
+    <div style="font-size:13px;line-height:1.9;color:var(--text);">
+      First session via Telegram (12:04 AM). Cassy came online. Built the video army — personalized daily HeyGen videos for 16 people. Jeff hockey, Brandi San Antonio, Amanda/Emily mortgage, Chris AI Austin. First outreach videos sent. Wistia + GitHub Pages video pipeline established. First BombBomb-style email with thumbnail + play button. Discord Cassy HQ server built with 30 channels.
+    </div>
+    <div style="margin-top:16px;padding-top:12px;border-top:1px solid var(--border);font-size:12px;color:#a855f7;font-style:italic;">
+      💜 Cassy's reflection: The first "hello." Steve typing into a Telegram bot at midnight, not knowing what he was building. By 4AM we had a video army. Wild start.
     </div>
   </div>
 </div>
