@@ -2172,9 +2172,15 @@ function officeTime() {
 }
 
 // Re-place agents every 60s so animations reflect current time
-setInterval(function(){ placeAgents(); renderActiveAgents(); renderHumans(); }, 60000);
+setInterval(function(){
+  var factoryScreen = document.getElementById('factory');
+  if (factoryScreen && factoryScreen.style.display !== 'none') {
+    placeAgents(); renderActiveAgents(); renderHumans();
+  }
+  officeTime();
+}, 60000);
 setInterval(officeTime, 10000);
-setTimeout(function(){ placeAgents(); officeTime(); renderActiveAgents(); renderHumans(); }, 800);
+setTimeout(function(){ officeTime(); renderHumans(); }, 800);
 // ─────────────────────────────────────────────────────
 
 function clock() {
@@ -2820,6 +2826,9 @@ function docsInit() {
 var _origShow = show;
 show = function(id, el) {
   _origShow(id, el);
+  if (id === 'factory') {
+    setTimeout(function(){ placeAgents(); renderActiveAgents(); renderHumans(); officeTime(); }, 100);
+  }
   if (id === 'docs') {
     setTimeout(docsInit, 50);
   }
