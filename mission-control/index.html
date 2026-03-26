@@ -2178,6 +2178,17 @@ var ZONE_SLOTS = {
 };
 var _slotIdx = {};
 
+var _agentActivity = {};
+
+function loadAgentActivity() {
+  fetch('../agent-activity.json?t=' + Date.now())
+    .then(function(r){ return r.json(); })
+    .then(function(d) {
+      _agentActivity = d.agents || {};
+    })
+    .catch(function(){ _agentActivity = {}; });
+}
+
 function placeAgents() {
   var room = document.getElementById('office-room');
   if (!room) return;
@@ -2186,7 +2197,10 @@ function placeAgents() {
   _slotIdx = { build:0, studio:0, library:0, management:0, comms:0, ops:0, boardroom:0, bullpen:0, break:0, lounge:0, quinn:0 };
 
   AGENTS.forEach(function(agent) {
-    var st = agent.getStatus();
+    var activityOverride = _agentActivity[agent.id];
+    var st = (activityOverride && activityOverride.zone && activityOverride.zone !== 'lounge')
+      ? { zone: activityOverride.zone, anim: 'typing', task: activityOverride.task || 'Working...' }
+      : agent.getStatus();
     var zone = st.zone || 'lounge';
     var slots = ZONE_SLOTS[zone] || ZONE_SLOTS['lounge'];
     var idx = _slotIdx[zone] || 0;
@@ -2299,6 +2313,7 @@ function officeTime() {
 
 // Re-place agents every 60s so animations reflect current time
 setInterval(function(){
+  loadAgentActivity();
   var factoryScreen = document.getElementById('factory');
   if (factoryScreen && factoryScreen.style.display !== 'none') {
     placeAgents(); renderActiveAgents(); renderHumans();
@@ -2306,7 +2321,7 @@ setInterval(function(){
   officeTime();
 }, 60000);
 setInterval(officeTime, 10000);
-setTimeout(function(){ officeTime(); renderHumans(); }, 800);
+setTimeout(function(){ loadAgentActivity(); officeTime(); renderHumans(); }, 800);
 // ─────────────────────────────────────────────────────
 
 function clock() {
@@ -2978,6 +2993,7 @@ var _origShow = show;
 show = function(id, el) {
   _origShow(id, el);
   if (id === 'factory') {
+    loadAgentActivity();
     setTimeout(function(){ placeAgents(); renderActiveAgents(); renderHumans(); officeTime(); }, 100);
   }
   if (id === 'factory-floor') {
