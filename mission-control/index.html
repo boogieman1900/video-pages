@@ -322,6 +322,41 @@ main{flex:1;overflow:auto;padding:24px;}
       <tr><td>Leads in Pipeline</td><td>7</td><td>7</td><td>7</td><td>7</td></tr>
     </table>
   </div>
+  <div class="card" style="margin-bottom:16px;">
+    <div class="card-title">💬 Conversation Telemetry</div>
+    <div class="grid-4" style="margin-bottom:12px;">
+      <div style="background:var(--surface2);border-radius:8px;padding:12px;"><div style="font-size:22px;font-weight:700;color:var(--gold);">34</div><div style="font-size:10px;color:var(--muted);">Inbound</div></div>
+      <div style="background:var(--surface2);border-radius:8px;padding:12px;"><div style="font-size:22px;font-weight:700;color:var(--gold);">29</div><div style="font-size:10px;color:var(--muted);">Outbound</div></div>
+      <div style="background:var(--surface2);border-radius:8px;padding:12px;"><div style="font-size:22px;font-weight:700;color:var(--gold);">42K</div><div style="font-size:10px;color:var(--muted);">Avg Context</div></div>
+      <div style="background:var(--surface2);border-radius:8px;padding:12px;"><div style="font-size:22px;font-weight:700;color:var(--gold);">1.22M</div><div style="font-size:10px;color:var(--muted);">Total Context Load</div></div>
+    </div>
+    <div class="grid-4" style="margin-bottom:12px;">
+      <div style="background:var(--surface2);border-radius:8px;padding:12px;"><div style="font-size:22px;font-weight:700;color:var(--yellow);">118K</div><div style="font-size:10px;color:var(--muted);">Max Context</div></div>
+      <div style="background:var(--surface2);border-radius:8px;padding:12px;"><div style="font-size:22px;font-weight:700;color:var(--blue);">3 / 2</div><div style="font-size:10px;color:var(--muted);">Checkpoint / Clear</div></div>
+      <div style="background:var(--surface2);border-radius:8px;padding:12px;"><div style="font-size:22px;font-weight:700;color:var(--green);">82%</div><div style="font-size:10px;color:var(--muted);">Prefix Compliance</div></div>
+      <div style="background:var(--surface2);border-radius:8px;padding:12px;"><div style="font-size:22px;font-weight:700;color:var(--muted);">Hybrid</div><div style="font-size:10px;color:var(--muted);">Update Mode</div></div>
+    </div>
+    <div style="margin-bottom:12px;">
+      <div style="font-size:10px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;">By LLM / Model</div>
+      <table class="kpi-table">
+        <tr><th>Provider</th><th>Model</th><th>Replies</th><th>Avg Ctx</th><th>Total Load</th><th>Cost</th></tr>
+        <tr><td>OpenAI</td><td>gpt-5.4</td><td>18</td><td>42K</td><td>756K</td><td>—</td></tr>
+        <tr><td>Anthropic</td><td>claude-sonnet-4-6</td><td>9</td><td>61K</td><td>549K</td><td>—</td></tr>
+        <tr><td>Groq</td><td>llama-3.3-70b</td><td>2</td><td>15K</td><td>30K</td><td>$0</td></tr>
+      </table>
+    </div>
+    <div style="background:var(--surface2);border-radius:8px;padding:10px 12px;">
+      <div style="font-size:10px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;">Context Load Share</div>
+      <div style="height:14px;background:rgba(255,255,255,0.05);border-radius:999px;overflow:hidden;display:flex;">
+        <div style="width:57%;background:#3b82f6;"></div><div style="width:41%;background:#f5c842;"></div><div style="width:2%;background:#22c55e;"></div>
+      </div>
+      <div style="display:flex;gap:14px;margin-top:8px;font-size:11px;color:var(--muted);flex-wrap:wrap;">
+        <span><span style="display:inline-block;width:10px;height:10px;background:#3b82f6;border-radius:2px;margin-right:5px;"></span>OpenAI 57%</span>
+        <span><span style="display:inline-block;width:10px;height:10px;background:#f5c842;border-radius:2px;margin-right:5px;"></span>Anthropic 41%</span>
+        <span><span style="display:inline-block;width:10px;height:10px;background:#22c55e;border-radius:2px;margin-right:5px;"></span>Groq 2%</span>
+      </div>
+    </div>
+  </div>
   <div class="card">
     <div class="card-title">💡 Cost Intelligence</div>
     <table class="kpi-table">
