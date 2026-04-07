@@ -10,20 +10,20 @@
   .headline{font-size:clamp(22px,5vw,34px);font-weight:700;color:#fff;text-align:center;margin-bottom:10px;}
   .sub{font-size:16px;color:#8888aa;text-align:center;margin-bottom:24px;}
   .video-wrap{width:100%;max-width:420px;border-radius:14px;overflow:hidden;background:#111;box-shadow:0 8px 48px rgba(0,0,0,0.6);}
-  .video-wrap iframe{display:block;width:100%;aspect-ratio:9/16;border:none;}
+  video{display:block;width:100%;height:auto;}
   .footer{margin-top:20px;font-size:12px;color:#444466;text-align:center;}
 </style>
 </head>
 <body>
 <p class="headline">Franck. Come Back.</p>
-<p class="sub">A message from Steve.</p>
+<p class="sub">A personal message from Steve.</p>
 <div class="video-wrap">
-  <iframe src="https://fast.wistia.com/embed/iframe/mwfcr5ve78?videoFoam=true&playerColor=4a4af0&autoPlay=false"
-    title="Franck — Come Back to BJJ"
-    allowtransparency="true" allowfullscreen scrolling="no">
-  </iframe>
+  <video controls playsinline poster="https://embed-ssl.wistia.com/deliveries/f488549fae4bf0b7473af5292caad9c8c8cddf89.jpg">
+    <source src="https://embed.wistia.com/deliveries/7737f579ee61acd4d2c1b89a9a3c15776d9a7028.bin" type="video/mp4">
+    <source src="https://embed.wistia.com/deliveries/6601b30a1a70412edc3ad85a5444ef4c62be7294.bin" type="video/mp4">
+    Your browser doesn't support video playback.
+  </video>
 </div>
 <div class="footer">Sent with love (and zero patience for excuses).</div>
-<script src="https://fast.wistia.com/assets/external/E-v1.js" async></script>
 </body>
 </html>
